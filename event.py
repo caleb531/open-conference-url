@@ -80,5 +80,4 @@ class Event(object):
                 search_str)
             if matches:
                 return matches.group(0)
-            else:
-                return None
+        return None
