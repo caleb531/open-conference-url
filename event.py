@@ -12,12 +12,18 @@ class Event(object):
 
     # A list of conference domains to look for, in order of precedence
     conference_domains = [
+        # Zoom
         'zoom.us',
+        # Google Meet
         'google.com',
+        # UberConference
         'uberconference.com',
+        # Microsoft Teams
         'microsoft.com'
     ]
 
+    # Initialize the Event object by processing a string of the iCal event
+    # contents
     def __init__(self, event_str):
         self.calendar = icalendar.Calendar().from_ical(event_str)
         # The last vevent will contain any overrides for recurring events (e.g.
@@ -39,6 +45,7 @@ class Event(object):
         self.raw_url = vevent.get('url')
         self.conference_url = self.parse_conference_url()
 
+    # Retrieve the vevent corresponding to today for this specific iCal event
     def get_vevent_for_today(self, vevents):
         current_date = datetime.datetime.now().date()
         for vevent in reversed(vevents):
@@ -46,17 +53,23 @@ class Event(object):
                 return vevent
         return vevents[0]
 
+    # Retrieve the date; this function handles all-day vevents, as well as
+    # vevents with a specific date/time
     @staticmethod
     def get_vevent_datetime(vevent):
         if type(vevent.get('dtstart').dt) == datetime.date:
+            # Handle all-day vevents
             current_datetime = datetime.datetime.now().astimezone()
             return current_datetime.combine(
                 date=vevent.get('dtstart').dt,
                 time=current_datetime.time(),
                 tzinfo=current_datetime.tzinfo)
         else:
+            # Handle events with a specific date/time
             return vevent.get('dtstart').dt
 
+    # Convert the given UTC date/time to equivalent date/time in the local
+    # timezone
     @staticmethod
     def localize_datetime(utc_datetime):
         now_timestamp = time.time()
@@ -72,6 +85,9 @@ class Event(object):
             time=offset_datetime.time(),
             tzinfo=now_datetime.tzinfo)
 
+    # Return the conference URL for the given event, whereby some services have
+    # higher precedence than others (e.g. always prefer Zoom URLs over Google
+    # Meet URLs if both are present)
     def parse_conference_url(self):
         search_str = f'{self.location}\n{self.description}\n{self.raw_url}'
         for domain in self.conference_domains:

@@ -10,6 +10,7 @@ from datetime import datetime, timedelta
 from event import Event
 
 
+# The path to the user's local calendar database
 CALENDAR_DB_DIR = os.path.expanduser(os.path.join(
     '~', 'Library', 'Calendars'))
 
@@ -17,6 +18,7 @@ CALENDAR_DB_DIR = os.path.expanduser(os.path.join(
 TIME_THRESHOLD_MINS = 20
 
 
+# Retrieve a list of event UIDs for today's calendar day
 def get_event_uids():
 
     event_uids = subprocess.check_output([
@@ -30,6 +32,7 @@ def get_event_uids():
         return event_uids
 
 
+# Retrieve the path to the ics file corresponding to the given event UID
 def get_event_path(event_uid):
     normalized_event_uid = event_uid.replace('.', '')
     event_filename = f'{normalized_event_uid}.ics'
@@ -41,11 +44,15 @@ def get_event_path(event_uid):
         return None
 
 
+# Read the given ics file path and return the Event object corresponding to
+# that event data
 def get_event(event_path):
     with open(event_path, 'r') as event_file:
         return Event(event_file.read())
 
 
+# Return True if the given date/time object is within the acceptable tolerance
+# range (e.g. within the next 15 minutes); if not, return False
 def is_time_within_range(event_datetime):
     current_datetime = datetime.now().astimezone()
     threshold = timedelta(minutes=TIME_THRESHOLD_MINS)
@@ -59,15 +66,16 @@ def is_time_within_range(event_datetime):
 
 def main():
 
-    feedback = {
-        'items': []
-    }
+    # The feedback object which will be fed to Alfred to display the results
+    feedback = {'items': []}
 
     for event_uid in get_event_uids():
         event_path = get_event_path(event_uid)
         event = get_event(event_path)
+        # Do not display the event in the results if it has no conference URL
         if not event.conference_url:
             continue
+        # Do not add the event in the results if it is not upcoming
         if not is_time_within_range(event.start_datetime_local):
             continue
         feedback['items'].append({
