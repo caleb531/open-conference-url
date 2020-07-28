@@ -14,8 +14,10 @@ from event import Event
 CALENDAR_DB_DIR = os.path.expanduser(os.path.join(
     '~', 'Library', 'Calendars'))
 
-# How many minutes before or into the meeting to show the conference URL
-TIME_THRESHOLD_MINS = 20
+# How long before or into the meeting to show the conference URL
+TIME_THRESHOLD = {
+    'minutes': 20
+}
 
 
 # Retrieve a list of event UIDs for today's calendar day
@@ -56,7 +58,7 @@ def get_event(event_path):
 # return False
 def is_time_within_range(event_datetime):
     current_datetime = datetime.now().astimezone()
-    threshold = timedelta(minutes=TIME_THRESHOLD_MINS)
+    threshold = timedelta(**TIME_THRESHOLD)
     min_datetime = (event_datetime - threshold)
     max_datetime = (event_datetime + threshold)
     if min_datetime <= current_datetime <= max_datetime:
