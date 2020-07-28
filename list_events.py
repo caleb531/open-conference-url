@@ -32,7 +32,7 @@ def get_event_uids():
         return event_uids
 
 
-# Retrieve the path to the ics file corresponding to the given event UID
+# Retrieve the path to the ICS file corresponding to the given event UID
 def get_event_path(event_uid):
     normalized_event_uid = event_uid.replace('.', '')
     event_filename = f'{normalized_event_uid}.ics'
@@ -44,7 +44,7 @@ def get_event_path(event_uid):
         return None
 
 
-# Read the given ics file path and return the Event object corresponding to
+# Read the given ICS file path and return the Event object corresponding to
 # that event data
 def get_event(event_path):
     with open(event_path, 'r') as event_file:

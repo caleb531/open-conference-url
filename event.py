@@ -22,7 +22,7 @@ class Event(object):
         'microsoft.com'
     ]
 
-    # Initialize the Event object by processing a string of the iCal event
+    # Initialize the Event object by processing a string of the ICS file
     # contents
     def __init__(self, event_str):
         self.calendar = icalendar.Calendar().from_ical(event_str)
