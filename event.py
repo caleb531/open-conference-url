@@ -31,7 +31,7 @@ class Event(object):
         # will fall back to the originally-scheduled time slot
         vevent = self.get_vevent_for_today(self.calendar.walk('vevent'))
         self.summary = vevent.get('summary')
-        # Handle recurring events by forcing the date of the start datetime
+        # Handle recurring events by forcing the date of the start date/time
         # object to be today (since the script outputting the event IDs will
         # only fetch today's events anyway)
         self.start_datetime_raw = Event.get_vevent_datetime(vevent).combine(

@@ -52,7 +52,8 @@ def get_event(event_path):
 
 
 # Return True if the given date/time object is within the acceptable tolerance
-# range (e.g. within the next 15 minutes); if not, return False
+# range (e.g. within the next 15 minutes OR in the last 15 minutes); if not,
+# return False
 def is_time_within_range(event_datetime):
     current_datetime = datetime.now().astimezone()
     threshold = timedelta(minutes=TIME_THRESHOLD_MINS)
@@ -82,7 +83,11 @@ def main():
             'title': event.summary,
             'subtitle': event.start_datetime_local.strftime('%-I:%M%p').lower(),
             'text': {
+                # Copy the conference URL to the clipboard when cmd-c is
+                # pressed
                 'copy': event.conference_url,
+                # Display the conference URL via Alfred's Large Type feature
+                # when cmd-l is pressed
                 'largetype': event.conference_url
             },
             'variables': {
@@ -98,6 +103,8 @@ def main():
             'valid': 'no'
         })
 
+    # Alfred doesn't appear to care about whitespace in the resulting JSON, so
+    # we are prettifying the JSON output here for easier debugging
     print(json.dumps(feedback, indent=2))
 
 
