@@ -74,6 +74,8 @@ def main():
 
     for event_uid in get_event_uids():
         event_path = get_event_path(event_uid)
+        if not event_path:
+            continue
         event = get_event(event_path)
         # Do not display the event in the results if it has no conference URL
         if not event.conference_url:
