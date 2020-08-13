@@ -36,7 +36,7 @@ def get_event_uids():
 
 # Retrieve the path to the ICS file corresponding to the given event UID
 def get_event_path(event_uid):
-    normalized_event_uid = event_uid.replace('.', '')
+    normalized_event_uid = event_uid.replace('.', '').replace(':', '')
     event_filename = f'{normalized_event_uid}.ics'
     event_paths = glob.glob(os.path.join(
         CALENDAR_DB_DIR, '*', '*', 'Events', event_filename))
