@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import argparse
 import glob
 import json
 import os
@@ -13,11 +14,10 @@ from event import Event
 # The path to the user's local calendar database
 CALENDAR_DB_DIR = os.path.expanduser(os.path.join(
     '~', 'Library', 'Calendars'))
-
-# How long before or into the meeting to show the conference URL
-TIME_THRESHOLD = {
-    'minutes': 20
-}
+# The number of hours in a day
+HOURS_IN_DAY = 24
+# The number of minutes in an hour
+MINUTES_IN_HOUR = 60
 
 
 # Retrieve a list of event UIDs for today's calendar day
@@ -56,9 +56,9 @@ def get_event(event_path):
 # Return True if the given date/time object is within the acceptable tolerance
 # range (e.g. within the next 15 minutes OR in the last 15 minutes); if not,
 # return False
-def is_time_within_range(event_datetime):
+def is_time_within_range(event_datetime, threshold):
     current_datetime = datetime.now().astimezone()
-    threshold = timedelta(**TIME_THRESHOLD)
+    threshold = timedelta(**threshold)
     min_datetime = (event_datetime - threshold)
     max_datetime = (event_datetime + threshold)
     if min_datetime <= current_datetime <= max_datetime:
@@ -67,7 +67,31 @@ def is_time_within_range(event_datetime):
         return False
 
 
+# Get the time threshold used for the is_time_within_range function
+def get_time_threshold(mode):
+    if mode and mode.strip().lower().startswith('a'):
+        return {'minutes': HOURS_IN_DAY * MINUTES_IN_HOUR}
+    else:
+        return {'minutes': 20}
+
+
+# Parse command line arguments to this program
+def parse_cli_args():
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        'mode',
+        nargs='?',
+        help='a case-insensitive keyword to adjust the behavior of the'
+             'program (can be ALL)')
+
+    return parser.parse_args()
+
+
 def main():
+
+    cli_args = parse_cli_args()
+    threshold = get_time_threshold(**vars(cli_args))
 
     # The feedback object which will be fed to Alfred to display the results
     feedback = {'items': []}
@@ -81,7 +105,7 @@ def main():
         if not event.conference_url:
             continue
         # Do not add the event in the results if it is not upcoming
-        if not is_time_within_range(event.start_datetime_local):
+        if not is_time_within_range(event.start_datetime_local, threshold):
             continue
         feedback['items'].append({
             'title': event.summary,
