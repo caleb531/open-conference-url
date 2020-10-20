@@ -19,7 +19,9 @@ class Event(object):
         # UberConference
         'uberconference.com',
         # Microsoft Teams
-        'microsoft.com'
+        'microsoft.com',
+        # GoToMeeting
+        'gotomeeting.com'
     ]
 
     # Initialize the Event object by processing a string of the ICS file
