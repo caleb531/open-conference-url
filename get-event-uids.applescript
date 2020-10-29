@@ -2,6 +2,9 @@
 -- written by Shane Stanley
 -- https://macscripter.net/viewtopic.php?pid=183519#p183519
 
+-- Performance note: This script is a few hundred milliseconds faster than the
+-- equivalent icalBuddy search, hence why we are using it
+
 use AppleScript version "2.4"
 use scripting additions
 use framework "Foundation"
