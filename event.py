@@ -82,9 +82,6 @@ class Event(object):
         now_utc_datetime = datetime.datetime.utcfromtimestamp(now_timestamp).astimezone()
         offset = now_datetime - now_utc_datetime
         offset_datetime = utc_datetime + offset
-        # Handle Daylight Saving Time (DST)
-        if not time.localtime().tm_isdst:
-            offset_datetime += datetime.timedelta(hours=1)
         return offset_datetime.combine(
             date=offset_datetime.date(),
             time=offset_datetime.time(),
