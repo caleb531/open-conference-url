@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import argparse
 import glob
 import json
 import os
@@ -68,11 +67,8 @@ def is_time_within_range(event_datetime, threshold):
 
 
 # Get the time threshold used for the is_time_within_range function
-def get_time_threshold(mode):
-    if mode and mode.strip().lower().startswith('a'):
-        return {'minutes': HOURS_IN_DAY * MINUTES_IN_HOUR}
-    else:
-        return {'minutes': 20}
+def get_time_threshold():
+    return {'minutes': 20}
 
 
 # Return an Alfred feedback item representing the given Event instance
@@ -95,23 +91,9 @@ def get_event_feedback_item(event):
     }
 
 
-# Parse command line arguments to this program
-def parse_cli_args():
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        'mode',
-        nargs='?',
-        help='a case-insensitive keyword to adjust the behavior of the'
-             'program (can be ALL)')
-
-    return parser.parse_args()
-
-
 def main():
 
-    cli_args = parse_cli_args()
-    threshold = get_time_threshold(**vars(cli_args))
+    threshold = get_time_threshold()
 
     all_events = []
     # The feedback object which will be fed to Alfred to display the results
