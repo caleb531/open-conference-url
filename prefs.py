@@ -1,9 +1,15 @@
 #!/usr/bin/env python3
 
-# The string format used to display dates in icalBuddy
-date_format = '%Y-%m-%d'
-# The string format used to display times in icalBuddy
-time_format = '%H:%M'
-# Represents how far out to look for future events (in addition to today's
-# events)
-offset_from_today = 0
+import json
+
+
+# The user's preferences for this workflow
+class Prefs(object):
+
+    def __init__(self):
+        with open('prefs.json', 'r') as prefs_json:
+            # Make all JSON keys accessible as instance attributes
+            self.__dict__.update(json.load(prefs_json))
+
+
+prefs = Prefs()

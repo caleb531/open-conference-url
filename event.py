@@ -3,7 +3,7 @@
 import re
 from datetime import datetime
 
-import prefs
+from prefs import prefs
 
 
 class Event(object):

@@ -7,8 +7,8 @@ import re
 import subprocess
 from datetime import datetime, timedelta
 
-import prefs
 from event import Event
+from prefs import prefs
 
 
 # The path to the user's local calendar database
