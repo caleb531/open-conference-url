@@ -4,5 +4,12 @@
   "offset_from_today": 0,
   "event_time_threshold": {
     "minutes": 20
-  }
+  },
+  "conference_domains": [
+    "zoom.us",
+    "google.com",
+    "uberconference.com",
+    "microsoft.com",
+    "gotomeeting.com"
+  ]
 }

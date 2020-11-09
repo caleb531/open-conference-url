@@ -8,20 +8,6 @@ from prefs import prefs
 
 class Event(object):
 
-    # A list of conference domains to look for, in order of precedence
-    conference_domains = [
-        # Zoom
-        'zoom.us',
-        # Google Meet
-        'google.com',
-        # UberConference
-        'uberconference.com',
-        # Microsoft Teams
-        'microsoft.com',
-        # GoToMeeting
-        'gotomeeting.com'
-    ]
-
     # Initialize an Event object by parsing an event blob string as input; the
     # event blob represents raw event data from icalBuddy, which has a very
     # particular string format and must be parsed with regular expressions
@@ -48,7 +34,7 @@ class Event(object):
     # higher precedence than others (e.g. always prefer Zoom URLs over Google
     # Meet URLs if both are present)
     def parse_conference_url(self):
-        for domain in self.conference_domains:
+        for domain in prefs.conference_domains:
             matches = re.search(
                 r'https://(\w+\.)?({domain})/([^><"\']+?)(?=([\s><"\']|$))'.format(domain=domain),
                 self.blob)
