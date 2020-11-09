@@ -3,6 +3,8 @@
 import re
 from datetime import datetime
 
+import prefs
+
 
 class Event(object):
 
@@ -39,7 +41,8 @@ class Event(object):
             r'\s{4}((.*?) at ([^-]+))', self.blob)
         return datetime.strptime(
             start_datetime_matches.group(1).strip(),
-            '{} at {}'.format('%Y-%m-%d', '%H:%M')).astimezone()
+            '{} at {}'.format(
+                prefs.date_format, prefs.time_format)).astimezone()
 
     # Return the conference URL for the given event, whereby some services have
     # higher precedence than others (e.g. always prefer Zoom URLs over Google

@@ -7,6 +7,7 @@ import re
 import subprocess
 from datetime import datetime, timedelta
 
+import prefs
 from event import Event
 
 
@@ -48,12 +49,12 @@ def get_events():
     event_blobs = get_event_blobs(
         event_props=('title', 'datetime', 'location', 'url', 'notes'),
         # YYYY-MM-DD (e.g. 2019-08-09)
-        date_format='%Y-%m-%d',
+        date_format=prefs.date_format,
         # 24-hour time (e.g. 18:30)
-        time_format='%H:%M',
+        time_format=prefs.time_format,
         # Represents how far out to look for future events (in addition to
         # today's events)
-        offset_from_today=0)
+        offset_from_today=prefs.offset_from_today)
     # The first element will always be an empty string, because the bullet
     # point we are splitting on is not a delimiter
     event_blobs.pop(0)
