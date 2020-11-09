@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
 import json
-import os
-import os.path
 import re
 import subprocess
 from datetime import datetime, timedelta
@@ -11,9 +9,6 @@ from event import Event
 from prefs import prefs
 
 
-# The path to the user's local calendar database
-CALENDAR_DB_DIR = os.path.expanduser(os.path.join(
-    '~', 'Library', 'Calendars'))
 # The number of hours in a day
 HOURS_IN_DAY = 24
 # The number of minutes in an hour
