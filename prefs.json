@@ -1,6 +1,4 @@
 {
-  "date_format": "%Y-%m-%d",
-  "time_format": "%H:%M",
   "offset_from_today": 0,
   "event_time_threshold": {
     "minutes": 20
