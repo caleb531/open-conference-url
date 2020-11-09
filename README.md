@@ -7,7 +7,7 @@ Open Conference URL is an [Alfred][alfred] workflow which enables you to quickly
 open links for Zoom and other conferencing services, based on your upcoming
 calendar events.
 
-[alfred]: http://alfredapp.com/
+[alfred]: https://www.alfredapp.com/
 
 ## Installation
 
