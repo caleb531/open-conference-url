@@ -11,11 +11,11 @@ calendar events.
 
 ## Installation
 
-Before you can use Open Conference URL, you must install the
-[icalBuddy][icalBuddy] utility:
+Before you can use Open Conference URL, you must install [icalBuddy][icalBuddy] and Python 3:
 
 ```sh
 brew install ical-buddy
+brew install python@3
 ```
 
 After this point, you can simply double-click the workflow file to install in
