@@ -13,8 +13,6 @@ from prefs import prefs
 HOURS_IN_DAY = 24
 # The number of minutes in an hour
 MINUTES_IN_HOUR = 60
-# The number of minutes threshold used to determine of
-TIME_THRESHOLD = {'minutes': 20}
 
 
 # Retrieve the raw calendar output for today's events
@@ -66,11 +64,11 @@ def get_event(event_path):
 # Return True if the given date/time object is within the acceptable tolerance
 # range (e.g. within the next 15 minutes OR in the last 15 minutes); if not,
 # return False
-def is_time_within_range(event_datetime, time_threshold):
+def is_time_within_range(event_datetime, event_time_threshold):
     current_datetime = datetime.now().astimezone()
-    time_threshold = timedelta(**time_threshold)
-    min_datetime = (event_datetime - time_threshold)
-    max_datetime = (event_datetime + time_threshold)
+    event_time_threshold = timedelta(**event_time_threshold)
+    min_datetime = (event_datetime - event_time_threshold)
+    max_datetime = (event_datetime + event_time_threshold)
     if min_datetime <= current_datetime <= max_datetime:
         return True
     else:
@@ -110,7 +108,7 @@ def main():
         all_events.append(event)
 
     upcoming_events = [event for event in all_events if is_time_within_range(
-                       event.start_datetime, TIME_THRESHOLD)]
+                       event.start_datetime, prefs.event_time_threshold)]
 
     # For convenience, display all events for today if there are no upcoming
     # events; also display a No Results item at the top of the result set (so
