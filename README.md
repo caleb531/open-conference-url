@@ -9,7 +9,7 @@ calendar events.
 
 [alfred]: http://alfredapp.com/
 
-## Usage
+## Installation
 
 Before you can use Open Conference URL, you must install the
 [icalBuddy][icalBuddy] utility:
@@ -18,7 +18,12 @@ Before you can use Open Conference URL, you must install the
 brew install ical-buddy
 ```
 
+After this point, you can simply double-click the workflow file to install in
+Alfred.
+
 [icalBuddy]: https://formulae.brew.sh/formula/ical-buddy
+
+## Usage
 
 To use, simply type the `conf` command into Alfred, and you will see a list of
 upcoming calendar events. It does this by including all events within +/- 20
