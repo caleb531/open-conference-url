@@ -80,7 +80,7 @@ def is_time_within_range(event_datetime, event_time_threshold):
 def get_event_feedback_item(event):
     return {
         'title': event.title,
-        'subtitle': event.start_datetime.strftime('%-I:%M%p').lower(),
+        'subtitle': 'All-Day' if event.is_all_day else event.start_datetime.strftime('%-I:%M%p').lower(),
         'text': {
             # Copy the conference URL to the clipboard when cmd-c is
             # pressed

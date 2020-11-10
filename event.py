@@ -16,6 +16,10 @@ class Event(object):
         self.blob = event_blob
         self.title = self.parse_title()
         self.start_datetime = self.parse_start_datetime()
+        if self.start_datetime.hour == 0 and self.start_datetime.minute == 0:
+            self.is_all_day = True
+        else:
+            self.is_all_day = False
         self.conference_url = self.parse_conference_url()
 
     # Parse and return the display title of the event from the blob string
@@ -25,11 +29,18 @@ class Event(object):
     # Parse and return the date and time the event starts
     def parse_start_datetime(self):
         start_datetime_matches = re.search(
-            r'\s{4}((.*?) at ([^-]+))', self.blob)
-        return datetime.strptime(
-            start_datetime_matches.group(1).strip(),
-            '{} at {}'.format(
-                prefs.date_format, prefs.time_format)).astimezone()
+            r'\s{4}(([\d\-\/]+)( at ([^-]+))?)', self.blob)
+        if start_datetime_matches.group(3):
+            # Handle events with specific start time
+            return datetime.strptime(
+                start_datetime_matches.group(1).strip(),
+                '{} at {}'.format(
+                    prefs.date_format, prefs.time_format)).astimezone()
+        else:
+            # Handle all-day events
+            return datetime.strptime(
+                start_datetime_matches.group(1).strip(),
+                prefs.date_format).astimezone()
 
     # Return the conference URL for the given event, whereby some services have
     # higher precedence than others (e.g. always prefer Zoom URLs over Google
