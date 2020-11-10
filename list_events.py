@@ -19,7 +19,7 @@ MINUTES_IN_HOUR = 60
 # Retrieve the raw calendar output for today's events
 def get_event_blobs(event_props, date_format, time_format, offset_from_today):
     return re.split(r'• ', subprocess.check_output([
-        'icalBuddy',
+        '/usr/local/bin/icalBuddy',
         # Override the default date/time formats
         '--dateFormat',
         date_format,
