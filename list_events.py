@@ -84,12 +84,11 @@ def get_event_feedback_item(event):
         'title': event.title,
         'subtitle': 'All-Day' if event.is_all_day else event.start_datetime.strftime('%-I:%M%p').lower(),
         'text': {
-            # Copy the conference URL to the clipboard when cmd-c is
-            # pressed
-            'copy': event.conference_url,
-            # Display the conference URL via Alfred's Large Type feature
-            # when cmd-l is pressed
-            'largetype': event.conference_url
+            # Copy the event title to the clipboard when cmd-c is pressed
+            'copy': event.title,
+            # Display the event title via Alfred's Large Type feature when
+            # cmd-l is pressed
+            'largetype': event.title
         },
         'variables': {
             'event_title': event.title,
