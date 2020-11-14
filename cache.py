@@ -102,5 +102,14 @@ class Cache(object):
         # Cache event blob data for next execution of workflow
         self.set('last_refresh_date', self.get_current_date())
 
+    # Queue a refresh of the cache (this will cause Alfred to refresh the
+    # workflow cache in the background without blocking the execution of this
+    # script)
+    def queue_refresh(self):
+        subprocess.call([
+            '/usr/bin/osascript',
+            'queue_cache_refresh.applescript'
+        ])
+
 
 cache = Cache()
