@@ -13,9 +13,9 @@ class Prefs(object):
     time_format = '%H:%M'
 
     def __init__(self):
-        with open('prefs.json', 'r') as prefs_json:
+        with open('prefs.json', 'r') as prefs_file:
             # Make all JSON keys accessible as instance attributes
-            self.__dict__.update(json.load(prefs_json))
+            self.__dict__.update(json.load(prefs_file))
 
 
 prefs = Prefs()
