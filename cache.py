@@ -30,15 +30,25 @@ class Cache(object):
         self.create_cache_dir()
         try:
             return self.read()
-        except IOError:
+        except (IOError, RuntimeError):
             self.refresh()
             return self.read()
+
+    # Return the current date as a string (for comparison against the date the
+    # cache was last refreshed)
+    def get_current_date(self):
+        return datetime.now().strftime(prefs.date_format)
 
     # Read the cache JSON into memory
     def read(self):
         with open(self.cache_path, 'r') as cache_file:
             # Make all JSON keys accessible as instance attributes
             self.__dict__.update(json.load(cache_file))
+        # Invalidate the cache at the start of every day
+        if self.last_refresh_date != self.get_current_date():
+            # Raising a RuntimeError will run the exception-handling code in
+            # the constructor
+            raise RuntimeError('Last refresh date is too old')
 
     # Create the cache directory if it doesn't already exist
     def create_cache_dir(self):
@@ -90,7 +100,7 @@ class Cache(object):
         # Cache event blob data for next execution of workflow
         self.set('event_blobs', event_blobs)
         # Cache event blob data for next execution of workflow
-        self.set('current_date', datetime.now().strftime(prefs.date_format))
+        self.set('last_refresh_date', self.get_current_date())
 
 
 cache = Cache()
