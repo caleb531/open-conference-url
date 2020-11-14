@@ -4,11 +4,10 @@
 from __future__ import unicode_literals
 
 import json
-import re
-import subprocess
 from datetime import datetime, timedelta
 
 from event import Event
+from cache import cache
 from prefs import prefs
 
 
@@ -19,41 +18,16 @@ MINUTES_IN_HOUR = 60
 
 
 # Retrieve the raw calendar output for today's events
-def get_event_blobs(event_props, date_format, time_format, offset_from_today):
-    return re.split(r'• ', subprocess.check_output([
-        '/usr/local/bin/icalBuddy',
-        # Override the default date/time formats
-        '--dateFormat',
-        date_format,
-        '--noRelativeDates',
-        '--timeFormat',
-        time_format,
-        # remove parenthetical calendar names from event titles
-        '--noCalendarNames',
-        # Only include the following fields and enforce their order
-        '--includeEventProps',
-        ','.join(event_props),
-        '--propertyOrder',
-        ','.join(event_props),
-        'eventsToday+{}'.format(offset_from_today)
-    ]).decode('utf-8'))
+def get_event_blobs():
+    if not cache.has('event_blobs'):
+        cache.refresh()
+    return cache.get('event_blobs')
 
 
 # Retrieve a list of event UIDs for today's calendar day
 def get_events():
 
-    event_blobs = get_event_blobs(
-        event_props=('title', 'datetime', 'location', 'url', 'notes'),
-        # YYYY-MM-DD (e.g. 2019-08-09)
-        date_format=prefs.date_format,
-        # 24-hour time (e.g. 18:30)
-        time_format=prefs.time_format,
-        # Represents how far out to look for future events (in addition to
-        # today's events)
-        offset_from_today=prefs.offset_from_today)
-    # The first element will always be an empty string, because the bullet
-    # point we are splitting on is not a delimiter
-    event_blobs.pop(0)
+    event_blobs = get_event_blobs()
     return [Event(event_blob) for event_blob in event_blobs]
 
 

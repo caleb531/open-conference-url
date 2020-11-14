@@ -11,6 +11,9 @@ class Prefs(object):
     # output; ***do not change this***
     date_format = '%Y-%m-%d'
     time_format = '%H:%M'
+    # The properties (in order) that icalBuddy must output; changing this order
+    # will break the parsing of event data
+    event_props = ('title', 'datetime', 'location', 'url', 'notes')
 
     def __init__(self):
         with open('prefs.json', 'r') as prefs_file:
