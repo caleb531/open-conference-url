@@ -18,6 +18,9 @@ class Event(object):
         self.start_datetime = self.parse_start_datetime()
         if self.start_datetime.hour == 0 and self.start_datetime.minute == 0:
             self.is_all_day = True
+            # Set the time of all-day events to the system's current time, to
+            # ensure that those events always show
+            self.start_datetime = datetime.now().astimezone()
         else:
             self.is_all_day = False
         self.conference_url = self.parse_conference_url()
