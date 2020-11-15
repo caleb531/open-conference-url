@@ -3,6 +3,7 @@
   "bundle_id": "com.calebevans.openconferenceurl",
   "resources": [
       "*.py",
-      "*.json"
+      "*.json",
+      "*.applescript"
   ]
 }
