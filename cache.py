@@ -97,10 +97,17 @@ class Cache(object):
         # The first element will always be an empty string, because the bullet
         # point we are splitting on is not a delimiter
         event_blobs.pop(0)
-        # Cache event blob data for next execution of workflow
-        self.set('event_blobs', event_blobs)
-        # Cache event blob data for next execution of workflow
-        self.set('last_refresh_date', self.get_current_date())
+        # Detect when cache data has been updated, or if it has remained the
+        # same (the event blobs are the only data worth checking)
+        if self.get('event_blobs') != event_blobs:
+            # Cache event blob data for next execution of workflow
+            self.set('event_blobs', event_blobs)
+            # Cache event blob data for next execution of workflow
+            self.set('last_refresh_date', self.get_current_date())
+            has_cache_updated = True
+        else:
+            has_cache_updated = False
+        return has_cache_updated
 
     # Queue a refresh of the cache (this will cause Alfred to refresh the
     # workflow cache in the background without blocking the execution of this

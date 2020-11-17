@@ -6,7 +6,8 @@ from cache import cache
 
 # A dedicated trigger point for refreshing the cache on command
 def main():
-    cache.refresh()
+    has_cache_updated = cache.refresh()
+    print(has_cache_updated, end='')
 
 
 if __name__ == '__main__':
