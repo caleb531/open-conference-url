@@ -4,7 +4,7 @@
 import re
 from datetime import datetime
 
-from prefs import prefs
+from ocu.prefs import prefs
 
 
 class Event(object):

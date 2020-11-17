@@ -6,9 +6,9 @@ from __future__ import unicode_literals
 import json
 from datetime import datetime, timedelta
 
-from event import Event
-from cache import cache
-from prefs import prefs
+from ocu.event import Event
+from ocu.cache import cache
+from ocu.prefs import prefs
 
 
 # The number of hours in a day

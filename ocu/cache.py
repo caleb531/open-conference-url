@@ -8,7 +8,7 @@ import re
 import subprocess
 from datetime import datetime
 
-from prefs import prefs
+from ocu.prefs import prefs
 
 
 # Manages storage and retrieval of cached data for this workflow (e.g. calendar
@@ -25,6 +25,9 @@ class Cache(object):
 
     # The file path to the cache store
     cache_path = os.path.join(cache_dir, 'event-cache.json')
+
+    # The directory containing the workflow's source files
+    code_dir = os.path.dirname(os.path.realpath(__file__))
 
     def __init__(self):
         self.create_cache_dir()
@@ -115,7 +118,7 @@ class Cache(object):
     def queue_refresh(self):
         subprocess.call([
             '/usr/bin/osascript',
-            'queue_cache_refresh.applescript'
+            os.path.join(self.code_dir, 'queue_cache_refresh.applescript')
         ])
 
 
