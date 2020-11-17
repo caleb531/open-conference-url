@@ -74,16 +74,14 @@ def get_event_feedback_item(event):
 
 def main():
 
-    all_events = []
     # The feedback object which will be fed to Alfred to display the results
     feedback = {'items': []}
 
-    for event in get_events():
-        # Do not display the event in the results if it has no conference URL
-        if not event.conference_url:
-            continue
-        all_events.append(event)
+    # Fetch all events from cache, regardless of proximity to the system's
+    # current time
+    all_events = [event for event in get_events() if event.conference_url]
 
+    # Filter those events to only those which are nearest to the current time
     upcoming_events = [event for event in all_events if is_time_within_range(
                        event.start_datetime, prefs.event_time_threshold)]
 
