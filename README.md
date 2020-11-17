@@ -11,17 +11,19 @@ calendar events.
 
 ## Installation
 
-Before you can use Open Conference URL, you must install [icalBuddy][icalBuddy] and Python 3:
+The Open Conference URL workflow requires [icalBuddy][icalbuddy] and Python 3,
+which you can install via the [Homebrew][homebrew] package manager.
 
 ```sh
 brew install ical-buddy
 brew install python@3
 ```
 
-After this point, you can simply double-click the workflow file to install in
-Alfred.
+Once both packages install successfully, you can simply double-click the
+workflow file to activate it in Alfred.
 
-[icalBuddy]: https://formulae.brew.sh/formula/ical-buddy
+[homebrew]: https://brew.sh/
+[icalbuddy]: https://formulae.brew.sh/formula/ical-buddy
 
 ## Usage
 
