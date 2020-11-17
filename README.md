@@ -35,10 +35,16 @@ times are displayed in your system's local timezone.
 
 ## Preferences
 
-The `prefs.json` file that's part of the workflow contains the relevant
-configuration for various aspects of the workflow's behavior. What follows is a
-description of each preference you can configure. If you are unfamiliar with
-JSON syntax, you can find many quick tutorials online.
+This workflow contains user configuration options for various aspects of the
+workflow's behavior. To view this preferences file:
+
+1. Right-click the workflow in Alfred Preferences
+2. Choose **Open In Finder**
+3. Navigate into the `ocu` folder
+4. Open `prefs.json` in your preferred text editor
+
+What follows is a description of each preference you can configure. If you are
+unfamiliar with JSON syntax, you can find many quick tutorials online.
 
 ### offset_from_today
 
