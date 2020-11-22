@@ -80,7 +80,7 @@ class Cache(object):
 
     # Refresh latest calendar event data
     def refresh(self):
-        event_blobs = re.split(r'• ', subprocess.check_output([
+        event_blobs = re.split(r'(?:^|\n)• ', subprocess.check_output([
             '/usr/local/bin/icalBuddy',
             # Override the default date/time formats
             '--dateFormat',
