@@ -64,12 +64,6 @@ For example, a value of `{"minutes": 20}` will mean the workflow will only show
 events whose start time was within the last 20 minutes *or* whose start time is
 within the next 20 minutes.
 
-Internally, the value of this preference is passed directly to Python's
-[`datetime.timedelta` function][docs], so you can consult that class's
-documentation to see other acceptable values (like `days`).
-
-[docs]: https://docs.python.org/3/library/datetime.html#datetime.timedelta
-
 ### conference_domains
 
 The `conference_domains` is an array of domain names representing which URLs to
