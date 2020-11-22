@@ -11,12 +11,11 @@ calendar events.
 
 ## Installation
 
-The Open Conference URL workflow requires [icalBuddy][icalbuddy] and Python 3,
+The Open Conference URL workflow requires [icalBuddy][icalbuddy],
 which you can install via the [Homebrew][homebrew] package manager.
 
 ```sh
 brew install ical-buddy
-brew install python@3
 ```
 
 Once both packages install successfully, you can simply double-click the
