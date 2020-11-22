@@ -65,20 +65,9 @@ class Cache(object):
         except OSError:
             pass
 
-    # Return True if the given key exists in the cache; otherwise, return false
-    def has(self, key):
-        if self.__dict__[key]:
-            return True
-        else:
-            return False
-
-    # Return True if the given key exists in the cache; otherwise, return false
-    def get(self, key):
-        return self.__dict__[key]
-
-    # Store the given value at the specified key in the cache
-    def set(self, key, value):
-        self.__dict__[key] = value
+    # Update the cache with the given key/value pairs
+    def update(self, attrs):
+        self.__dict__.update(attrs)
         with open(self.cache_path, 'w') as cache_file:
             json.dump(self.__dict__, cache_file,
                       indent=2, separators=(',', ': '))
@@ -107,11 +96,14 @@ class Cache(object):
         event_blobs.pop(0)
         # Detect when cache data has been updated, or if it has remained the
         # same (the event blobs are the only data worth checking)
-        if self.get('event_blobs') != event_blobs:
-            # Cache event blob data for next execution of workflow
-            self.set('event_blobs', event_blobs)
-            # Cache event blob data for next execution of workflow
-            self.set('last_refresh_date', self.get_current_date())
+        if self.event_blobs != event_blobs:
+            self.update({
+                # Cache event blob data for next execution of workflow
+                'event_blobs': event_blobs,
+                # Cache the current date so we know when to invalidate the
+                # cache
+                'last_refresh_date': self.get_current_date()
+            })
             has_cache_updated = True
         else:
             has_cache_updated = False
