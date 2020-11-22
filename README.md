@@ -63,3 +63,10 @@ considered "conference" URLs.
 The domains are listed in order of precedence, so if `"zoom.us"` precedes
 `"google.com"` in the file, then the workflow will prefer the Zoom link over the
 Google Meet link if both are present.
+
+## Credits
+
+Kudos to [@jacksonrayhamilton][jrh] for his architecture ideas and feedback on
+this project.
+
+[jrh]: https://github.com/jacksonrayhamilton
