@@ -11,18 +11,8 @@ calendar events.
 
 ## Installation
 
-The Open Conference URL workflow requires [icalBuddy][icalbuddy],
-which you can install via the [Homebrew][homebrew] package manager.
-
-```sh
-brew install ical-buddy
-```
-
-Once both packages install successfully, you can simply double-click the
-workflow file to activate it in Alfred.
-
-[homebrew]: https://brew.sh/
-[icalbuddy]: https://formulae.brew.sh/formula/ical-buddy
+Simply download the workflow file (shown in the file list above) and
+double-click it to install it in Alfred.
 
 ## Usage
 

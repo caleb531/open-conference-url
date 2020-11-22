@@ -29,6 +29,9 @@ class Cache(object):
     # The directory containing the workflow's source files
     code_dir = os.path.dirname(os.path.realpath(__file__))
 
+    # The path to the icalBuddy binary used for retrieving calendar data
+    binary_path = os.path.join(code_dir, 'icalBuddy')
+
     def __init__(self):
         self.create_cache_dir()
         try:
@@ -81,7 +84,7 @@ class Cache(object):
     # Refresh latest calendar event data
     def refresh(self):
         event_blobs = re.split(r'(?:^|\n)• ', subprocess.check_output([
-            '/usr/local/bin/icalBuddy',
+            self.binary_path,
             # Override the default date/time formats
             '--dateFormat',
             prefs.date_format,

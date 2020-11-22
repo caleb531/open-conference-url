@@ -2,8 +2,6 @@
   "export_file": "Open Conference URL.alfredworkflow",
   "bundle_id": "com.calebevans.openconferenceurl",
   "resources": [
-      "ocu/*.py",
-      "ocu/*.json",
-      "ocu/*.applescript"
+      "ocu/*"
   ]
 }
