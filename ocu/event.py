@@ -20,7 +20,7 @@ class Event(object):
             self.is_all_day = True
             # Set the time of all-day events to the system's current time, to
             # ensure that those events always show
-            self.start_datetime = datetime.now().astimezone()
+            self.start_datetime = datetime.now()
         else:
             self.is_all_day = False
         self.conference_url = self.parse_conference_url()
@@ -38,12 +38,12 @@ class Event(object):
             return datetime.strptime(
                 start_datetime_matches.group(1).strip(),
                 '{} at {}'.format(
-                    prefs.date_format, prefs.time_format)).astimezone()
+                    prefs.date_format, prefs.time_format))
         else:
             # Handle all-day events
             return datetime.strptime(
                 start_datetime_matches.group(1).strip(),
-                prefs.date_format).astimezone()
+                prefs.date_format)
 
     # Return the conference URL for the given event, whereby some services have
     # higher precedence than others (e.g. always prefer Zoom URLs over Google

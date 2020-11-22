@@ -42,7 +42,7 @@ def get_event(event_path):
 # range (e.g. within the next 15 minutes OR in the last 15 minutes); if not,
 # return False
 def is_time_within_range(event_datetime, event_time_threshold):
-    current_datetime = datetime.now().astimezone()
+    current_datetime = datetime.now()
     event_time_threshold = timedelta(**event_time_threshold)
     min_datetime = (event_datetime - event_time_threshold)
     max_datetime = (event_datetime + event_time_threshold)
