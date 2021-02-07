@@ -19,9 +19,9 @@ MINUTES_IN_HOUR = 60
 
 # Retrieve the raw calendar output for today's events
 def get_event_blobs():
-    if not hasattr(cache, 'event_blobs'):
+    if not cache.has('event_blobs'):
         cache.refresh()
-    return cache.event_blobs
+    return cache.get('event_blobs')
 
 
 # Retrieve a list of event UIDs for today's calendar day

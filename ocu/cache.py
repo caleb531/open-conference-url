@@ -36,6 +36,7 @@ class Cache(object):
 
     def __init__(self):
         self.create_cache_dir()
+        self.map = {}
         try:
             return self.read()
         except (IOError, RuntimeError):
@@ -51,9 +52,9 @@ class Cache(object):
     def read(self):
         with open(self.cache_path, 'r') as cache_file:
             # Make all JSON keys accessible as instance attributes
-            self.__dict__.update(json.load(cache_file))
+            self.map.update(json.load(cache_file))
         # Invalidate the cache at the start of every day
-        if self.last_refresh_date != self.get_current_date():
+        if self.get('last_refresh_date') != self.get_current_date():
             # Raising a RuntimeError will run the exception-handling code in
             # the constructor
             raise RuntimeError('Last refresh date is too old')
@@ -65,11 +66,19 @@ class Cache(object):
         except OSError:
             pass
 
+    # Retrieve the given key from the cache
+    def get(self, key):
+        return self.map.get(key)
+
+    # Return True if the given key exists in the map; return False otherwise
+    def has(self, key):
+        return key in self.map
+
     # Update the cache with the given key/value pairs
     def update(self, attrs):
-        self.__dict__.update(attrs)
+        self.map.update(attrs)
         with open(self.cache_path, 'w') as cache_file:
-            json.dump(self.__dict__, cache_file,
+            json.dump(self.map, cache_file,
                       indent=2, separators=(',', ': '))
 
     # Refresh latest calendar event data
@@ -96,7 +105,7 @@ class Cache(object):
         event_blobs.pop(0)
         # Detect when cache data has been updated, or if it has remained the
         # same (the event blobs are the only data worth checking)
-        if not hasattr(self, 'event_blobs') or self.event_blobs != event_blobs:
+        if self.get('event_blobs') != event_blobs:
             self.update({
                 # Cache event blob data for next execution of workflow
                 'event_blobs': event_blobs,
