@@ -96,7 +96,7 @@ class Cache(object):
         event_blobs.pop(0)
         # Detect when cache data has been updated, or if it has remained the
         # same (the event blobs are the only data worth checking)
-        if self.event_blobs != event_blobs:
+        if not hasattr(self, 'event_blobs') or self.event_blobs != event_blobs:
             self.update({
                 # Cache event blob data for next execution of workflow
                 'event_blobs': event_blobs,
