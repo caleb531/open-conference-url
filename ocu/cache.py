@@ -122,7 +122,7 @@ class Cache(object):
     # workflow cache in the background without blocking the execution of this
     # script)
     def queue_refresh(self):
-        subprocess.call([
+        subprocess.Popen([
             '/usr/bin/osascript',
             os.path.join(self.code_dir, 'queue_cache_refresh.applescript')
         ])
