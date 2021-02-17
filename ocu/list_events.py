@@ -28,7 +28,7 @@ def get_event_blobs():
 def get_events():
 
     event_blobs = get_event_blobs()
-    return [Event(event_blob) for event_blob in event_blobs]
+    return [Event(event_blob) for event_blob in event_blobs if '\n' in event_blob]
 
 
 # Read the given ICS file path and return the Event object corresponding to
