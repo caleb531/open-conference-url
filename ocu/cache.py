@@ -35,6 +35,7 @@ class Cache(object):
     binary_path = os.path.join(code_dir, 'icalBuddy')
 
     def __init__(self):
+        self.event_blobs = []
         self.create_cache_dir()
         self.map = {}
         try:
