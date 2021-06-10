@@ -5,7 +5,8 @@
   },
   "conference_domains": [
     "zoom.us",
-    "google.com",
+    "meet.google.com",
+    "hangouts.google.com",
     "uberconference.com",
     "microsoft.com",
     "gotomeeting.com",
