@@ -40,7 +40,7 @@ class Cache(object):
         try:
             return self.read()
         except (IOError, RuntimeError):
-            self.refresh()
+            self.refresh(force=True)
             return self.read()
 
     # Return the current date as a string (for comparison against the date the
@@ -82,7 +82,7 @@ class Cache(object):
                       indent=2, separators=(',', ': '))
 
     # Refresh latest calendar event data
-    def refresh(self):
+    def refresh(self, force=False):
         event_blobs = re.split(r'(?:^|\n)• ', subprocess.check_output([
             self.binary_path,
             # Override the default date/time formats
@@ -105,7 +105,7 @@ class Cache(object):
         event_blobs.pop(0)
         # Detect when cache data has been updated, or if it has remained the
         # same (the event blobs are the only data worth checking)
-        if self.get('event_blobs') != event_blobs:
+        if force or self.get('event_blobs') != event_blobs:
             self.update({
                 # Cache event blob data for next execution of workflow
                 'event_blobs': event_blobs,
