@@ -51,7 +51,7 @@ class Event(object):
     def parse_conference_url(self):
         for domain in prefs.conference_domains:
             matches = re.search(
-                r'https://(\w+\.)?({domain})/([^><"\']+?)(?=([\s><"\']|$))'.format(domain=domain),
+                r'https://(\w+\.)?({domain})/([^><"\']+?)(?=([\s><"\']|$))'.format(domain=domain),  # noqa
                 self.blob)
             if matches:
                 return matches.group(0)
