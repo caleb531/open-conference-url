@@ -36,13 +36,13 @@ class Event(object):
         if start_datetime_matches.group(3):
             # Handle events with specific start time
             return datetime.strptime(
-                start_datetime_matches.group(1).strip(),
+                start_datetime_matches.group(1).split('\n', 1)[0].strip(),
                 '{} at {}'.format(
                     prefs.date_format, prefs.time_format))
         else:
             # Handle all-day events
             return datetime.strptime(
-                start_datetime_matches.group(1).strip(),
+                start_datetime_matches.group(1).split('\n', 1)[0].strip(),
                 prefs.date_format)
 
     # Return the conference URL for the given event, whereby some services have
