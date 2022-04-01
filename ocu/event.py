@@ -25,7 +25,7 @@ class Event(object):
             self.is_all_day = False
         self.conference_url = self.parse_conference_url()
         # Bypass the browser when opening Zoom URLs, for convenience
-        if self.is_zoom_url(self.conference_url):
+        if self.is_zoom_url(self.conference_url) and prefs.use_direct_zoom:
             self.conference_url = self.convert_zoom_url_to_direct(
                 self.conference_url)
 
