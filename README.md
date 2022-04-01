@@ -1,6 +1,6 @@
 # Open Conference URL
 
-*Copyright 2020-2021 Caleb Evans*  
+*Copyright 2020-2022 Caleb Evans*  
 *Released under the MIT license*
 
 Open Conference URL is an [Alfred][alfred] workflow which enables you to quickly
