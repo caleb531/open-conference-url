@@ -24,6 +24,23 @@ class Event(object):
         else:
             self.is_all_day = False
         self.conference_url = self.parse_conference_url()
+        # Bypass the browser when opening Zoom URLs, for convenience
+        if self.is_zoom_url(self.conference_url):
+            self.conference_url = self.convert_zoom_url_to_direct(
+                self.conference_url)
+
+    # Return True if the given URL is a Zoom URL; return False otherwise
+    def is_zoom_url(self, url):
+        matches = re.search(r'https://(\w+\.)?(zoom.us)', url)
+        return bool(matches)
+
+    # Convert an https: Zoom URL to the zoommtg: protocol which will allow it
+    # to bypass a web browser to open directly in the Zoom application
+    def convert_zoom_url_to_direct(self, zoom_url):
+        zoom_url = re.sub(r'https://', 'zoommtg://', zoom_url)
+        zoom_url = re.sub(r'/j/', '/join?action=join&confno=', zoom_url)
+        zoom_url = re.sub(r'\?pwd=', '&pwd=', zoom_url)
+        return zoom_url
 
     # Parse and return the display title of the event from the blob string
     def parse_title(self):
