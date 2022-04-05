@@ -31,6 +31,8 @@ class Event(object):
 
     # Return True if the given URL is a Zoom URL; return False otherwise
     def is_zoom_url(self, url):
+        if not url:
+            return False
         matches = re.search(r'https://(\w+\.)?(zoom.us)', url)
         return bool(matches)
 
