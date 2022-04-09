@@ -52,11 +52,19 @@ def is_time_within_range(event_datetime, event_time_threshold_mins):
         return False
 
 
+# Get the event time (or 'All-Day' if the event is all-day)
+def get_event_time(event):
+    if event.is_all_day:
+        return 'All-Day'
+    else:
+        return event.start_datetime.strftime('%-I:%M%p').lower()
+
+
 # Return an Alfred feedback item representing the given Event instance
 def get_event_feedback_item(event):
     return {
         'title': event.title,
-        'subtitle': 'All-Day' if event.is_all_day else event.start_datetime.strftime('%-I:%M%p').lower(),
+        'subtitle': get_event_time(event),
         'text': {
             # Copy the conference URL to the clipboard when cmd-c is
             # pressed
@@ -80,7 +88,8 @@ def main():
 
     # Filter those events to only those which are nearest to the current time
     upcoming_events = [event for event in all_events if is_time_within_range(
-                       event.start_datetime, prefs['event_time_threshold_mins'])]
+                       event.start_datetime,
+                       prefs['event_time_threshold_mins'])]
 
     # The feedback object which will be fed to Alfred to display the results
     feedback = {'items': []}
