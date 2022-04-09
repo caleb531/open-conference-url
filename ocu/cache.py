@@ -6,11 +6,10 @@ from __future__ import unicode_literals
 import json
 import os
 import os.path
-import re
 import subprocess
 from datetime import datetime
 
-from ocu.prefs import prefs
+from ocu.calendar import calendar
 
 
 # Manages storage and retrieval of cached data for this workflow (e.g. calendar
@@ -31,15 +30,6 @@ class Cache(object):
     # The directory containing the workflow's source files
     code_dir = os.path.dirname(os.path.realpath(__file__))
 
-    # All possible paths to check for the icalBuddy binary that's used for
-    # retrieving calendar data; the first path that exists on the user's system
-    # is the one that's used
-    binary_paths = [
-        os.path.join(os.sep, 'opt', 'homebrew', 'bin', 'icalBuddy'),
-        os.path.join(os.sep, 'usr', 'local', 'bin', 'icalBuddy'),
-        os.path.join(code_dir, 'icalBuddy')
-    ]
-
     def __init__(self):
         self.create_cache_dir()
         self.map = {}
@@ -52,7 +42,7 @@ class Cache(object):
     # Return the current date as a string (for comparison against the date the
     # cache was last refreshed)
     def get_current_date(self):
-        return datetime.now().strftime(prefs.date_format)
+        return datetime.now().strftime(calendar.date_format)
 
     # Read the cache JSON into memory
     def read(self):
@@ -87,38 +77,9 @@ class Cache(object):
             json.dump(self.map, cache_file,
                       indent=2, separators=(',', ': '))
 
-    # Retrieve the first available path to the binary among a list of possible
-    # paths (this allows us to prefer the already-signed Homebrew icalBuddy
-    # binary over our workflow-bundled binary that requires explicit permission
-    # to execute)
-    def get_binary_path(self):
-        for binary_path in self.binary_paths:
-            if os.path.exists(binary_path):
-                return binary_path
-        return binary_path[-1]
-
     # Refresh latest calendar event data
     def refresh(self, force=False):
-        event_blobs = re.split(r'(?:^|\n)• ', subprocess.check_output([
-            self.get_binary_path(),
-            # Override the default date/time formats
-            '--dateFormat',
-            prefs.date_format,
-            '--noRelativeDates',
-            '--timeFormat',
-            prefs.time_format,
-            # remove parenthetical calendar names from event titles
-            '--noCalendarNames',
-            # Only include the following fields and enforce their order
-            '--includeEventProps',
-            ','.join(prefs.event_props),
-            '--propertyOrder',
-            ','.join(prefs.event_props),
-            'eventsToday+{}'.format(prefs['offset_from_today'])
-        ]).decode('utf-8'))
-        # The first element will always be an empty string, because the bullet
-        # point we are splitting on is not a delimiter
-        event_blobs.pop(0)
+        event_blobs = calendar.get_event_blobs()
         # Detect when cache data has been updated, or if it has remained the
         # same (the event blobs are the only data worth checking)
         if force or self.get('event_blobs') != event_blobs:

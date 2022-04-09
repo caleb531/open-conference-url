@@ -4,6 +4,7 @@
 import re
 from datetime import datetime
 
+from ocu.calendar import calendar
 from ocu.prefs import prefs
 
 
@@ -57,12 +58,12 @@ class Event(object):
             return datetime.strptime(
                 start_datetime_matches.group(1).split('\n', 1)[0].strip(),
                 '{} at {}'.format(
-                    prefs.date_format, prefs.time_format))
+                    calendar.date_format, calendar.time_format))
         else:
             # Handle all-day events
             return datetime.strptime(
                 start_datetime_matches.group(1).split('\n', 1)[0].strip(),
-                prefs.date_format)
+                calendar.date_format)
 
     # Return the conference URL for the given event, whereby some services have
     # higher precedence than others (e.g. always prefer Zoom URLs over Google
