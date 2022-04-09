@@ -31,8 +31,14 @@ class Cache(object):
     # The directory containing the workflow's source files
     code_dir = os.path.dirname(os.path.realpath(__file__))
 
-    # The path to the icalBuddy binary used for retrieving calendar data
-    binary_path = os.path.join(code_dir, 'icalBuddy')
+    # All possible paths to check for the icalBuddy binary that's used for
+    # retrieving calendar data; the first path that exists on the user's system
+    # is the one that's used
+    binary_paths = [
+        os.path.join(os.sep, 'opt', 'homebrew', 'bin', 'icalBuddy'),
+        os.path.join(os.sep, 'usr', 'local', 'bin', 'icalBuddy'),
+        os.path.join(code_dir, 'icalBuddy')
+    ]
 
     def __init__(self):
         self.create_cache_dir()
@@ -81,10 +87,20 @@ class Cache(object):
             json.dump(self.map, cache_file,
                       indent=2, separators=(',', ': '))
 
+    # Retrieve the first available path to the binary among a list of possible
+    # paths (this allows us to prefer the already-signed Homebrew icalBuddy
+    # binary over our workflow-bundled binary that requires explicit permission
+    # to execute)
+    def get_binary_path(self):
+        for binary_path in self.binary_paths:
+            if os.path.exists(binary_path):
+                return binary_path
+        return binary_path[-1]
+
     # Refresh latest calendar event data
     def refresh(self, force=False):
         event_blobs = re.split(r'(?:^|\n)• ', subprocess.check_output([
-            self.binary_path,
+            self.get_binary_path(),
             # Override the default date/time formats
             '--dateFormat',
             prefs.date_format,
