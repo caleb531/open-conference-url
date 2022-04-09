@@ -23,8 +23,8 @@ class Prefs(object):
     def convert_str_to_bool(self, value):
         return value.lower().strip() in ('1', 'y', 'yes', 'true', 't')
 
-    def __getitem__(self, name):
-        return self.pref_field_types[name.lower()](os.environ[name.lower()])
+    def __getitem__(self, pref_name):
+        return self.pref_field_types[pref_name](os.environ[pref_name])
 
 
 prefs = Prefs()
