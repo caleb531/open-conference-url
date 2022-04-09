@@ -41,9 +41,9 @@ def get_event(event_path):
 # Return True if the given date/time object is within the acceptable tolerance
 # range (e.g. within the next 15 minutes OR in the last 15 minutes); if not,
 # return False
-def is_time_within_range(event_datetime, event_time_threshold):
+def is_time_within_range(event_datetime, event_time_threshold_mins):
     current_datetime = datetime.now()
-    event_time_threshold = timedelta(**event_time_threshold)
+    event_time_threshold = timedelta(minutes=event_time_threshold_mins)
     min_datetime = (event_datetime - event_time_threshold)
     max_datetime = (event_datetime + event_time_threshold)
     if min_datetime <= current_datetime <= max_datetime:
@@ -80,7 +80,7 @@ def main():
 
     # Filter those events to only those which are nearest to the current time
     upcoming_events = [event for event in all_events if is_time_within_range(
-                       event.start_datetime, prefs.event_time_threshold)]
+                       event.start_datetime, prefs['event_time_threshold_mins'])]
 
     # The feedback object which will be fed to Alfred to display the results
     feedback = {'items': []}

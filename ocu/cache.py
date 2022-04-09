@@ -114,7 +114,7 @@ class Cache(object):
             ','.join(prefs.event_props),
             '--propertyOrder',
             ','.join(prefs.event_props),
-            'eventsToday+{}'.format(prefs.offset_from_today)
+            'eventsToday+{}'.format(prefs['offset_from_today'])
         ]).decode('utf-8'))
         # The first element will always be an empty string, because the bullet
         # point we are splitting on is not a delimiter

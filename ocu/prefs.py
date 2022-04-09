@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import json
 import os
 import os.path
 
@@ -16,17 +15,15 @@ class Prefs(object):
     # The properties (in order) that icalBuddy must output; changing this order
     # will break the parsing of event data
     event_props = ('title', 'datetime', 'location', 'url', 'notes')
+    pref_field_types = {
+        'conference_domains': lambda value: value.split(','),
+        'event_time_threshold_mins': int,
+        'offset_from_today': int,
+        'use_direct_zoom': lambda value: value.lower() == 'yes'
+    }
 
-    # The directory path containing the preferences file
-    prefs_dir = os.path.dirname(os.path.realpath(__file__))
-
-    # The file path to the preferences JSON file
-    prefs_file = os.path.join(prefs_dir, 'prefs.json')
-
-    def __init__(self):
-        with open(self.prefs_file, 'r') as prefs_file:
-            # Make all JSON keys accessible as instance attributes
-            self.__dict__.update(json.load(prefs_file))
+    def __getitem__(self, name):
+        return self.pref_field_types[name.lower()](os.environ[name.lower()])
 
 
 prefs = Prefs()
