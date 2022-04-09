@@ -53,12 +53,6 @@ For example, a value of `{"minutes": 20}` will mean the workflow will only show
 events whose start time was within the last 20 minutes *or* whose start time is
 within the next 20 minutes.
 
-### offset_from_today
-
-The `offset_from_today` is a positive integer representing how many days into
-the future the workflow should fetch calendar events. For example, a value of
-`1` will display events from tomorrow alongside events from today.
-
 ## Credits
 
 Kudos to [@jacksonrayhamilton][jrh] for his architecture ideas and feedback on

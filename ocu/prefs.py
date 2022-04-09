@@ -10,7 +10,6 @@ class Prefs(object):
     pref_field_types = {
         'conference_domains': lambda value: value.split(','),
         'event_time_threshold_mins': int,
-        'offset_from_today': int,
         'use_direct_zoom': lambda value: value.lower() in (
             '1',
             'y',

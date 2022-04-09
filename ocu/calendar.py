@@ -4,8 +4,6 @@ import os.path
 import re
 import subprocess
 
-from ocu.prefs import prefs
-
 
 # An abstraction class between this workflow and the program that retrieves the
 # calendar data (in this case, icalBuddy)
@@ -54,7 +52,9 @@ class Calendar(object):
             ','.join(self.event_props),
             '--propertyOrder',
             ','.join(self.event_props),
-            'eventsToday+{}'.format(prefs['offset_from_today'])
+            # If we omit the '+0', the icalBuddy output does not include the
+            # current date, which our parsing logic assumes is present
+            'eventsToday+0'
         ]).decode('utf-8'))
         # The first element will always be an empty string, because the bullet
         # point we are splitting on is not a delimiter
