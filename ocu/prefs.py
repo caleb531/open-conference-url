@@ -7,17 +7,21 @@ import os
 # The user's preferences for this workflow
 class Prefs(object):
 
-    pref_field_types = {
-        'conference_domains': lambda value: value.split(','),
-        'event_time_threshold_mins': int,
-        'use_direct_zoom': lambda value: value.lower() in (
-            '1',
-            'y',
-            'yes',
-            'true',
-            't'
-        )
-    }
+    def __init__(self):
+        self.pref_field_types = {
+            'conference_domains': self.convert_str_to_list,
+            'event_time_threshold_mins': int,
+            'use_direct_zoom': self.convert_str_to_bool
+        }
+
+    # Convert a comma-separated string of values to a proper list type
+    def convert_str_to_list(self, value):
+        return value.strip().split(',')
+
+    # Convert a boolean-like string value (like 'Yes' or 'True') to a proper
+    # boolean
+    def convert_str_to_bool(self, value):
+        return value.lower().strip() in ('1', 'y', 'yes', 'true', 't')
 
     def __getitem__(self, name):
         return self.pref_field_types[name.lower()](os.environ[name.lower()])
