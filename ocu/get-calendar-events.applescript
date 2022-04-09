@@ -203,7 +203,7 @@ repeat with theEvent in theEvents
 	-- set eventDataStr to eventDataStr & return & {startDate: prop2str(theEvent's startDate)}
 	set eventObject to createDict()
 	repeat with theEventProp in eventProps
-        if (theEventProp as text) is "startDate" then
+        if (theEventProp as text) is "startDate" or (theEventProp as text) is "endDate" then
 		    eventObject's setkv(theEventProp, normalizeDateString(theEvent's valueForKey:theEventProp))
         else
 		    eventObject's setkv(theEventProp, prop2str(theEvent's valueForKey:theEventProp))
