@@ -6,8 +6,8 @@ from __future__ import unicode_literals
 import json
 from datetime import datetime, timedelta
 
+from ocu.calendar import calendar
 from ocu.event import Event
-from ocu.cache import cache
 from ocu.prefs import prefs
 
 
@@ -19,9 +19,7 @@ MINUTES_IN_HOUR = 60
 
 # Retrieve the raw calendar output for today's events
 def get_event_blobs():
-    if not cache.has('event_blobs'):
-        cache.refresh()
-    return cache.get('event_blobs')
+    return calendar.get_event_blobs()
 
 
 # Retrieve a list of event UIDs for today's calendar day
@@ -82,13 +80,7 @@ def get_event_feedback_item(event):
 
 def main():
 
-    # Tell Alfred to refresh the event cache in the background without blocking
-    # the loading of the event list into Alfred's results; this should be the
-    # first operation performed in case an error is raised in the following
-    # lines due to a tainted cache
-    cache.queue_refresh()
-
-    # Fetch all events from cache, regardless of proximity to the system's
+    # Fetch all events, regardless of proximity to the system's
     # current time
     all_events = [event for event in get_events() if event.conference_url]
 
