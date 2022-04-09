@@ -10,12 +10,12 @@ from ocu.prefs import prefs
 
 class Event(object):
 
-    # Initialize an Event object by parsing an event blob string as input; the
-    # event blob represents raw event data from icalBuddy, which has a very
-    # particular string format and must be parsed with regular expressions
-    def __init__(self, event_blob):
-        self.blob = event_blob
-        self.title = self.parse_title()
+    # Initialize an Event object by parsing a dictionary of raw event
+    # properties as input; this dictionary is constructed and outputted by the
+    # get-calendar-events AppleScript
+    def __init__(self, raw_data):
+        self.raw_data = raw_data
+        self.title = raw_data.get('title')
         self.start_datetime = self.parse_start_datetime()
         if self.start_datetime.hour == 0 and self.start_datetime.minute == 0:
             self.is_all_day = True
@@ -45,34 +45,29 @@ class Event(object):
         zoom_url = re.sub(r'\?pwd=', '&pwd=', zoom_url)
         return zoom_url
 
-    # Parse and return the display title of the event from the blob string
-    def parse_title(self):
-        return re.search(r'^(.*?)\n', self.blob).group(1)
-
     # Parse and return the date and time the event starts
     def parse_start_datetime(self):
-        start_datetime_matches = re.search(
-            r'\s{4}(([\d\-\/]+)( at ([^-]+))?)', self.blob)
-        if start_datetime_matches.group(3):
-            # Handle events with specific start time
-            return datetime.strptime(
-                start_datetime_matches.group(1).split('\n', 1)[0].strip(),
-                '{} at {}'.format(
-                    calendar.date_format, calendar.time_format))
-        else:
+        if self.raw_data.get('isAllDay') == 'true':
             # Handle all-day events
             return datetime.strptime(
-                start_datetime_matches.group(1).split('\n', 1)[0].strip(),
-                calendar.date_format)
+                self.raw_data['startDate'],
+                '{}T00:00'.format(calendar.date_format))
+        else:
+            # Handle events with specific start time
+            return datetime.strptime(
+                self.raw_data['startDate'],
+                '{}T{}'.format(
+                    calendar.date_format, calendar.time_format))
 
     # Return the conference URL for the given event, whereby some services have
     # higher precedence than others (e.g. always prefer Zoom URLs over Google
     # Meet URLs if both are present)
     def parse_conference_url(self):
+        event_search_str = ''.join(self.raw_data.values())
         for domain in prefs['conference_domains']:
             matches = re.search(
                 r'https://([\w\-]+\.)*({domain})/([^><"\']+?)(?=([\s><"\']|$))'.format(domain=domain),  # noqa
-                self.blob)
+                event_search_str)
             if matches:
                 return matches.group(0)
         return None

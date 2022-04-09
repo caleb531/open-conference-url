@@ -139,7 +139,7 @@ use framework "EventKit"
 
 -- convert an event property to a string
 on prop2str(theProp)
-	return (theProp as list) as string
+	return (theProp as list) as text
 end prop2str
 
 
@@ -179,14 +179,35 @@ set theEvents to (theEKEventStore's eventsMatchingPredicate:thePred)
 set theEvents to theEvents's sortedArrayUsingSelector:"compareStartDateWithEvent:"
 set AppleScript's text item delimiters to {","}
 
+-- Convert the given number to a string, padding it with a single zero if it is less than 10
+on zpad(theNumber)
+    if theNumber is less than 10
+        return "0" & (theNumber as text)
+    else
+        return theNumber as text
+    end if
+end zpad
+
+-- Convert a localized date string into a date string in a standard format
+-- which we can safely consume in other scripts
+on normalizeDateString(dateString)
+    set theDate to (dateString as list) as date
+    set AppleScript's text item delimiters to {""}
+    return ((theDate's year) & "-" & zpad(theDate's month as number) & "-" & zpad(theDate's day) & "T" & zpad(theDate's hours) & ":" & zpad(theDate's minutes)) as text
+end normalizeDateString
+
 -- construct a JSON array of the calendar events
 set eventObjects to {}
-set eventProps to {"title", "startDate", "endDate", "location", "notes"}
+set eventProps to {"title", "startDate", "endDate", "isAllDay", "location", "notes"}
 repeat with theEvent in theEvents
 	-- set eventDataStr to eventDataStr & return & {startDate: prop2str(theEvent's startDate)}
 	set eventObject to createDict()
 	repeat with theEventProp in eventProps
-		eventObject's setkv(theEventProp, prop2str(theEvent's valueForKey:theEventProp))
+        if (theEventProp as text) is "startDate" then
+		    eventObject's setkv(theEventProp, normalizeDateString(theEvent's valueForKey:theEventProp))
+        else
+		    eventObject's setkv(theEventProp, prop2str(theEvent's valueForKey:theEventProp))
+        end if
 	end repeat
 	copy eventObject to end of eventObjects
 end repeat
