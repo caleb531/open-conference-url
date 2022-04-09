@@ -82,6 +82,12 @@ def get_event_feedback_item(event):
 
 def main():
 
+    # Tell Alfred to refresh the event cache in the background without blocking
+    # the loading of the event list into Alfred's results; this should be the
+    # first operation performed in case an error is raised in the following
+    # lines due to a tainted cache
+    cache.queue_refresh()
+
     # Fetch all events from cache, regardless of proximity to the system's
     # current time
     all_events = [event for event in get_events() if event.conference_url]
@@ -112,9 +118,6 @@ def main():
     feedback['items'].extend(get_event_feedback_item(event)
                              for event in upcoming_events)
 
-    # Tell Alfred to refresh the event cache in the background without blocking
-    # the loading of the event list into Alfred's results
-    cache.queue_refresh()
     # Alfred doesn't appear to care about whitespace in the resulting JSON, so
     # we are prettifying the JSON output here for easier debugging
     print(json.dumps(feedback, indent=2))
