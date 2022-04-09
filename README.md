@@ -24,6 +24,14 @@ meeting, the logical event will show.
 The workflow also accounts for timezones and Daylight Saving Time (DST). All
 times are displayed in your system's local timezone.
 
+## Cache
+
+By default, the workflow shows cached calendar event data from the last run on
+the workflow, but the latest data is fetched in the background and then
+re-rendered in Alfred every time you run `conf`. In other words, if you don't
+see your upcoming meeting when running `conf`, wait a second or two and it
+should show up.
+
 ## Preferences
 
 This workflow contains preferences for various aspects of the workflow's
