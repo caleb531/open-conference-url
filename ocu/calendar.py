@@ -22,11 +22,10 @@ class Calendar(object):
 
     # Retrieve the raw event blob data from the AppleScript
     def get_event_blobs(self):
-        event_blobs = json.loads(subprocess.check_output([
+        return json.loads(subprocess.check_output([
             'osascript',
             self.script_path
         ]).decode('utf-8'))
-        return event_blobs
 
 
 calendar = Calendar()
