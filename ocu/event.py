@@ -65,7 +65,7 @@ class Event(object):
     # higher precedence than others (e.g. always prefer Zoom URLs over Google
     # Meet URLs if both are present)
     def parse_conference_url(self):
-        event_search_str = ''.join(self.raw_data.values())
+        event_search_str = '\n'.join(self.raw_data.values())
         for domain in prefs['conference_domains']:
             matches = re.search(
                 r'https://([\w\-]+\.)*({domain})/([^><"\']+?)(?=([\s><"\']|$))'.format(domain=domain),  # noqa
