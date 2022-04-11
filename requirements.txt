@@ -1,3 +1,4 @@
-alfred-workflow-packager==1.2.1
-biplist==1.0.3
-jsonschema==2.6.0
+alfred-workflow-packager==2.0.0
+attrs==21.4.0
+jsonschema==4.4.0
+pyrsistent==0.18.1
