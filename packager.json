@@ -2,6 +2,7 @@
   "export_file": "Open Conference URL.alfredworkflow",
   "bundle_id": "com.calebevans.openconferenceurl",
   "resources": [
+      "icon.png",
       "ocu/*"
   ]
 }
