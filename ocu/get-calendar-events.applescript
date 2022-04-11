@@ -143,8 +143,6 @@ on prop2str(theProp)
 end prop2str
 
 
--- list of one or more calendar names
-set listOfCalNames to {"General", "Caleb Evans"}
 -- create start date and end date for occurances
 set nowDate to current application's NSDate's |date|()
 set todaysDate to current application's NSCalendar's currentCalendar()'s dateBySettingHour:0 minute:0 |second|:0 ofDate:nowDate options:0
@@ -169,8 +167,6 @@ end if
 
 -- get calendars that can store events
 set theCalendars to theEKEventStore's calendarsForEntityType:0
--- filter out the one you want
-set theNSPredicate to current application's NSPredicate's predicateWithFormat_("title IN %@", listOfCalNames)
 
 -- find matching events
 set thePred to theEKEventStore's predicateForEventsWithStartDate:todaysDate endDate:tomorrowsDate calendars:theCalendars
