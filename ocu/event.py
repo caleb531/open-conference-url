@@ -8,6 +8,8 @@ from ocu.calendar import calendar
 from ocu.prefs import prefs
 
 
+# The object representation of a calendar event, with all of its fields
+# normalized and ready to be consumed by the list_events module
 class Event(object):
 
     # Initialize an Event object by parsing a dictionary of raw event
