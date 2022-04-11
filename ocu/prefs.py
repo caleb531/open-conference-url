@@ -4,7 +4,9 @@
 import os
 
 
-# The user's preferences for this workflow
+# A utility class for retrieving user preferences for this workflow; all
+# preferences are stored as Alfred Workflow variables, and are exposed to the
+# scripting runtime as environment variables
 class Prefs(object):
 
     def __init__(self):
