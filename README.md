@@ -49,12 +49,12 @@ still match `us02web.zoom.us` in a conference URL.
 
 ### event_time_threshold_mins
 
-The `event_time_threshold_mins` is an object that can contain any combination
-of `hours` and `minutes` integers. If an event is within this duration of time
+The `event_time_threshold_mins` is an integer representing the number of
+minutes before/after a meeting. If an event is within this duration of time
 (relative to the system's current time), it will be displayed in Alfred's
 results.
 
-For example, a value of `{"minutes": 20}` will mean the workflow will only show
+For example, a value of `20` will mean the workflow will only show
 events whose start time was within the last 20 minutes *or* whose start time is
 within the next 20 minutes.
 
