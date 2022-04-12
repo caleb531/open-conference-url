@@ -27,9 +27,12 @@ times are displayed in your system's local timezone.
 ## Preferences
 
 This workflow contains preferences for various aspects of the workflow's
-behavior. These are defined as Alfred workflow variables, which you can access
-by opening the Open Conference URL workflow view in Alfred Preferences, then
-clicking the [_x_] icon in the top-right region of the window.
+behavior. These are defined as Alfred [workflow variables][workflow-vars],
+which you can access by opening the Open Conference URL workflow view in Alfred
+Preferences, then clicking the [_x_] icon in the top-right region of the
+window.
+
+[workflow-vars]: https://www.alfredapp.com/help/workflows/advanced/variables/
 
 ### conference_domains
 
