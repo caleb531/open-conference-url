@@ -11,8 +11,11 @@ calendar events.
 
 ## Installation
 
-Simply download the workflow file (shown in the file list above) and
-double-click it to install it in Alfred.
+To download the workflow, simply click the download link below.
+
+[Download Open Conference URL (stable)][workflow-download]
+
+[workflow-download]: https://github.com/caleb531/open-conference-url/raw/main/Open%20Conference%20URL.alfredworkflow
 
 ## Usage
 
