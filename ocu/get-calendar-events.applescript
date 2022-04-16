@@ -1,3 +1,9 @@
+-- This script file is a combination of a JSON utility library and an
+-- EventKit-based AppleScript written by Shane Stanley; the script has been
+-- revised to output a JSON array of raw calendar event data
+
+-----------------------------------------------------------------------
+
 -- A JSON library for AppleScript, written by Alex Morega (@mgax)
 --- Source: https://github.com/mgax/applescript-json
 --
