@@ -36,7 +36,7 @@ class Event(object):
     def is_zoom_url(self, url):
         if not url:
             return False
-        matches = re.search(r'https://([\w\-]+\.)?(zoom.us)', url)
+        matches = re.search(r'https://([\w\-]+\.)?(zoom.us)/j/', url)
         return bool(matches)
 
     # Convert an https: Zoom URL to the zoommtg: protocol which will allow it
