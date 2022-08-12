@@ -68,7 +68,7 @@ class Event(object):
         event_search_str = '\n'.join(self.raw_data.values())
         for domain in prefs['conference_domains']:
             matches = re.search(
-                r'https://([\w\-]+\.)*({domain})/([^><"\']+?)(?=([\s><"\']|$))'.format(domain=domain),  # noqa
+                r'https://([\w\-]+\.)*({domain})/([^><"\'\.]+?)(?=([\s><"\']|$))'.format(domain=domain),  # noqa
                 event_search_str)
             if matches:
                 return matches.group(0)
