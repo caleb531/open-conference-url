@@ -148,39 +148,6 @@ on prop2str(theProp)
 	return (theProp as list) as text
 end prop2str
 
-
--- create start date and end date for occurances
-set nowDate to current application's NSDate's |date|()
-set todaysDate to current application's NSCalendar's currentCalendar()'s dateBySettingHour:0 minute:0 |second|:0 ofDate:nowDate options:0
-set tomorrowsDate to todaysDate's dateByAddingTimeInterval:1 * days
-
--- create event store and get the OK to access Calendars
-set theEKEventStore to current application's EKEventStore's alloc()'s init()
-theEKEventStore's requestAccessToEntityType:0 completion:(missing value)
-
--- check if app has access; this will still occur the first time you OK
--- authorization
-set authorizationStatus to current application's EKEventStore's authorizationStatusForEntityType:0 -- work around enum bug
-if authorizationStatus is not 3 then
-	display dialog "Access must be given in System Preferences" & linefeed & "-> Security & Privacy first." buttons {"OK"} default button 1
-	tell application "System Preferences"
-		activate
-		tell pane id "com.apple.preference.security" to reveal anchor "Privacy"
-	end tell
-    -- Explicitly abort the script with an error
-	error number -128
-end if
-
--- get calendars that can store events
-set theCalendars to theEKEventStore's calendarsForEntityType:0
-
--- find matching events
-set thePred to theEKEventStore's predicateForEventsWithStartDate:todaysDate endDate:tomorrowsDate calendars:theCalendars
-set theEvents to (theEKEventStore's eventsMatchingPredicate:thePred)
--- sort by date
-set theEvents to theEvents's sortedArrayUsingSelector:"compareStartDateWithEvent:"
-set AppleScript's text item delimiters to {","}
-
 -- Convert the given number to a string, padding it with a single zero if it is less than 10
 on zpad(theNumber)
     if theNumber is less than 10
@@ -198,19 +165,71 @@ on normalizeDateString(dateString)
     return ((theDate's year) & "-" & zpad(theDate's month as number) & "-" & zpad(theDate's day) & "T" & zpad(theDate's hours) & ":" & zpad(theDate's minutes)) as text
 end normalizeDateString
 
--- construct a JSON array of the calendar events
-set eventObjects to {}
-set eventProps to {"title", "startDate", "endDate", "isAllDay", "location", "notes"}
-repeat with theEvent in theEvents
-	-- set eventDataStr to eventDataStr & return & {startDate: prop2str(theEvent's startDate)}
-	set eventObject to createDict()
-	repeat with theEventProp in eventProps
-        if (theEventProp as text) is "startDate" or (theEventProp as text) is "endDate" then
-		    eventObject's setkv(theEventProp, normalizeDateString(theEvent's valueForKey:theEventProp))
-        else
-		    eventObject's setkv(theEventProp, prop2str(theEvent's valueForKey:theEventProp))
-        end if
-	end repeat
-	copy eventObject to end of eventObjects
-end repeat
-return encode(eventObjects)
+on split(value_list_str, delimiter)
+    set old_delimiters to AppleScript's text item delimiters
+    set AppleScript's text item delimiters to delimiter
+    set value_list to every text item of value_list_str
+    set AppleScript's text item delimiters to old_delimiters
+    return value_list
+end split
+
+on run(listOfCalNames)
+
+    -- create start date and end date for occurances
+    set nowDate to current application's NSDate's |date|()
+    set todaysDate to current application's NSCalendar's currentCalendar()'s dateBySettingHour:0 minute:0 |second|:0 ofDate:nowDate options:0
+    set tomorrowsDate to todaysDate's dateByAddingTimeInterval:1 * days
+
+    -- create event store and get the OK to access Calendars
+    set theEKEventStore to current application's EKEventStore's alloc()'s init()
+    theEKEventStore's requestAccessToEntityType:0 completion:(missing value)
+
+    -- check if app has access; this will still occur the first time you OK
+    -- authorization
+    set authorizationStatus to current application's EKEventStore's authorizationStatusForEntityType:0 -- work around enum bug
+    if authorizationStatus is not 3 then
+        display dialog "Access must be given in System Preferences" & linefeed & "-> Security & Privacy first." buttons {"OK"} default button 1
+        tell application "System Preferences"
+            activate
+            tell pane id "com.apple.preference.security" to reveal anchor "Privacy"
+        end tell
+        -- Explicitly abort the script with an error
+        error number -128
+    end if
+
+    -- get calendars that can store events
+    set theCalendars to theEKEventStore's calendarsForEntityType:0
+    -- filter down to the calendars you want
+    if count of listOfCalNames > 0 then
+        set theNSPredicate to current application's NSPredicate's predicateWithFormat_("title IN %@", listOfCalNames)
+        set calsToSearch to theCalendars's filteredArrayUsingPredicate:theNSPredicate
+        if count of calsToSearch < 1 then return encode({})
+    else
+        set calsToSearch to theCalendars
+    end if
+
+    -- find matching events
+    set thePred to theEKEventStore's predicateForEventsWithStartDate:todaysDate endDate:tomorrowsDate calendars:calsToSearch
+    set theEvents to (theEKEventStore's eventsMatchingPredicate:thePred)
+    -- sort by date
+    set theEvents to theEvents's sortedArrayUsingSelector:"compareStartDateWithEvent:"
+    set AppleScript's text item delimiters to {","}
+
+    -- construct a JSON array of the calendar events
+    set eventObjects to {}
+    set eventProps to {"title", "startDate", "endDate", "isAllDay", "location", "notes"}
+    repeat with theEvent in theEvents
+        -- set eventDataStr to eventDataStr & return & {startDate: prop2str(theEvent's startDate)}
+        set eventObject to createDict()
+        repeat with theEventProp in eventProps
+            if (theEventProp as text) is "startDate" or (theEventProp as text) is "endDate" then
+                eventObject's setkv(theEventProp, normalizeDateString(theEvent's valueForKey:theEventProp))
+            else
+                eventObject's setkv(theEventProp, prop2str(theEvent's valueForKey:theEventProp))
+            end if
+        end repeat
+        copy eventObject to end of eventObjects
+    end repeat
+    return encode(eventObjects)
+
+end run
