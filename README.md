@@ -39,7 +39,7 @@ window.
 
 ### conference_domains
 
-The `conference_domains` is an comma-separated list of domain names
+The `conference_domains` is a comma-separated list of domain names
 representing which URLs to check within each calendar event. This domains list
 determines which links are considered "conference" URLs.
 
