@@ -50,6 +50,12 @@ Meet links if both are present in a calendar event.
 All subdomains are matched automatically, so having `zoom.us` in the list will
 still match `us02web.zoom.us` in a conference URL.
 
+### calendar_names
+
+The `calendar_names` is a comma-separated list of calendar names on your local
+system for which to fetch events. If you leave this field blank, then the
+workflow will implicitly fetch check all calendars for event data.
+
 ### event_time_threshold_mins
 
 The `event_time_threshold_mins` is an integer representing the number of
