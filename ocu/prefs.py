@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import re
 
 
 # A utility class for retrieving user preferences for this workflow; all
@@ -12,13 +13,18 @@ class Prefs(object):
     def __init__(self):
         self.pref_field_types = {
             'conference_domains': self.convert_str_to_list,
+            'calendar_names': self.convert_str_to_list,
             'event_time_threshold_mins': int,
             'use_direct_zoom': self.convert_str_to_bool
         }
 
     # Convert a comma-separated string of values to a proper list type
     def convert_str_to_list(self, value):
-        return value.strip().split(',')
+        value_list = re.split(r'\s*,\s*', value.strip())
+        if value_list == ['']:
+            return []
+        else:
+            return value_list
 
     # Convert a boolean-like string value (like 'Yes' or 'True') to a proper
     # boolean

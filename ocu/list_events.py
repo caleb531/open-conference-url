@@ -19,7 +19,7 @@ MINUTES_IN_HOUR = 60
 
 # Retrieve the raw calendar output for today's events
 def get_event_blobs():
-    return calendar.get_event_blobs()
+    return calendar.get_event_blobs(prefs['calendar_names'])
 
 
 # Retrieve a list of event UIDs for today's calendar day
