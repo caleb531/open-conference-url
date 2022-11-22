@@ -15,7 +15,7 @@ To download the workflow, simply click the download link below.
 
 [Download Open Conference URL (stable)][workflow-download]
 
-[workflow-download]: https://github.com/caleb531/open-conference-url/raw/main/Open%20Conference%20URL.alfredworkflow
+[workflow-download]: https://github.com/caleb531/open-conference-url/raw/main/Open%20Conference%20URL%20(Alfred%204).alfredworkflow
 
 ## Usage
 
