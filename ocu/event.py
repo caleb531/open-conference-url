@@ -68,8 +68,9 @@ class Event(object):
     def parse_conference_url(self):
         event_search_str = '\n'.join(self.raw_data.values())
         for domain in prefs['conference_domains']:
+            domain_patt = re.sub(r'\*', r'([a-z0-9\-]+)', domain)
             matches = re.search(
-                r'https://([\w\-]+\.)?({domain})/([^><"\'\.]+?)(?=([\s><"\']|$))'.format(domain=domain),  # noqa
+                r'https://({domain})/([^><"\'\.]+?)(?=([\s><"\']|$))'.format(domain=domain_patt),  # noqa
                 event_search_str)
             if matches:
                 return matches.group(0)
