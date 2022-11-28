@@ -32,3 +32,8 @@ def test_teams():
     tc.assertEqual(
         event.conference_url,
         'https://teams.microsoft.com/l/meetup-join/12%3ameeting_A1b2C3%40thread.v2/0?context=%7b%22Tid')  # noqa
+
+
+def test_excluding_non_conference_urls():
+    event = get_event_from_file('non-meeting.json')
+    tc.assertEqual(event.conference_url, None)

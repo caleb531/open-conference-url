@@ -3,6 +3,7 @@
 
 import re
 from datetime import datetime
+from operator import itemgetter
 from urllib.parse import urlparse
 
 from ocu.calendar import calendar
@@ -77,12 +78,12 @@ class Event(object):
     # conference domain we want
     def get_url_score(self, url):
         if re.search(r'\.[a-z]{3}$', url):
-            return -10
+            return -1
         url_parts = urlparse(url)
         for i, domain_patt in enumerate(prefs['conference_domains']):
             if self.does_domain_match_pattern(url_parts.hostname, domain_patt):
                 return 10 * (len(prefs['conference_domains']) - i)
-        return 0
+        return -1
 
     # Return the conference URL for the given event, whereby some services have
     # higher precedence than others (e.g. always prefer Zoom URLs over Google
@@ -92,7 +93,9 @@ class Event(object):
         urls = re.findall(r'https://(?:.*?)(?=[\s><"\']|$)', event_search_str)
         if not urls:
             return None
-        ranked_urls = sorted(urls, key=self.get_url_score, reverse=True)
-        if not ranked_urls:
+        url_pairs = [(url, self.get_url_score(url)) for url in urls]
+        filtered_url_pairs = [(url, score)
+                              for url, score in url_pairs if score >= 0]
+        if not filtered_url_pairs:
             return None
-        return ranked_urls[0]
+        return max(filtered_url_pairs, key=itemgetter(1))[0]
