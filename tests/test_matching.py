@@ -25,7 +25,7 @@ def test_zoom():
     event = get_event_from_file('zoom.json')
     tc.assertEqual(
         event.conference_url,
-        'https://zoom.us/j/123456?usp=sharing')
+        'https://zoom.us/j/123456?pwd=AiBjCk')
 
 
 @use_env('use_direct_zoom', 'true')
@@ -33,7 +33,7 @@ def test_zoom_direct():
     event = get_event_from_file('zoom.json')
     tc.assertEqual(
         event.conference_url,
-        'zoommtg://zoom.us/join?action=join&confno=123456?usp=sharing')
+        'zoommtg://zoom.us/join?action=join&confno=123456&pwd=AiBjCk')
 
 
 def test_google_meet():
