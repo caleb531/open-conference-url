@@ -27,15 +27,15 @@ def test_zoom():
         'https://zoom.us/l/123456?usp=sharing')
 
 
-def test_meet():
-    event = get_event_from_file('meet.json')
+def test_google_meet():
+    event = get_event_from_file('google-meet.json')
     tc.assertEqual(
         event.conference_url,
         'https://meet.google.com/abc-defg-hij')
 
 
-def test_teams():
-    event = get_event_from_file('teams.json')
+def test_microsoft_teams():
+    event = get_event_from_file('microsoft-teams.json')
     tc.assertEqual(
         event.conference_url,
         'https://teams.microsoft.com/l/meetup-join/12%3ameeting_A1b2C3%40thread.v2/0?context=%7b%22Tid')
