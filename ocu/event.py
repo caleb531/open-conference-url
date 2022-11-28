@@ -3,6 +3,7 @@
 
 import re
 from datetime import datetime
+from urllib.parse import urlparse
 
 from ocu.calendar import calendar
 from ocu.prefs import prefs
@@ -62,16 +63,24 @@ class Event(object):
                 '{}T{}'.format(
                     calendar.date_format, calendar.time_format))
 
+    def get_url_score(self, url):
+        if re.search(r'\.[a-z]{3}$', url):
+            return -10
+        url_parts = urlparse(url)
+        for i, domain in enumerate(prefs['conference_domains']):
+            if url_parts.hostname == domain:
+                return 10 * (len(prefs['conference_domains']) - i)
+        return 0
+
     # Return the conference URL for the given event, whereby some services have
     # higher precedence than others (e.g. always prefer Zoom URLs over Google
     # Meet URLs if both are present)
     def parse_conference_url(self):
         event_search_str = '\n'.join(self.raw_data.values())
-        for domain in prefs['conference_domains']:
-            domain_patt = re.sub(r'\*', r'([a-z0-9\-]+)', domain)
-            matches = re.search(
-                r'https://({domain})/([^><"\'\.]+?)(?=([\s><"\']|$))'.format(domain=domain_patt),  # noqa
-                event_search_str)
-            if matches:
-                return matches.group(0)
-        return None
+        urls = re.findall(r'https://(?:.*?)(?=[\s><"\']|$)', event_search_str)
+        if not urls:
+            return None
+        ranked_urls = sorted(urls, key=self.get_url_score, reverse=True)
+        if not ranked_urls:
+            return None
+        return ranked_urls[0]

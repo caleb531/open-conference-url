@@ -1,4 +1,5 @@
 alfred-workflow-packager==2.0.0
 attrs==21.4.0
 jsonschema==4.4.0
+nose2==0.12.0
 pyrsistent==0.18.1
