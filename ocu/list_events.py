@@ -22,11 +22,18 @@ def get_event_blobs():
     return calendar.get_event_blobs(prefs['calendar_names'])
 
 
-# Retrieve a list of event UIDs for today's calendar day
-def get_events():
+# Fetch all of today's events, regardless of proximity to the system's current
+# time
+def get_events_today():
 
     event_blobs = get_event_blobs()
     return [Event(event_blob) for event_blob in event_blobs]
+
+
+# Retrieve only events from today for which a conference URL has been found
+def get_events_today_with_conference_urls():
+
+    return [event for event in get_events_today() if event.conference_url]
 
 
 # Read the given ICS file path and return the Event object corresponding to
@@ -48,6 +55,14 @@ def is_time_within_range(event_datetime, event_time_threshold_mins):
         return True
     else:
         return False
+
+
+# Get those events from today which are nearest to the user's current date/time
+def filter_events_to_upcoming(events):
+    # Filter those events to only those which are nearest to the current time
+    return [event for event in events if is_time_within_range(
+                       event.start_datetime,
+                       prefs['event_time_threshold_mins'])]
 
 
 # Get the event time (or 'All-Day' if the event is all-day)
@@ -80,14 +95,8 @@ def get_event_feedback_item(event):
 
 def main():
 
-    # Fetch all events, regardless of proximity to the system's
-    # current time
-    all_events = [event for event in get_events() if event.conference_url]
-
-    # Filter those events to only those which are nearest to the current time
-    upcoming_events = [event for event in all_events if is_time_within_range(
-                       event.start_datetime,
-                       prefs['event_time_threshold_mins'])]
+    all_events = get_events_today_with_conference_urls()
+    upcoming_events = filter_events_to_upcoming(all_events)
 
     # The feedback object which will be fed to Alfred to display the results
     feedback = {'items': []}
