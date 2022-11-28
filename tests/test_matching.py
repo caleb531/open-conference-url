@@ -27,6 +27,13 @@ def test_zoom():
         'https://zoom.us/l/123456?usp=sharing')  # noqa
 
 
+def test_meet():
+    event = get_event_from_file('meet.json')
+    tc.assertEqual(
+        event.conference_url,
+        'https://meet.google.com/abc-defg-hij')  # noqa
+
+
 def test_teams():
     event = get_event_from_file('teams.json')
     tc.assertEqual(
