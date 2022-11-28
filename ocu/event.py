@@ -63,12 +63,24 @@ class Event(object):
                 '{}T{}'.format(
                     calendar.date_format, calendar.time_format))
 
+    # Return true if the given domain (e.g. "us02web.zoom.us") matches the given
+    # pattern (e.g. "*.zoom.us")
+    def does_domain_match_pattern(self, domain, pattern):
+        domain_patt = re.sub(r'\\\*', r'([a-z0-9\-]+)', re.escape(pattern))
+        matches = re.match(domain_patt, domain)
+        if matches:
+            return True
+        else:
+            return False
+
+    # Compute a numeric score to represent the likelihood that this is the
+    # conference domain we want
     def get_url_score(self, url):
         if re.search(r'\.[a-z]{3}$', url):
             return -10
         url_parts = urlparse(url)
-        for i, domain in enumerate(prefs['conference_domains']):
-            if url_parts.hostname == domain:
+        for i, domain_patt in enumerate(prefs['conference_domains']):
+            if self.does_domain_match_pattern(url_parts.hostname, domain_patt):
                 return 10 * (len(prefs['conference_domains']) - i)
         return 0
 
