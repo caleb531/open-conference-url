@@ -6,6 +6,7 @@ import os.path
 import unittest
 
 from ocu.event import Event
+from tests.utilities import use_env
 
 
 EVENT_DATA_DIR = os.path.join('tests', 'sample_events')
@@ -24,7 +25,15 @@ def test_zoom():
     event = get_event_from_file('zoom.json')
     tc.assertEqual(
         event.conference_url,
-        'https://zoom.us/l/123456?usp=sharing')
+        'https://zoom.us/j/123456?usp=sharing')
+
+
+@use_env('use_direct_zoom', 'true')
+def test_zoom_direct():
+    event = get_event_from_file('zoom.json')
+    tc.assertEqual(
+        event.conference_url,
+        'zoommtg://zoom.us/join?action=join&confno=123456?usp=sharing')
 
 
 def test_google_meet():
