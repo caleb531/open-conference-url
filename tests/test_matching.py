@@ -24,21 +24,21 @@ def test_zoom():
     event = get_event_from_file('zoom.json')
     tc.assertEqual(
         event.conference_url,
-        'https://zoom.us/l/123456?usp=sharing')  # noqa
+        'https://zoom.us/l/123456?usp=sharing')
 
 
 def test_meet():
     event = get_event_from_file('meet.json')
     tc.assertEqual(
         event.conference_url,
-        'https://meet.google.com/abc-defg-hij')  # noqa
+        'https://meet.google.com/abc-defg-hij')
 
 
 def test_teams():
     event = get_event_from_file('teams.json')
     tc.assertEqual(
         event.conference_url,
-        'https://teams.microsoft.com/l/meetup-join/12%3ameeting_A1b2C3%40thread.v2/0?context=%7b%22Tid')  # noqa
+        'https://teams.microsoft.com/l/meetup-join/12%3ameeting_A1b2C3%40thread.v2/0?context=%7b%22Tid')
 
 
 def test_excluding_non_conference_urls():
