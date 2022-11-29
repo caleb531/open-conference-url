@@ -30,13 +30,14 @@ class Event(object):
             self.is_all_day = False
         self.conference_url = self.parse_conference_url()
         # Bypass the browser when opening Zoom Join URLs, if enabled
-        if self.is_convertible_zoom_url(self.conference_url):
-            self.conference_url = self.convert_zoom_url_to_direct(
+        if self.__class__.is_convertible_zoom_url(self.conference_url):
+            self.conference_url = self.__class__.convert_zoom_url_to_direct(
                 self.conference_url)
 
     # Return True if the given URL is a Zoom URL that can be converted to a
     # direct link (via the zoommtg:// protocol); return False otherwise
-    def is_convertible_zoom_url(self, url):
+    @staticmethod
+    def is_convertible_zoom_url(url):
         if not url or not prefs['use_direct_zoom']:
             return False
         matches = re.search(r'https://([\w\-]+\.)?(zoom.us)/j/', url)
@@ -44,7 +45,8 @@ class Event(object):
 
     # Convert an https: Zoom URL to the zoommtg: protocol which will allow it
     # to bypass a web browser to open directly in the Zoom application
-    def convert_zoom_url_to_direct(self, zoom_url):
+    @staticmethod
+    def convert_zoom_url_to_direct(zoom_url):
         zoom_url = re.sub(r'https://', 'zoommtg://', zoom_url)
         zoom_url = re.sub(r'/j/', '/join?action=join&confno=', zoom_url)
         zoom_url = re.sub(r'\?pwd=', '&pwd=', zoom_url)

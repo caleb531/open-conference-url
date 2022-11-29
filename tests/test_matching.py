@@ -96,7 +96,7 @@ def test_zoom_direct():
                  if service['name'] == 'Zoom'][0]
     for correct_url in zoom_data['example_correct_urls']:
         event = get_event_with_defaults(notes=correct_url)
-        direct_zoom_url = event.convert_zoom_url_to_direct(event.conference_url)
+        direct_zoom_url = Event.convert_zoom_url_to_direct(event.conference_url)
         yield case.assertEqual, event.conference_url, direct_zoom_url
 
 
