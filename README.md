@@ -13,9 +13,11 @@ calendar events.
 
 To download the workflow, simply click the download link below.
 
-[Download Open Conference URL (stable)][workflow-download]
+[Download Open Conference URL (Alfred 5)][workflow-download-alfred5]
+[workflow-download-alfred5]: https://github.com/caleb531/open-conference-url/raw/main/Open%20Conference%20URL%20(Alfred%205).alfredworkflow
 
-[workflow-download]: https://github.com/caleb531/open-conference-url/raw/main/Open%20Conference%20URL%20(Alfred%204).alfredworkflow
+[Download Open Conference URL (Alfred 4)][workflow-download-alfred4]
+[workflow-download-alfred4]: https://github.com/caleb531/open-conference-url/raw/main/Open%20Conference%20URL%20(Alfred%204).alfredworkflow
 
 ## Usage
 
