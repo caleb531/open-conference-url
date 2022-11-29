@@ -53,12 +53,11 @@ def generate_notes_test_cases(service):
     Should parse all permutations of correct conference URL in Notes field
     containing other URLs which should be ignored
     """
-    # TODO
     for correct_url in service['example_correct_urls']:
         base_permutation = service['example_incorrect_urls'] + [correct_url]
         permutations = itertools.permutations(base_permutation)
         for permutation in permutations:
-            for start_token, end_token in ('""', '\'\'', '<>'):  # TODO
+            for start_token, end_token in ('""', '\'\'', '<>'):
                 wrapped_urls = [(start_token + url + end_token)
                                 for url in permutation]
                 event = get_event_with_defaults(
