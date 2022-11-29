@@ -26,13 +26,6 @@ def get_test_data():
         return json.load(test_data_file)
 
 
-def get_event_from_file(file_name):
-    """Parse a JSON object from the specified file into an Event object"""
-    with open(os.path.join(EVENT_DATA_DIR, file_name), 'r') as json_file:
-        raw_data = json.load(json_file)
-        return Event(raw_data)
-
-
 def get_event_with_defaults(**kwargs):
     """
     Build a new Event object from the given service dictionary, with any
@@ -88,10 +81,13 @@ def test_permutations():
 
 @use_env('use_direct_zoom', 'true')
 def test_zoom_direct():
-    event = get_event_from_file('zoom.json')
-    case.assertEqual(
-        event.conference_url,
-        'zoommtg://zoom.us/join?action=join&confno=123456&pwd=AiBjCk')
+    event_data = get_test_data()
+    zoom_data = [service for service in event_data['services']
+                 if service['name'] == 'Zoom'][0]
+    for correct_url in zoom_data['example_correct_urls']:
+        event = get_event_with_defaults(notes=correct_url)
+        direct_zoom_url = event.convert_zoom_url_to_direct(event.conference_url)
+        yield case.assertEqual, event.conference_url, direct_zoom_url
 
 
 def test_excluding_non_conference_urls():
