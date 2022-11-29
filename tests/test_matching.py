@@ -16,7 +16,8 @@ from tests.utilities import use_env
 URL_TOKENS = (
     ('\'', '\''),
     ('"', '"'),
-    ('<', '>')
+    ('<', '>'),
+    ('\n', '\n')
 )
 
 case = unittest.TestCase()
