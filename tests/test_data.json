@@ -1,0 +1,36 @@
+{
+  "services": [
+    {
+      "name": "Zoom",
+      "example_correct_urls": [
+        "https://zoom.us/j/123456?pwd=AiBjCk"
+      ],
+      "example_incorrect_urls": [
+        "https://zoom.us/favicon.png",
+        "https://zoom.us/favicon.ico",
+        "https://meet.google.com/abc123",
+        "https://teams.microsoft.com/l/meetup-join/12%3ameeting_A1b2C3%40thread.v2/0?context=%7b%22Tidc123"
+      ]
+    },
+    {
+      "name": "Google Meet",
+      "example_correct_urls": [
+        "https://meet.google.com/abc123"
+      ],
+      "example_incorrect_urls": [
+        "https://meet.google.com/favicon.ico"
+      ]
+    },
+    {
+      "name": "Microsoft Teams",
+      "example_correct_urls": [
+        "https://teams.microsoft.com/l/meetup-join/12%3ameeting_A1b2C3%40thread.v2/0?context=%7b%22Tidc123"
+      ],
+      "example_incorrect_urls": [
+        "https://teams.microsoft.com/favicon.png",
+        "https://teams.microsoft.com/favicon.ico",
+        "https://dialin.teams.microsoft.com/usp/pstnconferencing"
+      ]
+    }
+  ]
+}
