@@ -10,8 +10,6 @@ from ocu.event import Event
 from tests.utilities import use_env
 
 
-EVENT_DATA_DIR = os.path.join('tests', 'sample_events')
-
 # The supported start/end tokens that a conference URL could potentially be
 # wrapped in
 URL_TOKENS = (
