@@ -53,3 +53,10 @@ def test_microsoft_teams():
 def test_excluding_non_conference_urls():
     event = get_event_from_file('non-meeting.json')
     tc.assertEqual(event.conference_url, None)
+
+
+def test_location():
+    event = get_event_from_file('location.json')
+    tc.assertEqual(
+        event.conference_url,
+        'https://zoom.us/j/123456?pwd=AiBjCk')
