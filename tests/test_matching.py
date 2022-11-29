@@ -107,3 +107,11 @@ def test_excluding_non_conference_urls():
     """
     event = get_event_with_defaults(location='https://github.com')
     case.assertEqual(event.conference_url, None)
+
+
+def test_no_urls():
+    """
+    Should handle events without any URLs whatsoever
+    """
+    event = get_event_with_defaults(notes='')
+    case.assertEqual(event.conference_url, None)
