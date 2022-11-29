@@ -12,6 +12,13 @@ from tests.utilities import use_env
 
 EVENT_DATA_DIR = os.path.join('tests', 'sample_events')
 
+# The supported start/end tokens that a conference URL could potentially be
+# wrapped in
+URL_TOKENS = (
+    ('\'', '\''),
+    ('"', '"'),
+    ('<', '>')
+)
 
 case = unittest.TestCase()
 
@@ -62,7 +69,7 @@ def generate_notes_test_cases(service):
         base_permutation = service['example_incorrect_urls'] + [correct_url]
         permutations = itertools.permutations(base_permutation)
         for permutation in permutations:
-            for start_token, end_token in ('""', '\'\'', '<>'):
+            for start_token, end_token in URL_TOKENS:
                 wrapped_urls = [(start_token + url + end_token)
                                 for url in permutation]
                 event = get_event_with_defaults(
