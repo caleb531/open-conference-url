@@ -81,6 +81,7 @@ def test_permutations():
 
 @use_env('use_direct_zoom', 'true')
 def test_zoom_direct():
+    """Should convert Zoom https: URLs to zoommtg: URLs if enabled"""
     event_data = get_test_data()
     zoom_data = [service for service in event_data['services']
                  if service['name'] == 'Zoom'][0]
@@ -91,5 +92,9 @@ def test_zoom_direct():
 
 
 def test_excluding_non_conference_urls():
+    """
+    Should never match non-conference URLs even if they are the only URLs
+    present
+    """
     event = get_event_with_defaults(location='https://github.com')
     case.assertEqual(event.conference_url, None)
