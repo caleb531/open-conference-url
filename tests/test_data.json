@@ -3,7 +3,11 @@
     {
       "name": "Zoom",
       "example_correct_urls": [
-        "https://zoom.us/j/123456?pwd=AiBjCk"
+        "https://zoom.us/j/123456",
+        "https://zoom.us/j/123456?pwd=AiBjCk",
+        "https://us02web.zoom.us/j/123456",
+        "https://us02web.zoom.us/j/123456?pwd=AiBjCk",
+        "https://mycompany.zoom.us/my/cevans"
       ],
       "example_incorrect_urls": [
         "https://zoom.us/favicon.png",

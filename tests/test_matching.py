@@ -97,7 +97,10 @@ def test_zoom_direct():
     for correct_url in zoom_data['example_correct_urls']:
         event = get_event_with_defaults(notes=correct_url)
         direct_zoom_url = Event.convert_zoom_url_to_direct(event.conference_url)
-        yield case.assertEqual, event.conference_url, direct_zoom_url
+        # Only /j/ URLs can be converted to the zoommtg: protocol; meeting URLs
+        # like the personalized /my/ URLs are unable to be converted
+        if '/j/' in correct_url:
+            yield case.assertEqual, event.conference_url, direct_zoom_url
 
 
 def test_excluding_non_conference_urls():
