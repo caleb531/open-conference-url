@@ -26,16 +26,21 @@ def get_test_data():
         return json.load(test_data_file)
 
 
-def get_event_with_defaults(**kwargs):
+def get_event_with_defaults(title='Meeting',
+                            startDate='2011-10-16T08:00',
+                            endDate='2011-10-16T09:00',
+                            location='',
+                            notes=''):
     """
     Build a new Event object from the given service dictionary, with any
     additional parameters
     """
     return Event({
-        'title': kwargs.get('title', 'Meeting'),
-        'startDate': kwargs.get('startDate', '2011-10-16T08:00'),
-        'endDate': kwargs.get('endDate', '2011-10-16T09:00'),
-        **kwargs
+        'title': title,
+        'startDate': startDate,
+        'endDate': endDate,
+        'location': location,
+        'notes': notes
     })
 
 
