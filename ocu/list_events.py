@@ -36,13 +36,6 @@ def get_events_today_with_conference_urls():
     return [event for event in get_events_today() if event.conference_url]
 
 
-# Read the given ICS file path and return the Event object corresponding to
-# that event data
-def get_event(event_path):
-    with open(event_path, 'r') as event_file:
-        return Event(event_file.read())
-
-
 # Return True if the given date/time object is within the acceptable tolerance
 # range (e.g. within the next 15 minutes OR in the last 15 minutes); if not,
 # return False
