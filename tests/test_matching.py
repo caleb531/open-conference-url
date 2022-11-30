@@ -134,9 +134,11 @@ def test_msteams_direct():
     msteams_data = [service for service in event_data['services']
                     if service['name'] == 'Microsoft Teams'][0]
     for correct_url in msteams_data['example_correct_urls']:
-        event = get_event_with_defaults(notes=correct_url)
-        direct_msteams_url = convert_msteams_url_to_direct(correct_url)
-        yield case.assertEqual, event.conference_url, direct_msteams_url
+        # Only /l/ URLs can be converted to the msteams: protocol
+        if '/l/' in correct_url:
+            event = get_event_with_defaults(notes=correct_url)
+            direct_msteams_url = convert_msteams_url_to_direct(correct_url)
+            yield case.assertEqual, event.conference_url, direct_msteams_url
 
 
 def test_excluding_non_conference_urls():

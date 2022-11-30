@@ -54,7 +54,8 @@ class Event(object):
     def is_convertible_msteams_url(url):
         if not url or not prefs['use_direct_msteams']:
             return False
-        return 'https://teams.microsoft.com/' in url
+        matches = re.search(r'https://([\w\-]+\.)?(teams.microsoft.com)/l/', url)
+        return bool(matches)
 
     # Convert an https: Zoom URL to the zoommtg: protocol which will allow it
     # to bypass a web browser to open directly in the Zoom application
