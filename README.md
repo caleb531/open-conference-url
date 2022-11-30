@@ -10,6 +10,9 @@ Open Conference URL is an [Alfred][alfred] workflow which enables you to quickly
 open links for Zoom and other conferencing services, based on your upcoming
 calendar events.
 
+The workflow will be solely supporting Alfred 5 going forward, but the last
+release supporting Alfred 4 will remain available here for your convenience.
+
 [alfred]: https://www.alfredapp.com/
 
 ![Screenshot](screenshot.png)
