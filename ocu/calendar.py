@@ -21,9 +21,7 @@ class Calendar(object):
         'get-calendar-events.applescript')
 
     # Retrieve the raw event blob data from the AppleScript
-    def get_event_blobs(self, calendar_names=None):
-        if not calendar_names:
-            calendar_names = []
+    def get_event_blobs(self, calendar_names):
         return json.loads(subprocess.check_output([
             'osascript',
             self.script_path,
