@@ -33,6 +33,10 @@ class Event(object):
         if self.__class__.is_convertible_zoom_url(self.conference_url):
             self.conference_url = self.__class__.convert_zoom_url_to_direct(
                 self.conference_url)
+        # Bypass the browser when opening MS Teams Meeting URLs, if enabled
+        if self.__class__.is_convertible_msteams_url(self.conference_url):
+            self.conference_url = self.__class__.convert_msteams_url_to_direct(
+                self.conference_url)
 
     # Return True if the given URL is a Zoom URL that can be converted to a
     # direct link (via the zoommtg:// protocol); return False otherwise
@@ -43,6 +47,15 @@ class Event(object):
         matches = re.search(r'https://([\w\-]+\.)?(zoom.us)/j/', url)
         return bool(matches)
 
+    # Return True if the given URL is a Microsoft Teams URL that can be
+    # converted to a direct link (via the msteams:// protocol); return False
+    # otherwise
+    @staticmethod
+    def is_convertible_msteams_url(url):
+        if not url or not prefs['use_direct_msteams']:
+            return False
+        return 'https://teams.microsoft.com/' in url
+
     # Convert an https: Zoom URL to the zoommtg: protocol which will allow it
     # to bypass a web browser to open directly in the Zoom application
     @staticmethod
@@ -51,6 +64,13 @@ class Event(object):
         zoom_url = re.sub(r'/j/', '/join?action=join&confno=', zoom_url)
         zoom_url = re.sub(r'\?pwd=', '&pwd=', zoom_url)
         return zoom_url
+
+    # Convert an https: Microsoft Teams URL to the msteams: protocol which will
+    # allow it to bypass a web browser to open directly in the Microsoft Teams
+    # application
+    @staticmethod
+    def convert_msteams_url_to_direct(msteams_url):
+        return msteams_url.replace('https://', 'msteams://')
 
     # Parse and return the date and time the event starts
     def parse_start_datetime(self):

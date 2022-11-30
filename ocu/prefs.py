@@ -15,7 +15,8 @@ class Prefs(object):
             'conference_domains': self.convert_str_to_list,
             'calendar_names': self.convert_str_to_list,
             'event_time_threshold_mins': int,
-            'use_direct_zoom': self.convert_str_to_bool
+            'use_direct_zoom': self.convert_str_to_bool,
+            'use_direct_msteams': self.convert_str_to_bool
         }
 
     # Convert a comma-separated string of values to a proper list type

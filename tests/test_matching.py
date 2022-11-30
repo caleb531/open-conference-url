@@ -102,6 +102,16 @@ def convert_zoom_url_to_direct(zoom_url):
     return zoom_url
 
 
+def convert_msteams_url_to_direct(msteams_url):
+    """
+    Convert the given https: Microsoft Teams URL to a msteams: URL; a method for
+    this already exists in the Event class, however we have duplicated it here
+    to decouple any expected test output from the internal implementation of
+    Event
+    """
+    return msteams_url.replace('https://', 'msteams://')
+
+
 @use_env('use_direct_zoom', 'true')
 def test_zoom_direct():
     """Should convert Zoom https: URLs to zoommtg: URLs if enabled"""
@@ -115,6 +125,18 @@ def test_zoom_direct():
             event = get_event_with_defaults(notes=correct_url)
             direct_zoom_url = convert_zoom_url_to_direct(correct_url)
             yield case.assertEqual, event.conference_url, direct_zoom_url
+
+
+@use_env('use_direct_msteams', 'true')
+def test_msteams_direct():
+    """Should convert MS Teams https: URLs to msteams: URLs if enabled"""
+    event_data = get_test_data()
+    msteams_data = [service for service in event_data['services']
+                    if service['name'] == 'Microsoft Teams'][0]
+    for correct_url in msteams_data['example_correct_urls']:
+        event = get_event_with_defaults(notes=correct_url)
+        direct_msteams_url = convert_msteams_url_to_direct(correct_url)
+        yield case.assertEqual, event.conference_url, direct_msteams_url
 
 
 def test_excluding_non_conference_urls():
