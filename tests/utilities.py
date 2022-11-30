@@ -1,8 +1,24 @@
 #!/usr/bin/env python3
 
 import os
+import sys
 import types
 from functools import wraps
+from io import StringIO
+
+
+def redirect_stdout(func):
+    """Temporarily redirects stdout to new Unicode output stream"""
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        original_stdout = sys.stdout
+        out = StringIO()
+        try:
+            sys.stdout = out
+            return func(out, *args, **kwargs)
+        finally:
+            sys.stdout = original_stdout
+    return wrapper
 
 
 # Derived from: <https://gist.github.com/LeoHuckvale/8f50f8f2a6235512827b>
