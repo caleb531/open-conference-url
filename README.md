@@ -52,8 +52,9 @@ The domains are listed in order of precedence, so if `zoom.us` precedes
 `google.com` in the list, then the workflow will prefer Zoom links over Google
 Meet links if both are present in a calendar event.
 
-All subdomains are matched automatically, so having `zoom.us` in the list will
-still match `us02web.zoom.us` in a conference URL.
+If you wish to match a subdomain, you must specify it explicitly (e.g.
+`teams.microsoft.com`). However, you can also match all subdomains via the
+asterisk character (`*`) as a wildcard (e.g. `*.zoom.us`).
 
 ### calendar_names
 
