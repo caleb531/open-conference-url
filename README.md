@@ -3,6 +3,9 @@
 *Copyright 2020-2022 Caleb Evans*  
 *Released under the MIT license*
 
+[![tests](https://github.com/caleb531/open-conference-url/actions/workflows/tests.yml/badge.svg)](https://github.com/caleb531/open-conference-url/actions/workflows/tests.yml)
+[![Coverage Status](https://coveralls.io/repos/caleb531/open-conference-url/badge.svg?branch=main)](https://coveralls.io/r/caleb531/open-conference-url?branch=main)
+
 Open Conference URL is an [Alfred][alfred] workflow which enables you to quickly
 open links for Zoom and other conferencing services, based on your upcoming
 calendar events.
