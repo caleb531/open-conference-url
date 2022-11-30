@@ -36,15 +36,12 @@ meeting, the logical event will show.
 The workflow also accounts for timezones and Daylight Saving Time (DST). All
 times are displayed in your system's local timezone.
 
-## Preferences
+## Configuration
 
-This workflow contains preferences for various aspects of the workflow's
-behavior. These are defined as Alfred [workflow variables][workflow-vars],
-which you can access by opening the Open Conference URL workflow view in Alfred
-Preferences, then clicking the \[_x_\] icon in the top-right region of the
-window.
-
-[workflow-vars]: https://www.alfredapp.com/help/workflows/advanced/variables/
+This workflow contains configuration for various aspects of the workflow's
+behavior. In Alfred 5, you can adjust these configuration options by navigating
+to the workflow in Alfred Preferences and clicking the "Configure Workflow..."
+button near the top of the window.
 
 ### conference_domains
 
