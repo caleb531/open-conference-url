@@ -37,6 +37,15 @@
         "https://teams.microsoft.com/favicon.ico",
         "https://dialin.teams.microsoft.com/usp/pstnconferencing"
       ]
+    },
+    {
+      "name": "Dialpad",
+      "example_correct_urls": [
+        "https://meetings.dialpad.com/room/acme-corp/a123456789"
+      ],
+      "example_incorrect_urls": [
+        "https://dialpad.com/favicon.png"
+      ]
     }
   ]
 }
