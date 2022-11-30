@@ -73,6 +73,16 @@ For example, a value of `30` will mean the workflow will only show
 events whose start time was within the last 30 minutes *or* whose start time is
 within the next 20 minutes.
 
+### use_direct_zoom
+
+If enabled, opens Zoom links directly in the Zoom application, bypassing the
+browser entirely.
+
+### use_direct_msteams
+
+If enabled, opens Microsoft Teams links directly in the Microsoft Teams
+application, bypassing the browser entirely.
+
 ## Credits
 
 Kudos to [@jacksonrayhamilton][jrh] for his architecture ideas and feedback on
