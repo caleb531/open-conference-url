@@ -34,7 +34,7 @@ jobs:
 
     - name: Test with nose2
       run: |
-        coverage run -m nose2 tests
+        coverage run -m nose2 --quiet tests
         coverage lcov -o cover/coverage.lcov
 
     - name: Coveralls
