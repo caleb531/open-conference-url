@@ -4,9 +4,11 @@
       "name": "Zoom",
       "example_correct_urls": [
         "https://zoom.us/j/123456",
+        "https://zoom.us/j/123456?usp=sharing",
         "https://zoom.us/j/123456?pwd=AiBjCk",
+        "https://zoom.us/j/123456?pwd=AiBjCk&usp=sharing",
         "https://us02web.zoom.us/j/123456",
-        "https://us02web.zoom.us/j/123456?pwd=AiBjCk",
+        "https://us02web.zoom.us/j/123456?pwd=AiBjCk&usp=sharing",
         "https://mycompany.zoom.us/my/cevans"
       ],
       "example_incorrect_urls": [
