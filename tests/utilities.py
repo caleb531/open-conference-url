@@ -5,6 +5,7 @@ import sys
 import types
 from functools import wraps
 from io import StringIO
+from unittest.mock import patch
 
 
 def redirect_stdout(func):
@@ -40,6 +41,20 @@ def use_env(key, value):
                     return return_value
             finally:
                 os.environ[key] = ''
+        return wrapper
+
+    return decorator
+
+
+def use_events(event_dicts):
+    """
+    Sets the current list of raw event blobs to use in ocu.list_events
+    """
+    def decorator(func):
+        @patch('ocu.list_events.get_event_blobs', return_value=event_dicts)
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            return func(*args, **kwargs)
         return wrapper
 
     return decorator
