@@ -68,8 +68,8 @@ minutes before/after a meeting. If an event is within this duration of time
 (relative to the system's current time), it will be displayed in Alfred's
 results.
 
-For example, a value of `20` will mean the workflow will only show
-events whose start time was within the last 20 minutes *or* whose start time is
+For example, a value of `30` will mean the workflow will only show
+events whose start time was within the last 30 minutes *or* whose start time is
 within the next 20 minutes.
 
 ## Credits
