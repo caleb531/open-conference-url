@@ -6,12 +6,12 @@ import unittest
 from freezegun import freeze_time
 
 from ocu import list_events
-from tests.utilities import redirect_stdout, use_events
+from tests.utilities import redirect_stdout, use_event_blobs
 
 case = unittest.TestCase()
 
 
-@use_events([{
+@use_event_blobs([{
     'title': 'My Meeting',
     'startDate': '2022-10-16T08:00',
     'endDate': '2022-10-16T09:00',
@@ -28,7 +28,7 @@ def test_5mins_before(out, get_events_today):
     case.assertEqual(len(feedback['items']), 1)
 
 
-@use_events([{
+@use_event_blobs([{
     'title': 'My Meeting',
     'startDate': '2022-10-16T08:00',
     'endDate': '2022-10-16T09:00',
@@ -45,7 +45,7 @@ def test_5mins_after(out, get_events_today):
     case.assertEqual(len(feedback['items']), 1)
 
 
-@use_events([{
+@use_event_blobs([{
     'title': 'My Meeting',
     'startDate': '2022-10-16T08:00',
     'endDate': '2022-10-16T09:00',
@@ -62,7 +62,7 @@ def test_before_window(out, get_events_today):
     case.assertEqual(len(feedback['items']), 2)
 
 
-@use_events([{
+@use_event_blobs([{
     'title': 'My Meeting',
     'startDate': '2022-10-16T08:00',
     'endDate': '2022-10-16T09:00',
@@ -79,7 +79,7 @@ def test_after_window(out, get_events_today):
     case.assertEqual(len(feedback['items']), 2)
 
 
-@use_events([{
+@use_event_blobs([{
     'title': 'All-Day Conference',
     'startDate': '2022-10-16T00:00',
     'isAllDay': 'true',
@@ -96,7 +96,7 @@ def test_all_day(out, get_events_today):
     case.assertEqual(len(feedback['items']), 1)
 
 
-@use_events([])
+@use_event_blobs([])
 @freeze_time('2022-10-16 9:30:00')
 @redirect_stdout
 def test_no_events_for_today(out, get_events_today):
