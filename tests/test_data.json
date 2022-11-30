@@ -37,6 +37,15 @@
       ]
     },
     {
+      "name": "GoTo",
+      "example_correct_urls": [
+        "https://meet.goto.com/123456"
+      ],
+      "example_incorrect_urls": [
+        "https://meet.goto.com/favicon.png"
+      ]
+    },
+    {
       "name": "Webex",
       "example_correct_urls": [
         "https://example.webex.com/meet/giacomo"
