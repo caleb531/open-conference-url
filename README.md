@@ -42,9 +42,8 @@ times are displayed in your system's local timezone.
 ## Configuration
 
 This workflow contains configuration for various aspects of the workflow's
-behavior. In Alfred 5, you can adjust these configuration options by navigating
-to the workflow in Alfred Preferences and clicking the "Configure Workflow..."
-button near the top of the window. For more, see [the Alfred help article on Workflow Configuration][workflow-configuration].
+behavior. For details on how to find these configuration settings, you can refer
+to [the Alfred help article on Workflow Configuration][workflow-configuration].
 
 [workflow-configuration]: https://www.alfredapp.com/help/workflows/user-configuration/
 
