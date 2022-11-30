@@ -84,6 +84,7 @@ def test_after_window(out, get_events_today):
 @patch('ocu.list_events.get_events_today', return_value=[Event({
     'title': 'All-Day Conference',
     'startDate': '2022-10-16T00:00',
+    'isAllDay': 'true',
     'notes': 'https://zoom.us/j/123456'
 })])
 @freeze_time('2022-10-16 8:00:00')
