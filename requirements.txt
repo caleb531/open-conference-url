@@ -6,4 +6,5 @@ jsonschema==4.4.0
 nose2==0.12.0
 pyrsistent==0.18.1
 python-dateutil==2.8.2
+python-dotenv==0.21.0
 six==1.16.0
