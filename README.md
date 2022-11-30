@@ -12,6 +12,8 @@ calendar events.
 
 [alfred]: https://www.alfredapp.com/
 
+![Screenshot](screenshot.png)
+
 ## Installation
 
 To download the workflow, simply click the download link below.
