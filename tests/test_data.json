@@ -39,6 +39,15 @@
       ]
     },
     {
+      "name": "Webex",
+      "example_correct_urls": [
+        "https://example.webex.com/meet/giacomo"
+      ],
+      "example_incorrect_urls": [
+        "https://webex.com/favicon.png"
+      ]
+    },
+    {
       "name": "Dialpad",
       "example_correct_urls": [
         "https://meetings.dialpad.com/room/acme-corp/a123456789"
