@@ -47,11 +47,11 @@ to [the Alfred help article on Workflow Configuration][workflow-configuration].
 
 [workflow-configuration]: https://www.alfredapp.com/help/workflows/user-configuration/
 
-### conference_domains
+### Conference Domains
 
-The `conference_domains` option is a comma-separated list of domain names
-representing which URLs to check within each calendar event. This domains list
-determines which links are considered "conference" URLs.
+A comma-separated list of domain names representing which URLs to check within
+each calendar event. This domains list determines which links are considered
+"conference" URLs.
 
 The domains are listed in order of precedence, so if `zoom.us` precedes
 `google.com` in the list, then the workflow will prefer Zoom links over Google
@@ -61,32 +61,31 @@ If you wish to match a subdomain, you must specify it explicitly (e.g.
 `teams.microsoft.com`). However, you can also match all subdomains via the
 asterisk character (`*`) as a wildcard (e.g. `*.zoom.us`).
 
-### calendar_names
+### Calendar Names
 
-The `calendar_names` option is a comma-separated list of calendar names on your
-local system for which to fetch events. If you leave this field blank, then the
-workflow will implicitly fetch check all calendars for event data.
+A comma-separated list of calendar names on your local system for which to fetch
+events. If you leave this field blank, then the workflow will implicitly fetch
+check all calendars for event data.
 
-### event_time_threshold_mins
+### Time Threshold
 
-The `event_time_threshold_mins` is an integer representing the number of
-minutes before/after a meeting. If an event is within this duration of time
-(relative to the system's current time), it will be displayed in Alfred's
-results.
+An integer representing the number of minutes before/after a meeting. If an
+event is within this duration of time (relative to the system's current time),
+it will be displayed in Alfred's results.
 
 For example, a value of `30` will mean the workflow will only show
 events whose start time was within the last 30 minutes *or* whose start time is
 within the next 20 minutes.
 
-### use_direct_zoom
+### Use Direct Zoom Links
 
-The `use_direct_zoom` option opens Zoom links directly in the Zoom application,
-bypassing the browser entirely.
+Launches meetings directly in the Zoom application, bypassing your web browser
+entirely.
 
-### use_direct_msteams
+### Use Direct Teams Links
 
-The `use_direct_msteams` option opens Microsoft Teams links directly in the
-Microsoft Teams application, bypassing the browser entirely.
+Opens Microsoft Teams links directly in the Microsoft Teams application,
+bypassing your web browser entirely.
 
 ## Credits
 
