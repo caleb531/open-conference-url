@@ -44,7 +44,7 @@ window.
 
 ### conference_domains
 
-The `conference_domains` is a comma-separated list of domain names
+The `conference_domains` option is a comma-separated list of domain names
 representing which URLs to check within each calendar event. This domains list
 determines which links are considered "conference" URLs.
 
@@ -58,8 +58,8 @@ asterisk character (`*`) as a wildcard (e.g. `*.zoom.us`).
 
 ### calendar_names
 
-The `calendar_names` is a comma-separated list of calendar names on your local
-system for which to fetch events. If you leave this field blank, then the
+The `calendar_names` option is a comma-separated list of calendar names on your
+local system for which to fetch events. If you leave this field blank, then the
 workflow will implicitly fetch check all calendars for event data.
 
 ### event_time_threshold_mins
@@ -75,13 +75,13 @@ within the next 20 minutes.
 
 ### use_direct_zoom
 
-If enabled, opens Zoom links directly in the Zoom application, bypassing the
-browser entirely.
+The `use_direct_zoom` option opens Zoom links directly in the Zoom application,
+bypassing the browser entirely.
 
 ### use_direct_msteams
 
-If enabled, opens Microsoft Teams links directly in the Microsoft Teams
-application, bypassing the browser entirely.
+The `use_direct_msteams` option opens Microsoft Teams links directly in the
+Microsoft Teams application, bypassing the browser entirely.
 
 ## Credits
 
