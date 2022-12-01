@@ -15,7 +15,7 @@ case = unittest.TestCase()
     'title': 'My Meeting',
     'startDate': '2022-10-16T08:00',
     'endDate': '2022-10-16T09:00',
-    'notes': 'https://zoom.us/j/123456'
+    'location': 'https://zoom.us/j/123456'
 }])
 @freeze_time('2022-10-16 07:55:00')
 @redirect_stdout
@@ -32,7 +32,7 @@ def test_5mins_before(out, get_events_today):
     'title': 'My Meeting',
     'startDate': '2022-10-16T08:00',
     'endDate': '2022-10-16T09:00',
-    'notes': 'https://zoom.us/j/123456'
+    'location': 'https://zoom.us/j/123456'
 }])
 @freeze_time('2022-10-16 8:05:00')
 @redirect_stdout
@@ -42,6 +42,12 @@ def test_5mins_after(out, get_events_today):
     feedback = json.loads(out.getvalue())
     case.assertEqual(feedback['items'][0]['title'], 'My Meeting')
     case.assertEqual(feedback['items'][0]['subtitle'], '8:00am')
+    case.assertEqual(
+        feedback['items'][0]['text']['copy'],
+        'https://zoom.us/j/123456')
+    case.assertEqual(
+        feedback['items'][0]['text']['largetype'],
+        'https://zoom.us/j/123456')
     case.assertEqual(len(feedback['items']), 1)
 
 
@@ -49,7 +55,7 @@ def test_5mins_after(out, get_events_today):
     'title': 'My Meeting',
     'startDate': '2022-10-16T08:00',
     'endDate': '2022-10-16T09:00',
-    'notes': 'https://zoom.us/j/123456'
+    'location': 'https://zoom.us/j/123456'
 }])
 @freeze_time('2022-10-16 7:30:00')
 @redirect_stdout
@@ -66,7 +72,7 @@ def test_before_window(out, get_events_today):
     'title': 'My Meeting',
     'startDate': '2022-10-16T08:00',
     'endDate': '2022-10-16T09:00',
-    'notes': 'https://zoom.us/j/123456'
+    'location': 'https://zoom.us/j/123456'
 }])
 @freeze_time('2022-10-16 9:30:00')
 @redirect_stdout
@@ -83,7 +89,7 @@ def test_after_window(out, get_events_today):
     'title': 'All-Day Conference',
     'startDate': '2022-10-16T00:00',
     'isAllDay': 'true',
-    'notes': 'https://zoom.us/j/123456'
+    'location': 'https://zoom.us/j/123456'
 }])
 @freeze_time('2022-10-16 8:00:00')
 @redirect_stdout
@@ -101,13 +107,13 @@ def test_all_day_standalone(out, get_events_today):
         'title': 'All-Day Conference',
         'startDate': '2022-10-16T00:00',
         'isAllDay': 'true',
-        'notes': 'https://zoom.us/j/123456'
+        'location': 'https://zoom.us/j/123456'
     },
     {
         'title': 'Morning Scrum',
         'startDate': '2022-10-16T08:00',
         'endDate': '2022-10-16T09:00',
-        'notes': 'https://zoom.us/j/123456'
+        'location': 'https://zoom.us/j/123456'
     }
 ])
 @freeze_time('2022-10-16 7:58:00')
