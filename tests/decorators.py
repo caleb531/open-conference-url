@@ -51,10 +51,11 @@ def use_event_blobs(event_dicts):
     Sets the current list of raw event blobs to use in ocu.list_events
     """
     def decorator(func):
-        @patch('ocu.calendar.calendar.get_event_blobs', return_value=event_dicts)
         @wraps(func)
         def wrapper(*args, **kwargs):
-            return func(*args, **kwargs)
+            with patch('ocu.calendar.calendar.get_event_blobs',
+                       return_value=event_dicts):
+                return func(*args, event_dicts, **kwargs)
         return wrapper
 
     return decorator
