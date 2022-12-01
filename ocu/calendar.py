@@ -20,8 +20,8 @@ class Calendar(object):
         os.path.dirname(os.path.realpath(__file__)),
         'get-calendar-events.applescript')
 
-    # Retrieve the raw event blob data from the AppleScript
-    def get_event_blobs(self, calendar_names):
+    # Retrieve the raw event attribute dictionaries from the AppleScript
+    def get_event_dicts(self, calendar_names):
         return json.loads(subprocess.check_output([
             'osascript',
             self.script_path,

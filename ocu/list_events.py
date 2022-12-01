@@ -17,17 +17,17 @@ HOURS_IN_DAY = 24
 MINUTES_IN_HOUR = 60
 
 
-# Retrieve the raw calendar output for today's events
-def get_event_blobs():
-    return calendar.get_event_blobs(prefs['calendar_names'])
+# Retrieve the raw event dictionary data for today's events
+def get_event_dicts():
+    return calendar.get_event_dicts(prefs['calendar_names'])
 
 
 # Fetch all of today's events, regardless of proximity to the system's current
 # time
 def get_events_today():
 
-    event_blobs = get_event_blobs()
-    return [Event(event_blob) for event_blob in event_blobs]
+    event_dicts = get_event_dicts()
+    return [Event(event_dict) for event_dict in event_dicts]
 
 
 # Retrieve only events from today for which a conference URL has been found
