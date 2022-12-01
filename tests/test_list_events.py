@@ -25,6 +25,12 @@ def test_5mins_before(out, event_dicts):
     feedback = json.loads(out.getvalue())
     case.assertEqual(feedback['items'][0]['title'], 'My Meeting')
     case.assertEqual(feedback['items'][0]['subtitle'], '8:00am')
+    case.assertEqual(
+        feedback['items'][0]['text']['copy'],
+        event_dicts[0]['location'])
+    case.assertEqual(
+        feedback['items'][0]['text']['largetype'],
+        event_dicts[0]['location'])
     case.assertEqual(len(feedback['items']), 1)
 
 
@@ -44,10 +50,10 @@ def test_5mins_after(out, event_dicts):
     case.assertEqual(feedback['items'][0]['subtitle'], '8:00am')
     case.assertEqual(
         feedback['items'][0]['text']['copy'],
-        'https://zoom.us/j/123456')
+        event_dicts[0]['location'])
     case.assertEqual(
         feedback['items'][0]['text']['largetype'],
-        'https://zoom.us/j/123456')
+        event_dicts[0]['location'])
     case.assertEqual(len(feedback['items']), 1)
 
 
@@ -65,6 +71,12 @@ def test_before_window(out, event_dicts):
     feedback = json.loads(out.getvalue())
     case.assertEqual(feedback['items'][0]['title'], 'No Results')
     case.assertEqual(feedback['items'][1]['title'], 'My Meeting')
+    case.assertEqual(
+        feedback['items'][1]['text']['copy'],
+        event_dicts[0]['location'])
+    case.assertEqual(
+        feedback['items'][1]['text']['largetype'],
+        event_dicts[0]['location'])
     case.assertEqual(len(feedback['items']), 2)
 
 
@@ -82,6 +94,12 @@ def test_after_window(out, event_dicts):
     feedback = json.loads(out.getvalue())
     case.assertEqual(feedback['items'][0]['title'], 'No Results')
     case.assertEqual(feedback['items'][1]['title'], 'My Meeting')
+    case.assertEqual(
+        feedback['items'][1]['text']['copy'],
+        event_dicts[0]['location'])
+    case.assertEqual(
+        feedback['items'][1]['text']['largetype'],
+        event_dicts[0]['location'])
     case.assertEqual(len(feedback['items']), 2)
 
 
@@ -99,6 +117,12 @@ def test_all_day_standalone(out, event_dicts):
     feedback = json.loads(out.getvalue())
     case.assertEqual(feedback['items'][0]['title'], 'All-Day Conference')
     case.assertEqual(feedback['items'][0]['subtitle'], 'All-Day')
+    case.assertEqual(
+        feedback['items'][0]['text']['copy'],
+        event_dicts[0]['location'])
+    case.assertEqual(
+        feedback['items'][0]['text']['largetype'],
+        event_dicts[0]['location'])
     case.assertEqual(len(feedback['items']), 1)
 
 
@@ -113,7 +137,7 @@ def test_all_day_standalone(out, event_dicts):
         'title': 'Morning Scrum',
         'startDate': '2022-10-16T08:00',
         'endDate': '2022-10-16T09:00',
-        'location': 'https://zoom.us/j/123456'
+        'location': 'https://zoom.us/j/789012'
     }
 ])
 @freeze_time('2022-10-16 7:58:00')
@@ -124,8 +148,20 @@ def test_all_day_mixed(out, event_dicts):
     feedback = json.loads(out.getvalue())
     case.assertEqual(feedback['items'][0]['title'], 'All-Day Conference')
     case.assertEqual(feedback['items'][0]['subtitle'], 'All-Day')
+    case.assertEqual(
+        feedback['items'][0]['text']['copy'],
+        event_dicts[0]['location'])
+    case.assertEqual(
+        feedback['items'][0]['text']['largetype'],
+        event_dicts[0]['location'])
     case.assertEqual(feedback['items'][1]['title'], 'Morning Scrum')
     case.assertEqual(feedback['items'][1]['subtitle'], '8:00am')
+    case.assertEqual(
+        feedback['items'][1]['text']['copy'],
+        event_dicts[1]['location'])
+    case.assertEqual(
+        feedback['items'][1]['text']['largetype'],
+        event_dicts[1]['location'])
     case.assertEqual(len(feedback['items']), 2)
 
 
