@@ -6,7 +6,7 @@ import unittest
 from freezegun import freeze_time
 
 from ocu import list_events
-from tests.utilities import redirect_stdout, use_event_blobs
+from tests.decorators import redirect_stdout, use_event_blobs
 
 case = unittest.TestCase()
 
