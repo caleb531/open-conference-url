@@ -69,7 +69,7 @@ def test_before_window(out, event_dicts):
     """Should list all meetings if before next meeting's window"""
     list_events.main()
     feedback = json.loads(out.getvalue())
-    case.assertEqual(feedback['items'][0]['title'], 'No Results')
+    case.assertEqual(feedback['items'][0]['title'], 'No Upcoming Meetings')
     case.assertEqual(feedback['items'][1]['title'], 'My Meeting')
     case.assertEqual(
         feedback['items'][1]['text']['copy'],
@@ -92,7 +92,7 @@ def test_after_window(out, event_dicts):
     """Should list all meetings if after next meeting's window"""
     list_events.main()
     feedback = json.loads(out.getvalue())
-    case.assertEqual(feedback['items'][0]['title'], 'No Results')
+    case.assertEqual(feedback['items'][0]['title'], 'No Upcoming Meetings')
     case.assertEqual(feedback['items'][1]['title'], 'My Meeting')
     case.assertEqual(
         feedback['items'][1]['text']['copy'],

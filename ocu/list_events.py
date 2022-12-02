@@ -99,14 +99,14 @@ def main():
     if not all_events and not upcoming_events:
         feedback['items'].append({
             'title': 'No Results',
-            'subtitle': 'No calendar events for today',
+            'subtitle': 'No meetings for today',
             'valid': 'no'
         })
     elif all_events and not upcoming_events:
         upcoming_events = all_events
         feedback['items'].append({
-            'title': 'No Results',
-            'subtitle': 'Showing all calendar events for today',
+            'title': 'No Upcoming Meetings',
+            'subtitle': 'Showing all meetings for today',
             'valid': 'no'
         })
     feedback['items'].extend(get_event_feedback_item(event)
