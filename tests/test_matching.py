@@ -141,7 +141,7 @@ def test_msteams_direct():
             yield case.assertEqual, event.conference_url, direct_msteams_url
 
 
-def test_excluding_non_conference_urls():
+def test_non_conference_urls():
     """
     Should never match non-conference URLs even if they are the only URLs
     present
