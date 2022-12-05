@@ -6,7 +6,7 @@ import unittest
 from freezegun import freeze_time
 
 from ocu import list_events
-from tests.decorators import redirect_stdout, use_event_dicts
+from tests.decorators import redirect_stdout, use_env, use_event_dicts
 
 case = unittest.TestCase()
 
@@ -243,4 +243,28 @@ def test_no_events_for_today(out, event_dicts):
     list_events.main()
     feedback = json.loads(out.getvalue())
     case.assertEqual(feedback['items'][0]['title'], 'No Results')
+    case.assertEqual(len(feedback['items']), 1)
+
+
+@use_env('time_system', '24-hour')
+@use_event_dicts([{
+    'title': 'My Meeting',
+    'startDate': '2022-10-16T13:00',
+    'endDate': '2022-10-16T14:00',
+    'location': 'https://zoom.us/j/123456'
+}])
+@freeze_time('2022-10-16 12:55:00')
+@redirect_stdout
+def test_24_hour(out, event_dicts):
+    """Should list meeting starting in 5 minutes"""
+    list_events.main()
+    feedback = json.loads(out.getvalue())
+    case.assertEqual(feedback['items'][0]['title'], 'My Meeting')
+    case.assertEqual(feedback['items'][0]['subtitle'], '13:00')
+    case.assertEqual(
+        feedback['items'][0]['text']['copy'],
+        event_dicts[0]['location'])
+    case.assertEqual(
+        feedback['items'][0]['text']['largetype'],
+        event_dicts[0]['location'])
     case.assertEqual(len(feedback['items']), 1)

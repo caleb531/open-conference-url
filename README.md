@@ -87,6 +87,10 @@ entirely.
 Opens Microsoft Teams links directly in the Microsoft Teams application,
 bypassing your web browser entirely.
 
+### Time System
+
+Whether 12-hour or 12-hour time are used for the displayed event start times.
+
 ## Credits
 
 Kudos to [@jacksonrayhamilton][jrh] for his architecture ideas and feedback on

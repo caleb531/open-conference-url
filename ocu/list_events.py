@@ -62,6 +62,8 @@ def filter_events_to_upcoming(events):
 def get_event_time(event):
     if event.is_all_day:
         return 'All-Day'
+    elif prefs['time_system'] == '24-hour':
+        return event.start_datetime.strftime('%H:%M').lower()
     else:
         return event.start_datetime.strftime('%-I:%M%p').lower()
 

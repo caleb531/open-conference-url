@@ -32,6 +32,7 @@ def use_env(key, value):
         def wrapper(*args, **kwargs):
             # Setting only a single environment variable at a time ensures that
             # this decorator can be used multiple times on the same function
+            orig_value = os.environ.get(key, '')
             os.environ[key] = value
             try:
                 return_value = func(*args, **kwargs)
@@ -40,7 +41,7 @@ def use_env(key, value):
                 else:
                     return return_value
             finally:
-                os.environ[key] = ''
+                os.environ[key] = orig_value
         return wrapper
 
     return decorator
