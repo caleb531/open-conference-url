@@ -182,7 +182,7 @@ def test_all_day_mixed(out, event_dicts):
 @freeze_time('2022-10-16 07:55:00')
 @redirect_stdout
 def test_multiple_meetings_at_once(out, event_dicts):
-    """Should list meeting starting in 5 minutes"""
+    """Should list multiple upcoming meetings at once"""
     list_events.main()
     feedback = json.loads(out.getvalue())
     case.assertEqual(feedback['items'][0]['title'], 'My Meeting 1')
@@ -221,7 +221,7 @@ def test_multiple_meetings_at_once(out, event_dicts):
 @freeze_time('2022-10-16 07:55:00')
 @redirect_stdout
 def test_excluding_non_conference_urls(out, event_dicts):
-    """Should list meeting starting in 5 minutes"""
+    """Should exclude non-conference URLs from 'upcoming' results"""
     list_events.main()
     feedback = json.loads(out.getvalue())
     case.assertEqual(feedback['items'][0]['title'], 'My Meeting')
