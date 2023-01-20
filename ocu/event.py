@@ -97,6 +97,10 @@ class Event(object):
         else:
             return False
 
+    # Clean up the conference URL by removing extraneous characters
+    def normalize_url(self, url):
+        return re.sub(r'([\.\;]$)', '', url)
+
     # Compute a numeric score to represent the likelihood that this is the
     # conference domain we want
     def get_url_score(self, url):
@@ -116,7 +120,9 @@ class Event(object):
         urls = re.findall(r'https://(?:.*?)(?=[\s><"\']|$)', event_search_str)
         if not urls:
             return None
-        url_pairs = [(url, self.get_url_score(url)) for url in urls]
+        normalized_urls = [self.normalize_url(url) for url in urls]
+        url_pairs = [(url, self.get_url_score(url))
+                     for url in normalized_urls]
         filtered_url_pairs = [(url, score)
                               for url, score in url_pairs if score >= 0]
         if not filtered_url_pairs:
