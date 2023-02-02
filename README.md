@@ -90,6 +90,10 @@ bypassing your web browser entirely.
 
 Whether 12-hour or 12-hour time are used for the displayed event start times.
 
+### Permissions Required
+
+To read the calendar files the workflow requires Systems Settings -> Privacy & Security -> Calendars permission for Alfred 5 and Terminal.
+
 ## Credits
 
 Kudos to [@jacksonrayhamilton][jrh] for his architecture ideas and feedback on
