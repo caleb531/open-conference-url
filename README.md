@@ -18,7 +18,7 @@ release supporting Alfred 4 will remain available here for your convenience.
 
 ## Installation
 
-To download the workflow, simply click the download link below.
+To download the workflow, simply click one of the download links below.
 
 [Download Open Conference URL (Alfred 5)][workflow-download-alfred5]
 
