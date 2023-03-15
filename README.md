@@ -37,6 +37,12 @@ footprint than full-blown Xcode.
 
 ![Prompt to install Apple's Command Line Tools](screenshot-clt-installer.png)
 
+### Calendar Permissions
+
+To read from your local calendar, the workflow requires Calendar permissions for
+both Alfred 5 and Terminal. Visit **Systems Settings > Privacy & Security >
+Calendars** to grant them these permissions.
+
 ## Usage
 
 To use, simply type the `conf` command into Alfred, and you will see a list of
@@ -98,10 +104,6 @@ bypassing your web browser entirely.
 ### Time System
 
 Whether 12-hour or 12-hour time are used for the displayed event start times.
-
-### Permissions Required
-
-To read the calendar files the workflow requires Systems Settings -> Privacy & Security -> Calendars permission for Alfred 5 and Terminal.
 
 ## Credits
 
