@@ -28,6 +28,15 @@ To download the workflow, simply click the download link below.
 
 [workflow-download-alfred4]: https://github.com/caleb531/open-conference-url/raw/main/Open%20Conference%20URL%20(Alfred%204).alfredworkflow
 
+### Command Line Tools
+
+If you are installing the workflow for the first time, you may be prompted to
+install Apple's Command Line Tools. These developer tools are required
+for the workflow to function, and fortunately, they have a much smaller size
+footprint than full-blown Xcode.
+
+![Prompt to install Apple's Command Line Tools](screenshot-clt-installer.png)
+
 ## Usage
 
 To use, simply type the `conf` command into Alfred, and you will see a list of
