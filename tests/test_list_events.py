@@ -256,7 +256,7 @@ def test_no_events_for_today(out, event_dicts):
 @freeze_time('2022-10-16 12:55:00')
 @redirect_stdout
 def test_24_hour(out, event_dicts):
-    """Should list meeting starting in 5 minutes"""
+    """Should list meeting starting in 5 minutes (in 24-hour time)"""
     list_events.main()
     feedback = json.loads(out.getvalue())
     case.assertEqual(feedback['items'][0]['title'], 'My Meeting')
