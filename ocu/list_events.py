@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 
 import json
 from datetime import datetime, timedelta
+from operator import attrgetter
 
 from ocu.calendar import calendar
 from ocu.event import Event
@@ -33,27 +34,28 @@ def get_events_today():
 # Retrieve only events from today for which a conference URL has been found
 def get_events_today_with_conference_urls():
 
-    return [event for event in get_events_today() if event.conference_url]
+    return sorted(
+        (event for event in get_events_today() if event.conference_url),
+        key=attrgetter('start_datetime'), reverse=True)
 
 
-# Return True if the given date/time object is within the acceptable tolerance
-# range (e.g. within the next 15 minutes OR in the last 15 minutes); if not,
-# return False
-def is_time_within_range(event_datetime, event_time_threshold_mins):
+# Return True if the given date/time is within the next 15 minutes OR sometime
+# within the past; otherwise, return False
+def is_time_in_past_or_upcoming(event_datetime, event_time_threshold_mins):
     current_datetime = datetime.now()
     event_time_threshold = timedelta(minutes=event_time_threshold_mins)
     min_datetime = (event_datetime - event_time_threshold)
-    max_datetime = (event_datetime + event_time_threshold)
-    if min_datetime <= current_datetime <= max_datetime:
+    if min_datetime <= current_datetime:
         return True
     else:
         return False
 
 
-# Get those events from today which are nearest to the user's current date/time
-def filter_events_to_upcoming(events):
+# Get those events from today which are either in the past or upcoming (but not
+# any further into the future)
+def filter_out_future_events(events):
     # Filter those events to only those which are nearest to the current time
-    return [event for event in events if is_time_within_range(
+    return [event for event in events if is_time_in_past_or_upcoming(
                        event.start_datetime,
                        prefs['event_time_threshold_mins'])]
 
@@ -91,7 +93,7 @@ def get_event_feedback_item(event):
 def main():
 
     all_events = get_events_today_with_conference_urls()
-    upcoming_events = filter_events_to_upcoming(all_events)
+    upcoming_events = filter_out_future_events(all_events)
 
     # The feedback object which will be fed to Alfred to display the results
     feedback = {'items': []}
