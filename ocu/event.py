@@ -20,7 +20,9 @@ class Event(object):
     def __init__(self, raw_data):
         self.raw_data = raw_data
         self.title = raw_data.get('title')
-        self.start_datetime = self.parse_start_datetime()
+        self.start_datetime = self.parse_datetime(self.raw_data['startDate'])
+        if 'endDate' in self.raw_data:
+            self.end_datetime = self.parse_datetime(self.raw_data['endDate'])
         if self.start_datetime.hour == 0 and self.start_datetime.minute == 0:
             self.is_all_day = True
             # Set the time of all-day events to the system's current time, to
@@ -73,17 +75,17 @@ class Event(object):
     def convert_msteams_url_to_direct(msteams_url):
         return msteams_url.replace('https://', 'msteams://')
 
-    # Parse and return the date and time the event starts
-    def parse_start_datetime(self):
+    # Parse and return some raw date/time into a proper datetime object
+    def parse_datetime(self, raw_datetime):
         if self.raw_data.get('isAllDay') == 'true':
             # Handle all-day events
             return datetime.strptime(
-                self.raw_data['startDate'],
+                raw_datetime,
                 '{}T00:00'.format(calendar.date_format))
         else:
             # Handle events with specific start time
             return datetime.strptime(
-                self.raw_data['startDate'],
+                raw_datetime,
                 '{}T{}'.format(
                     calendar.date_format, calendar.time_format))
 
