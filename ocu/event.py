@@ -77,17 +77,11 @@ class Event(object):
 
     # Parse and return some raw date/time into a proper datetime object
     def parse_datetime(self, raw_datetime):
-        if self.raw_data.get('isAllDay') == 'true':
-            # Handle all-day events
-            return datetime.strptime(
-                raw_datetime,
-                '{}T00:00'.format(calendar.date_format))
-        else:
-            # Handle events with specific start time
-            return datetime.strptime(
-                raw_datetime,
-                '{}T{}'.format(
-                    calendar.date_format, calendar.time_format))
+        # Handle events with specific start time
+        return datetime.strptime(
+            raw_datetime,
+            '{}T{}'.format(
+                calendar.date_format, calendar.time_format))
 
     # Return true if the given domain (e.g. "us02web.zoom.us") matches the given
     # pattern (e.g. "*.zoom.us")

@@ -104,6 +104,30 @@ def test_all_day_standalone(out, event_dicts):
     case.assertEqual(len(feedback['items']), 1)
 
 
+@use_event_dicts([{
+    'title': 'All-Day Conference',
+    'startDate': '2022-10-16T00:00',
+    'endDate': '2022-10-18T23:59',
+    'isAllDay': 'true',
+    'location': 'https://zoom.us/j/123456'
+}])
+@freeze_time('2022-10-16 8:00:00')
+@redirect_stdout
+def test_all_day_multiple_days(out, event_dicts):
+    """Should handle all-day events spanning multiple days"""
+    list_events.main()
+    feedback = json.loads(out.getvalue())
+    case.assertEqual(feedback['items'][0]['title'], 'All-Day Conference')
+    case.assertEqual(feedback['items'][0]['subtitle'], 'All-Day')
+    case.assertEqual(
+        feedback['items'][0]['text']['copy'],
+        event_dicts[0]['location'])
+    case.assertEqual(
+        feedback['items'][0]['text']['largetype'],
+        event_dicts[0]['location'])
+    case.assertEqual(len(feedback['items']), 1)
+
+
 @use_event_dicts([
     {
         'title': 'All-Day Conference',
