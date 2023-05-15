@@ -176,19 +176,19 @@ def test_all_day_mixed(out, event_dicts):
     },
     {
         'title': 'My Meeting 2',
-        'startDate': '2022-10-16T08:00',
+        'startDate': '2022-10-16T08:15',
         'endDate': '2022-10-16T09:00',
         'location': 'https://zoom.us/j/789012'
     }
 ])
-@freeze_time('2022-10-16 07:55:00')
+@freeze_time('2022-10-16 07:58:00')
 @redirect_stdout
 def test_multiple_meetings_at_once(out, event_dicts):
     """Should list multiple upcoming meetings at once"""
     list_events.main()
     feedback = json.loads(out.getvalue())
     case.assertEqual(feedback['items'][0]['title'], 'My Meeting 2')
-    case.assertEqual(feedback['items'][0]['subtitle'], '8:00am')
+    case.assertEqual(feedback['items'][0]['subtitle'], '8:15am')
     case.assertEqual(
         feedback['items'][0]['text']['copy'],
         event_dicts[1]['location'])
