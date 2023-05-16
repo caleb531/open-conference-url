@@ -130,7 +130,7 @@ def main():
     elif all_events and not upcoming_events and past_events:
         feedback['items'].append({
             'title': 'No Upcoming Meetings',
-            'subtitle': 'Showing past events',
+            'subtitle': 'Showing events from earlier today',
             'valid': 'no'
         })
         feedback['items'].extend(get_event_feedback_item(event)
@@ -138,7 +138,7 @@ def main():
     elif all_events and not upcoming_events and not past_events:
         feedback['items'].append({
             'title': 'No Upcoming Meetings',
-            'subtitle': 'Showing all events',
+            'subtitle': 'Showing all events for today',
             'valid': 'no'
         })
         feedback['items'].extend(get_event_feedback_item(event)
