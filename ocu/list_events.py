@@ -53,7 +53,8 @@ def is_time_upcoming(event_datetime, event_time_threshold_mins):
     current_datetime = datetime.now()
     event_time_threshold = timedelta(minutes=event_time_threshold_mins)
     min_datetime = (event_datetime - event_time_threshold)
-    if min_datetime < current_datetime <= event_datetime:
+    max_datetime = (event_datetime + event_time_threshold)
+    if min_datetime < current_datetime <= max_datetime:
         return True
     else:
         return False

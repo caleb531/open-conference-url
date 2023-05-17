@@ -46,16 +46,15 @@ def test_5mins_after(out, event_dicts):
     """Should list meeting that started 5 minutes ago"""
     list_events.main()
     feedback = json.loads(out.getvalue())
-    case.assertEqual(feedback['items'][0]['title'], 'No Upcoming Meetings')
-    case.assertEqual(feedback['items'][1]['title'], 'My Meeting')
-    case.assertEqual(feedback['items'][1]['subtitle'], '8:00am')
+    case.assertEqual(feedback['items'][0]['title'], 'My Meeting')
+    case.assertEqual(feedback['items'][0]['subtitle'], '8:00am')
     case.assertEqual(
-        feedback['items'][1]['text']['copy'],
+        feedback['items'][0]['text']['copy'],
         event_dicts[0]['location'])
     case.assertEqual(
-        feedback['items'][1]['text']['largetype'],
+        feedback['items'][0]['text']['largetype'],
         event_dicts[0]['location'])
-    case.assertEqual(len(feedback['items']), 2)
+    case.assertEqual(len(feedback['items']), 1)
 
 
 @use_event_dicts([{
