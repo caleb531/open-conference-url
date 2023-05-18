@@ -219,9 +219,49 @@ def test_multiple_meetings_at_once(out, event_dicts):
         'location': 'https://zoom.us/j/789012'
     },
 ])
+@freeze_time('2022-10-16 10:00:00')
+@redirect_stdout
+def test_past_meetings_only(out, event_dicts):
+    """Should list past meetings alongside upcoming meetings"""
+    list_events.main()
+    feedback = json.loads(out.getvalue())
+    case.assertEqual(feedback['items'][0]['title'], 'No Upcoming Meetings')
+    case.assertEqual(feedback['items'][1]['title'], 'My Meeting 2')
+    case.assertEqual(feedback['items'][1]['subtitle'], '8:00am')
+    case.assertEqual(
+        feedback['items'][1]['text']['copy'],
+        event_dicts[1]['location'])
+    case.assertEqual(
+        feedback['items'][1]['text']['largetype'],
+        event_dicts[1]['location'])
+    case.assertEqual(feedback['items'][2]['title'], 'My Meeting 1')
+    case.assertEqual(feedback['items'][2]['subtitle'], '6:00am')
+    case.assertEqual(
+        feedback['items'][2]['text']['copy'],
+        event_dicts[0]['location'])
+    case.assertEqual(
+        feedback['items'][2]['text']['largetype'],
+        event_dicts[0]['location'])
+    case.assertEqual(len(feedback['items']), 3)
+
+
+@use_event_dicts([
+    {
+        'title': 'My Meeting 1',
+        'startDate': '2022-10-16T06:00',
+        'endDate': '2022-10-16T07:00',
+        'location': 'https://zoom.us/j/123456'
+    },
+    {
+        'title': 'My Meeting 2',
+        'startDate': '2022-10-16T08:00',
+        'endDate': '2022-10-16T09:00',
+        'location': 'https://zoom.us/j/789012'
+    },
+])
 @freeze_time('2022-10-16 07:55:00')
 @redirect_stdout
-def test_past_meetings(out, event_dicts):
+def test_past_meetings_with_upcoming(out, event_dicts):
     """Should list past meetings alongside upcoming meetings"""
     list_events.main()
     feedback = json.loads(out.getvalue())
