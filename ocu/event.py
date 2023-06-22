@@ -6,13 +6,17 @@ from datetime import datetime
 from operator import itemgetter
 from urllib.parse import urlparse
 
-from ocu.calendar import calendar
 from ocu.prefs import prefs
 
 
 # The object representation of a calendar event, with all of its fields
 # normalized and ready to be consumed by the list_events module
 class Event(object):
+
+    # The date and time used internally to display and parse raw event data;
+    # ***do not change this***
+    date_format = '%Y-%m-%d'
+    time_format = '%H:%M'
 
     # Initialize an Event object by parsing a dictionary of raw event
     # properties as input; this dictionary is constructed and outputted by the
@@ -80,8 +84,7 @@ class Event(object):
         # Handle events with specific start time
         return datetime.strptime(
             raw_datetime,
-            '{}T{}'.format(
-                calendar.date_format, calendar.time_format))
+            '{}T{}'.format(self.date_format, self.time_format))
 
     # Return true if the given domain (e.g. "us02web.zoom.us") matches the given
     # pattern (e.g. "*.zoom.us")
