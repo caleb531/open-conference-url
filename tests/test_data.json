@@ -1,5 +1,5 @@
 {
-  "conference_domain_delimiters": ["\\n", "\n", ","],
+  "conference_domain_delimiters": ["\n", ","],
   "services": [
     {
       "name": "Zoom",

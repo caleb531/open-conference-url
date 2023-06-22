@@ -86,7 +86,7 @@ def test_permutations():
     Test all permutations of test cases that the workflow should correctly
     handle
     """
-    original_conference_domains = os.environ['conference_domains'].split('\\n')
+    original_conference_domains = os.environ['conference_domains'].split(',')
     test_data = get_test_data()
     for delimiter in test_data['conference_domain_delimiters']:
         with use_env('conference_domains', delimiter.join(original_conference_domains)):

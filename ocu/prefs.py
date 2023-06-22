@@ -22,7 +22,7 @@ class Prefs(object):
 
     # Convert a comma-separated string of values to a proper list type
     def convert_str_to_list(self, value):
-        value_list = re.split(r'\s*(?:,|\\n|\n)\s*', value.strip())
+        value_list = re.split(r'\s*(?:,|\n)\s*', value.strip())
         if value_list == ['']:
             return []
         else:
