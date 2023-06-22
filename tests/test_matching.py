@@ -86,10 +86,13 @@ def test_permutations():
     Test all permutations of test cases that the workflow should correctly
     handle
     """
+    original_conference_domains = os.environ['conference_domains'].split('\\n')
     test_data = get_test_data()
-    for service in test_data['services']:
-        yield from generate_location_test_cases(service)
-        yield from generate_notes_test_cases(service)
+    for delimiter in test_data['conference_domain_delimiters']:
+        with use_env('conference_domains', delimiter.join(original_conference_domains)):
+            for service in test_data['services']:
+                yield from generate_location_test_cases(service)
+                yield from generate_notes_test_cases(service)
 
 
 def convert_zoom_url_to_direct(zoom_url):
