@@ -8,7 +8,7 @@ import re
 import unittest
 
 from ocu.event import Event
-from tests.decorators import use_env
+from tests.utils import use_env
 
 
 # The supported start/end tokens that a conference URL could potentially be
