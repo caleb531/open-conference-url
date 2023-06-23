@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
+import os
 import json
 import sys
+import types
 from functools import wraps
 from io import StringIO
 from unittest.mock import patch
-
-from tests.context_managers import use_env_context
 
 
 def redirect_stdout(func):
@@ -31,8 +31,18 @@ def use_env(key, value):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
-            with use_env_context(key, value):
-                return func(*args, **kwargs)
+            # Setting only a single environment variable at a time ensures that
+            # this decorator can be used multiple times on the same function
+            orig_value = os.environ.get(key, '')
+            os.environ[key] = value
+            try:
+                return_value = func(*args, **kwargs)
+                if isinstance(return_value, types.GeneratorType):
+                    yield from return_value
+                else:
+                    return return_value
+            finally:
+                os.environ[key] = orig_value
         return wrapper
 
     return decorator
