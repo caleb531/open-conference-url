@@ -5,6 +5,7 @@ import os
 import os.path
 import re
 import subprocess
+from ocu.event import Event
 from ocu.calendars.base_calendar import BaseCalendar
 
 
@@ -34,15 +35,15 @@ class IcalBuddyCalendar(BaseCalendar):
         return binary_path[-1]
 
     # Retrieve the raw event strings from icalBuddy
-    def get_event_strs(self):
-        return re.split(r'(?:^|\n)• ', subprocess.check_output([
+    def get_raw_event_strs(self):
+        event_blobs = re.split(r'(?:^|\n)• ', subprocess.check_output([
             self.get_binary_path(),
             # Override the default date/time formats
             '--dateFormat',
-            self.date_format,
+            Event.date_format,
             '--noRelativeDates',
             '--timeFormat',
-            self.time_format,
+            Event.time_format,
             # remove parenthetical calendar names from event titles
             '--noCalendarNames',
             # Only include the following fields and enforce their order
@@ -54,3 +55,63 @@ class IcalBuddyCalendar(BaseCalendar):
             # current date, which our parsing logic assumes is present
             'eventsToday+0'
         ]).decode('utf-8'))
+        # The first element will always be an empty string, because the bullet
+        # point we are splitting on is not a delimiter
+        event_blobs.pop(0)
+        return event_blobs
+
+    # Because parsing date/time information from an icalBuddy event string is
+    # more involved, we have a dedicated method for it
+    def parse_date_info(self, raw_event_str):
+        date_matches_single_day = re.search(
+            r'\n\s{4}(.*?) at (.*?) - (.*?)\n',
+            raw_event_str)
+        date_matches_multi_day = re.search(
+            r'\n\s{4}(.*?) at (.*?) - (.*?) at (.*?)\n',
+            raw_event_str)
+        if date_matches_multi_day:
+            return {
+                'start_date': date_matches_multi_day.group(1),
+                'start_time': date_matches_multi_day.group(2),
+                'end_date': date_matches_multi_day.group(3),
+                'end_time': date_matches_multi_day.group(4)
+            }
+        else:
+            return {
+                'start_date': date_matches_single_day.group(1),
+                'start_time': date_matches_single_day.group(2),
+                'end_date': date_matches_single_day.group(1),
+                'end_time': date_matches_single_day.group(3)
+            }
+
+    # Parse a string of raw event data into a dictionary which can be consumed
+    # by the Event class
+    def convert_raw_event_str_to_dict(self, raw_event_str):
+        title_matches = re.search(
+            r'^(.*?)\n',
+            raw_event_str)
+        date_info = self.parse_date_info(raw_event_str)
+        location_matches = re.search(
+            r'\n\s{4}location: (.*?)\n',
+            raw_event_str)
+        notes_matches = re.search(
+            r'\n\s{4}notes: ((?:.|\n)*)$',
+            raw_event_str)
+        return {
+            # 'raw_data': raw_event_str,
+            'title': title_matches.group(1) if title_matches else '',
+            'startDate': '{}T{}'.format(
+                date_info['start_date'],
+                date_info['start_time']),
+            'endDate': '{}T{}'.format(
+                date_info['end_date'],
+                date_info['end_time']),
+            'location': location_matches.group(1) if location_matches else '',
+            'notes': notes_matches.group(1) if notes_matches else ''
+        }
+
+    # Transform the raw event data into a list of dictionaries that are
+    # consumable by the Event class
+    def get_event_dicts(self):
+        return [self.convert_raw_event_str_to_dict(raw_event_str)
+                for raw_event_str in self.get_raw_event_strs()]
