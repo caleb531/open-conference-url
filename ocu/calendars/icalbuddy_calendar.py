@@ -21,23 +21,29 @@ class IcalBuddyCalendar(BaseCalendar):
     binary_paths = [
         os.path.join(os.sep, 'opt', 'homebrew', 'bin', 'icalBuddy'),
         os.path.join(os.sep, 'usr', 'local', 'bin', 'icalBuddy'),
-        os.path.join(os.path.dirname(os.path.realpath(__file__)), 'icalBuddy')
     ]
 
     # Retrieve the first available path to the binary among a list of possible
     # paths (this allows us to prefer the already-signed Homebrew icalBuddy
     # binary over our workflow-bundled binary that requires explicit permission
     # to execute)
-    def get_binary_path(self):
-        for binary_path in self.binary_paths:
+    @classmethod
+    def get_binary_path(cls):
+        for binary_path in cls.binary_paths:
             if os.path.exists(binary_path):
                 return binary_path
-        return binary_path[-1]
+        return None
+
+    # A simple utility method to check if icalBuddy is currently installed on
+    # the user's system
+    @classmethod
+    def is_icalbuddy_installed(cls):
+        return bool(cls.get_binary_path())
 
     # Retrieve the raw event strings from icalBuddy
     def get_raw_event_strs(self):
         event_blobs = re.split(r'(?:^|\n)• ', subprocess.check_output([
-            self.get_binary_path(),
+            self.__class__.get_binary_path(),
             # Override the default date/time formats
             '--dateFormat',
             Event.date_format,
