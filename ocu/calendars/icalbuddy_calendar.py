@@ -7,6 +7,7 @@ import re
 import subprocess
 from ocu.event import Event
 from ocu.calendars.base_calendar import BaseCalendar
+from ocu.prefs import prefs
 
 
 # A Calendar class for retrieving event data via AppleScript
@@ -38,7 +39,7 @@ class IcalBuddyCalendar(BaseCalendar):
     # the user's system
     @classmethod
     def is_icalbuddy_installed(cls):
-        return bool(cls.get_binary_path())
+        return bool(cls.get_binary_path()) and prefs['use_icalbuddy']
 
     # Retrieve the raw event strings from icalBuddy
     def get_raw_event_strs(self):

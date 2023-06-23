@@ -17,6 +17,7 @@ class Prefs(object):
             'event_time_threshold_mins': int,
             'use_direct_zoom': self.convert_str_to_bool,
             'use_direct_msteams': self.convert_str_to_bool,
+            'use_icalbuddy': self.convert_str_to_bool,
             'time_system': str
         }
 
