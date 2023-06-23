@@ -8,7 +8,7 @@ import itertools
 from datetime import datetime, timedelta
 from operator import attrgetter
 
-from ocu.calendar import calendar
+from ocu.calendar import get_calendar
 from ocu.event import Event
 from ocu.prefs import prefs
 
@@ -23,7 +23,7 @@ MINUTES_IN_HOUR = 60
 # time
 def get_events_today():
 
-    event_dicts = calendar.get_event_dicts()
+    event_dicts = get_calendar().get_event_dicts()
     return [Event(event_dict) for event_dict in event_dicts]
 
 

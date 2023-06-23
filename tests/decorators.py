@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import json
 import sys
 import types
 from functools import wraps
@@ -54,8 +55,8 @@ def use_event_dicts(event_dicts):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
-            with patch('ocu.calendar.calendar.get_event_dicts',
-                       return_value=event_dicts):
+            with patch('subprocess.check_output',
+                       return_value=json.dumps(event_dicts).encode('utf-8')):
                 return func(*args, event_dicts, **kwargs)
         return wrapper
 
