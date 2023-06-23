@@ -326,7 +326,6 @@ def test_no_events_for_today(out, event_dicts):
     case.assertEqual(len(feedback['items']), 1)
 
 
-@use_env('time_system', '24-hour')
 @use_event_dicts([{
     'title': 'My Meeting',
     'startDate': '2022-10-16T13:00',
@@ -334,6 +333,7 @@ def test_no_events_for_today(out, event_dicts):
     'location': 'https://zoom.us/j/123456'
 }])
 @freeze_time('2022-10-16 12:55:00')
+@use_env('time_system', '24-hour')
 @redirect_stdout
 def test_24_hour(out, event_dicts):
     """Should list meeting starting in 5 minutes (in 24-hour time)"""
