@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import os.path
 import json
 import sys
 import types
@@ -58,6 +59,25 @@ def use_event_dicts(event_dicts):
             with patch('subprocess.check_output',
                        return_value=json.dumps(event_dicts).encode('utf-8')):
                 return func(*args, event_dicts, **kwargs)
+        return wrapper
+
+    return decorator
+
+
+def use_icalbuddy_output(file_name):
+    """
+        Sets the current list of raw event dicts to use in ocu.list_events
+    """
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            file_path = os.path.join(
+                'tests', 'icalbuddy_output', f'{file_name}.txt')
+            with open(file_path, 'r') as file:
+                file_contents = file.read()
+            with patch('subprocess.check_output',
+                       return_value=file_contents.encode('utf-8')):
+                return func(*args, **kwargs)
         return wrapper
 
     return decorator
