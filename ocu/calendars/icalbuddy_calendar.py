@@ -91,14 +91,14 @@ class IcalBuddyCalendar(BaseCalendar):
     # by the Event class
     def convert_raw_event_str_to_dict(self, raw_event_str):
         title_matches = re.search(
-            r'^(.*?)\n',
+            r'^(.*?)\r?\n',
             raw_event_str)
         date_info = self.parse_date_info(raw_event_str)
         location_matches = re.search(
-            r'\n\s{4}location: (.*?)\n',
+            r'\n\s{4}location: (.*?)(?:\r?\n|$)',
             raw_event_str)
         notes_matches = re.search(
-            r'\n\s{4}notes: ((?:.|\n)*)$',
+            r'\n\s{4}notes: ((?:.|\r|\n)*)$',
             raw_event_str)
         return {
             # 'raw_data': raw_event_str,
