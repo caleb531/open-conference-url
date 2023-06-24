@@ -10,6 +10,7 @@ case = unittest.TestCase()
 
 @use_icalbuddy_output('single_event')
 def test_single_event():
+    """should parse single event from icalBuddy output"""
     calendar = IcalBuddyCalendar()
     event_dicts = calendar.get_event_dicts()
     case.assertEqual(event_dicts[0]['title'], 'WWDC 2022 Keynote')
@@ -22,6 +23,7 @@ def test_single_event():
 
 @use_icalbuddy_output('multiple_events')
 def test_multiple_events():
+    """should parse multiple events from icalBuddy output"""
     calendar = IcalBuddyCalendar()
     event_dicts = calendar.get_event_dicts()
     case.assertEqual(event_dicts[0]['title'], 'WWDC 2023 Keynote')
@@ -39,6 +41,7 @@ def test_multiple_events():
 
 @use_icalbuddy_output('multiple_days')
 def test_multiple_days():
+    """should parse single event spanning multiple days from icalBuddy output"""
     calendar = IcalBuddyCalendar()
     event_dicts = calendar.get_event_dicts()
     case.assertEqual(event_dicts[0]['title'], 'Multi-Day Meeting')
@@ -51,6 +54,7 @@ def test_multiple_days():
 
 @use_icalbuddy_output('all_day')
 def test_all_day():
+    """should parse all-day event from icalBuddy output"""
     calendar = IcalBuddyCalendar()
     event_dicts = calendar.get_event_dicts()
     case.assertEqual(event_dicts[0]['title'], 'All-Day Meeting')
