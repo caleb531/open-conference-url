@@ -41,9 +41,9 @@ class IcalBuddyCalendar(BaseCalendar):
     def is_icalbuddy_installed(cls):
         return bool(cls.get_binary_path()) and prefs['use_icalbuddy']
 
-    # Retrieve the raw event strings from icalBuddy
-    def get_raw_event_strs(self):
-        event_blobs = re.split(r'(?:^|\n)• ', subprocess.check_output([
+    # Retrieve the raw calendar output from icalBuddy
+    def get_raw_calendar_output(self):
+        return subprocess.check_output([
             self.__class__.get_binary_path(),
             # Override the default date/time formats
             '--dateFormat',
@@ -61,11 +61,7 @@ class IcalBuddyCalendar(BaseCalendar):
             # If we omit the '+0', the icalBuddy output does not include the
             # current date, which our parsing logic assumes is present
             'eventsToday+0'
-        ]).decode('utf-8'))
-        # The first element will always be an empty string, because the bullet
-        # point we are splitting on is not a delimiter
-        event_blobs.pop(0)
-        return event_blobs
+        ]).decode('utf-8')
 
     # Because parsing date/time information from an icalBuddy event string is
     # more involved, we have a dedicated method for it
@@ -120,5 +116,9 @@ class IcalBuddyCalendar(BaseCalendar):
     # Transform the raw event data into a list of dictionaries that are
     # consumable by the Event class
     def get_event_dicts(self):
+        # The [1:] is necessary because the first element will always be an
+        # empty string, because the bullet point we are splitting on is not a
+        # delimiter
+        raw_event_strs = re.split(r'(?:^|\n)• ', self.get_raw_calendar_output())[1:]
         return [self.convert_raw_event_str_to_dict(raw_event_str)
-                for raw_event_str in self.get_raw_event_strs()]
+                for raw_event_str in raw_event_strs]
