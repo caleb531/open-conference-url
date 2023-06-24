@@ -22,5 +22,5 @@ class AppleScriptCalendar(BaseCalendar):
         return json.loads(subprocess.check_output([
             'osascript',
             self.script_path,
-            prefs['calendar_names']
+            *prefs['calendar_names']
         ]).decode('utf-8'))
