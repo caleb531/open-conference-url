@@ -47,3 +47,15 @@ def test_multiple_days():
     case.assertEqual(event_dicts[0]['location'], 'https://zoom.us/j/123456')
     case.assertEqual(event_dicts[0]['notes'], '')
     case.assertEqual(len(event_dicts), 1)
+
+
+@use_icalbuddy_output('all_day')
+def test_all_day():
+    calendar = IcalBuddyCalendar()
+    event_dicts = calendar.get_event_dicts()
+    case.assertEqual(event_dicts[0]['title'], 'All-Day Meeting')
+    case.assertEqual(event_dicts[0]['startDate'], '2023-06-21T00:00')
+    case.assertEqual(event_dicts[0]['endDate'], '2023-06-21T11:59')
+    case.assertEqual(event_dicts[0]['location'], 'https://zoom.us/j/123456')
+    case.assertEqual(event_dicts[0]['notes'], '')
+    case.assertEqual(len(event_dicts), 1)
