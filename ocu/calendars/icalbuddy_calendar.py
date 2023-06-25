@@ -39,7 +39,7 @@ class IcalBuddyCalendar(BaseCalendar):
     # the user's system
     @classmethod
     def is_icalbuddy_installed(cls):
-        return bool(cls.get_binary_path()) and prefs['use_icalbuddy']
+        return prefs['use_icalbuddy'] and bool(cls.get_binary_path())
 
     # Retrieve the raw calendar output from icalBuddy
     def get_raw_calendar_output(self):
