@@ -101,6 +101,19 @@ entirely.
 Opens Microsoft Teams links directly in the Microsoft Teams application,
 bypassing your web browser entirely.
 
+### Use icalBuddy
+
+Uses icalBuddy to source calendar event data (instead of AppleScript). Enabling
+this option (assuming you have icalBuddy installed) can drastically improve the
+workflow's performance if you have a very large number of events across your
+calendars.
+
+You must have icalBuddy installed via Homebrew for this to work. To install, open a Terminal and run:
+
+```sh
+brew install ical-buddy
+```
+
 ### Time System
 
 Whether 12-hour or 12-hour time are used for the displayed event start times.
