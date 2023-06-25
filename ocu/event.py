@@ -21,11 +21,11 @@ class Event(object):
     # Initialize an Event object by parsing a dictionary of raw event
     # properties as input; this dictionary is constructed and outputted by the
     # get-calendar-events AppleScript
-    def __init__(self, raw_data):
-        self.title = raw_data.get('title')
-        self.start_datetime = self.parse_datetime(raw_data['startDate'])
-        if 'endDate' in raw_data:
-            self.end_datetime = self.parse_datetime(raw_data['endDate'])
+    def __init__(self, event_dict):
+        self.title = event_dict.get('title')
+        self.start_datetime = self.parse_datetime(event_dict['startDate'])
+        if 'endDate' in event_dict:
+            self.end_datetime = self.parse_datetime(event_dict['endDate'])
         if self.start_datetime.hour == 0 and self.start_datetime.minute == 0:
             self.is_all_day = True
             # Set the time of all-day events to the system's current time, to
@@ -33,7 +33,7 @@ class Event(object):
             self.start_datetime = datetime.now()
         else:
             self.is_all_day = False
-        self.conference_url = self.parse_conference_url(raw_data)
+        self.conference_url = self.parse_conference_url(event_dict)
         # Bypass the browser when opening Zoom Join URLs, if enabled
         if self.__class__.is_convertible_zoom_url(self.conference_url):
             self.conference_url = self.__class__.convert_zoom_url_to_direct(
@@ -113,8 +113,8 @@ class Event(object):
     # Return the conference URL for the given event, whereby some services have
     # higher precedence than others (e.g. always prefer Zoom URLs over Google
     # Meet URLs if both are present)
-    def parse_conference_url(self, raw_data):
-        event_search_str = '\n'.join(raw_data.values())
+    def parse_conference_url(self, event_dict):
+        event_search_str = '\n'.join(event_dict.values())
         urls = re.findall(r'https://(?:.*?)(?=[\s><"\']|$)', event_search_str)
         if not urls:
             return None
