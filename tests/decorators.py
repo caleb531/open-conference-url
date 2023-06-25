@@ -4,7 +4,6 @@ import os
 import os.path
 import json
 import sys
-import types
 from functools import wraps
 from io import StringIO
 from unittest.mock import patch
@@ -37,11 +36,7 @@ def use_env(key, value):
             orig_value = os.environ.get(key, '')
             os.environ[key] = value
             try:
-                return_value = func(*args, **kwargs)
-                if isinstance(return_value, types.GeneratorType):
-                    yield from return_value
-                else:
-                    return return_value
+                return func(*args, **kwargs)
             finally:
                 os.environ[key] = orig_value
         return wrapper
