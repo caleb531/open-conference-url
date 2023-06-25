@@ -1,11 +1,41 @@
 #!/usr/bin/env python3
 
 import unittest
+from unittest.mock import patch
 
+from ocu.calendar import get_calendar
 from ocu.calendars.icalbuddy_calendar import IcalBuddyCalendar
-from tests.decorators import use_icalbuddy_output
+from tests.decorators import use_env, use_icalbuddy_output
 
 case = unittest.TestCase()
+
+
+@patch('os.path.exists', return_value=True)
+@use_env('use_icalbuddy', 'true')
+def test_icalbuddy_available_enabled(exists):
+    """should use icalBuddy if it is both available and enabled"""
+    case.assertIsInstance(get_calendar(), IcalBuddyCalendar)
+
+
+@patch('os.path.exists', return_value=True)
+@use_env('use_icalbuddy', 'false')
+def test_icalbuddy_available_disabled(exists):
+    """should not use icalBuddy if it is available but disabled"""
+    case.assertNotIsInstance(get_calendar(), IcalBuddyCalendar)
+
+
+@patch('os.path.exists', return_value=False)
+@use_env('use_icalbuddy', 'true')
+def test_icalbuddy_unavailable_enabled(exists):
+    """should not use icalBuddy if it is enabled but unavailable"""
+    case.assertNotIsInstance(get_calendar(), IcalBuddyCalendar)
+
+
+@patch('os.path.exists', return_value=False)
+@use_env('use_icalbuddy', 'false')
+def test_icalbuddy_unavailable_disabled(exists):
+    """should not use icalBuddy if it is disabled and unavailable"""
+    case.assertNotIsInstance(get_calendar(), IcalBuddyCalendar)
 
 
 @use_icalbuddy_output('single_event')
