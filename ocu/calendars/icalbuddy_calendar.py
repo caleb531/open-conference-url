@@ -111,7 +111,6 @@ class IcalBuddyCalendar(BaseCalendar):
             r'\n\s{4}notes: ((?:.|\r|\n)*)$',
             raw_event_str)
         return {
-            # 'raw_data': raw_event_str,
             'title': title_matches.group(1) if title_matches else '',
             'startDate': '{}T{}'.format(
                 date_info['start_date'],
