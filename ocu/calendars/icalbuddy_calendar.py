@@ -67,13 +67,13 @@ class IcalBuddyCalendar(BaseCalendar):
     # more involved, we have a dedicated method for it
     def parse_date_info(self, raw_event_str):
         date_matches_all_day = re.search(
-            r'\n\s{4}(\S*?)\n',
+            r'\n\s{4}(\S*?)(\n|$)',
             raw_event_str)
         date_matches_single_day = re.search(
-            r'\n\s{4}(\S*?) at (\S*?) - (\S*?)\n',
+            r'\n\s{4}(\S*?) at (\S*?) - (\S*?)(\n|$)',
             raw_event_str)
         date_matches_multi_day = re.search(
-            r'\n\s{4}(\S*?) at (\S*?) - (\S*?) at (\S*?)\n',
+            r'\n\s{4}(\S*?) at (\S*?) - (\S*?) at (\S*?)(\n|$)',
             raw_event_str)
         if date_matches_multi_day:
             return {
