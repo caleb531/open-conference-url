@@ -8,8 +8,7 @@ import re
 import unittest
 
 from ocu.event import Event
-from tests.decorators import use_env
-from tests.context_managers import use_env_context
+from tests.utils import use_env
 
 
 # The supported start/end tokens that a conference URL could potentially be
@@ -92,7 +91,7 @@ def test_permutations():
         os.environ['conference_domains'])
     test_data = get_test_data()
     for delimiter in test_data['conference_domain_delimiters']:
-        with use_env_context('conference_domains', delimiter.join(original_conference_domains)):
+        with use_env('conference_domains', delimiter.join(original_conference_domains)):
             for service in test_data['services']:
                 yield from generate_location_test_cases(service)
                 yield from generate_notes_test_cases(service)

@@ -5,7 +5,7 @@ from unittest.mock import patch
 
 from ocu.calendar import get_calendar
 from ocu.calendars.icalbuddy_calendar import IcalBuddyCalendar
-from tests.decorators import use_env, use_icalbuddy_output
+from tests.utils import use_env, use_icalbuddy_output
 
 case = unittest.TestCase()
 
