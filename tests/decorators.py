@@ -9,6 +9,8 @@ from functools import wraps
 from io import StringIO
 from unittest.mock import patch
 
+from tests.context_managers import use_env_context
+
 
 def redirect_stdout(func):
     """Temporarily redirects stdout to new Unicode output stream"""
@@ -34,24 +36,19 @@ def use_env(key, value):
     def decorator(func):
         @wraps(func)
         def function_wrapper(*args, **kwargs):
-            orig_value = os.environ.get(key, '')
-            os.environ[key] = value
-            try:
-                return_value = func(*args, **kwargs)
-            finally:
-                os.environ[key] = orig_value
-            return return_value
+            with use_env_context(key, value):
+                return func(*args, **kwargs)
 
         @wraps(func)
         def generator_wrapper(*args, **kwargs):
-            orig_value = os.environ.get(key, '')
-            os.environ[key] = value
-            try:
+            with use_env_context(key, value):
                 return_value = yield from func(*args, **kwargs)
-            finally:
-                os.environ[key] = orig_value
             return return_value
-        return generator_wrapper if inspect.isgeneratorfunction(func) else function_wrapper
+
+        if inspect.isgeneratorfunction(func):
+            return generator_wrapper
+        else:
+            return function_wrapper
 
     return decorator
 
