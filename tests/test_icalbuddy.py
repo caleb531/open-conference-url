@@ -82,14 +82,27 @@ def test_multiple_days():
     case.assertEqual(len(event_dicts), 1)
 
 
-@use_icalbuddy_output('all_day')
-def test_all_day():
-    """should parse all-day event from icalBuddy output"""
+@use_icalbuddy_output('single_day_all_day')
+def test_single_day_all_day():
+    """should parse all-day event (on a single day) from icalBuddy output"""
     calendar = IcalBuddyCalendar()
     event_dicts = calendar.get_event_dicts()
-    case.assertEqual(event_dicts[0]['title'], 'All-Day Meeting')
+    case.assertEqual(event_dicts[0]['title'], 'Single-Day All-Day Meeting')
     case.assertEqual(event_dicts[0]['startDate'], '2023-06-21T00:00')
     case.assertEqual(event_dicts[0]['endDate'], '2023-06-21T11:59')
+    case.assertEqual(event_dicts[0]['location'], 'https://zoom.us/j/123456')
+    case.assertEqual(event_dicts[0]['notes'], '')
+    case.assertEqual(len(event_dicts), 1)
+
+
+@use_icalbuddy_output('multiple_days_all_day')
+def test_multiple_days_all_day():
+    """should parse all-day event (over multiple days) from icalBuddy output"""
+    calendar = IcalBuddyCalendar()
+    event_dicts = calendar.get_event_dicts()
+    case.assertEqual(event_dicts[0]['title'], 'Multi-Day All-Day Meeting')
+    case.assertEqual(event_dicts[0]['startDate'], '2023-06-28T00:00')
+    case.assertEqual(event_dicts[0]['endDate'], '2023-06-30T11:59')
     case.assertEqual(event_dicts[0]['location'], 'https://zoom.us/j/123456')
     case.assertEqual(event_dicts[0]['notes'], '')
     case.assertEqual(len(event_dicts), 1)

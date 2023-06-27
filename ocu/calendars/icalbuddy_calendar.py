@@ -66,8 +66,11 @@ class IcalBuddyCalendar(BaseCalendar):
     # Because parsing date/time information from an icalBuddy event string is
     # more involved, we have a dedicated method for it
     def parse_date_info(self, raw_event_str):
-        date_matches_all_day = re.search(
+        date_matches_single_day_all_day = re.search(
             r'\n\s{4}(\S*?)(\n|$)',
+            raw_event_str)
+        date_matches_multi_day_all_day = re.search(
+            r'\n\s{4}(\S*?) - (\S*?)(\n|$)',
             raw_event_str)
         date_matches_single_day = re.search(
             r'\n\s{4}(\S*?) at (\S*?) - (\S*?)(\n|$)',
@@ -82,11 +85,18 @@ class IcalBuddyCalendar(BaseCalendar):
                 'end_date': date_matches_multi_day.group(3),
                 'end_time': date_matches_multi_day.group(4)
             }
-        elif date_matches_all_day:
+        elif date_matches_multi_day_all_day:
             return {
-                'start_date': date_matches_all_day.group(1),
+                'start_date': date_matches_multi_day_all_day.group(1),
                 'start_time': '00:00',
-                'end_date': date_matches_all_day.group(1),
+                'end_date': date_matches_multi_day_all_day.group(2),
+                'end_time': '11:59'
+            }
+        elif date_matches_single_day_all_day:
+            return {
+                'start_date': date_matches_single_day_all_day.group(1),
+                'start_time': '00:00',
+                'end_date': date_matches_single_day_all_day.group(1),
                 'end_time': '11:59'
             }
         else:
