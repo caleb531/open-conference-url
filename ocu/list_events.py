@@ -35,9 +35,12 @@ def get_events_today_with_conference_urls():
 
 # Return True if the given date/time is sometime within the past; otherwise,
 # return False
-def is_time_in_past(event_datetime):
+def is_time_in_past(event_datetime, event_time_threshold_mins):
     current_datetime = datetime.now()
-    if event_datetime <= current_datetime:
+    event_time_threshold = timedelta(minutes=event_time_threshold_mins)
+    min_datetime = event_datetime
+    max_datetime = (event_datetime + event_time_threshold)
+    if min_datetime < current_datetime <= max_datetime:
         return True
     else:
         return False
@@ -57,7 +60,9 @@ def is_time_upcoming(event_datetime, event_time_threshold_mins):
 
 # Get those events from today which are in the past
 def filter_to_past_events(events):
-    return [event for event in events if is_time_in_past(event.start_datetime)]
+    return [event for event in events if is_time_in_past(
+                event.end_datetime,
+                prefs['event_time_threshold_mins'])]
 
 
 # Get those events from today which are either in the past or upcoming (but not
@@ -65,8 +70,8 @@ def filter_to_past_events(events):
 def filter_to_upcoming_events(events):
     # Filter those events to only those which are nearest to the current time
     return [event for event in events if is_time_upcoming(
-                       event.start_datetime,
-                       prefs['event_time_threshold_mins'])]
+                event.start_datetime,
+                prefs['event_time_threshold_mins'])]
 
 
 # Return a sorted list the given events by time

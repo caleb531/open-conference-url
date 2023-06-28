@@ -83,6 +83,7 @@ def test_before_window(out, event_dicts):
 @use_event_dicts([{
     'title': 'All-Day Conference',
     'startDate': '2022-10-16T00:00',
+    'endDate': '2022-10-16T23:59',
     'isAllDay': 'true',
     'location': 'https://zoom.us/j/123456'
 }])
@@ -131,6 +132,7 @@ def test_all_day_multiple_days(out, event_dicts):
     {
         'title': 'All-Day Conference',
         'startDate': '2022-10-16T00:00',
+        'endDate': '2022-10-16T23:59',
         'isAllDay': 'true',
         'location': 'https://zoom.us/j/123456'
     },
@@ -219,10 +221,10 @@ def test_multiple_meetings_at_once(out, event_dicts):
         'location': 'https://zoom.us/j/789012'
     },
 ])
-@freeze_time('2022-10-16 10:00:00')
+@freeze_time('2022-10-16 9:15:00')
 @redirect_stdout
 def test_past_meetings_only(out, event_dicts):
-    """Should list past meetings alongside upcoming meetings"""
+    """Should list recent past meetings only"""
     list_events.main()
     feedback = json.loads(out.getvalue())
     case.assertEqual(feedback['items'][0]['title'], 'No Upcoming Meetings')
@@ -234,15 +236,7 @@ def test_past_meetings_only(out, event_dicts):
     case.assertEqual(
         feedback['items'][1]['text']['largetype'],
         event_dicts[1]['location'])
-    case.assertEqual(feedback['items'][2]['title'], 'My Meeting 1')
-    case.assertEqual(feedback['items'][2]['subtitle'], '6:00am')
-    case.assertEqual(
-        feedback['items'][2]['text']['copy'],
-        event_dicts[0]['location'])
-    case.assertEqual(
-        feedback['items'][2]['text']['largetype'],
-        event_dicts[0]['location'])
-    case.assertEqual(len(feedback['items']), 3)
+    case.assertEqual(len(feedback['items']), 2)
 
 
 @use_event_dicts([
@@ -254,6 +248,12 @@ def test_past_meetings_only(out, event_dicts):
     },
     {
         'title': 'My Meeting 2',
+        'startDate': '2022-10-16T07:15',
+        'endDate': '2022-10-16T07:45',
+        'location': 'https://zoom.us/j/123456'
+    },
+    {
+        'title': 'My Meeting 3',
         'startDate': '2022-10-16T08:00',
         'endDate': '2022-10-16T09:00',
         'location': 'https://zoom.us/j/789012'
@@ -262,25 +262,25 @@ def test_past_meetings_only(out, event_dicts):
 @freeze_time('2022-10-16 07:55:00')
 @redirect_stdout
 def test_past_meetings_with_upcoming(out, event_dicts):
-    """Should list past meetings alongside upcoming meetings"""
+    """Should list recent past meetings alongside upcoming meetings"""
     list_events.main()
     feedback = json.loads(out.getvalue())
-    case.assertEqual(feedback['items'][0]['title'], 'My Meeting 2')
+    case.assertEqual(feedback['items'][0]['title'], 'My Meeting 3')
     case.assertEqual(feedback['items'][0]['subtitle'], '8:00am')
     case.assertEqual(
         feedback['items'][0]['text']['copy'],
-        event_dicts[1]['location'])
+        event_dicts[2]['location'])
     case.assertEqual(
         feedback['items'][0]['text']['largetype'],
-        event_dicts[1]['location'])
-    case.assertEqual(feedback['items'][1]['title'], 'My Meeting 1')
-    case.assertEqual(feedback['items'][1]['subtitle'], '6:00am')
+        event_dicts[2]['location'])
+    case.assertEqual(feedback['items'][1]['title'], 'My Meeting 2')
+    case.assertEqual(feedback['items'][1]['subtitle'], '7:15am')
     case.assertEqual(
         feedback['items'][1]['text']['copy'],
-        event_dicts[0]['location'])
+        event_dicts[1]['location'])
     case.assertEqual(
         feedback['items'][1]['text']['largetype'],
-        event_dicts[0]['location'])
+        event_dicts[1]['location'])
     case.assertEqual(len(feedback['items']), 2)
 
 
