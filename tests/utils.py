@@ -56,8 +56,7 @@ class use_env(object):
         @wraps(func)
         def generator_wrapper(*args, **kwargs):
             with self:
-                return_value = yield from func(*args, **kwargs)
-            return return_value
+                return (yield from func(*args, **kwargs))
 
         if inspect.isgeneratorfunction(func):
             return generator_wrapper
