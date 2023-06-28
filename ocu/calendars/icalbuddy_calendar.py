@@ -90,14 +90,14 @@ class IcalBuddyCalendar(BaseCalendar):
                 'start_date': date_matches_multi_day_all_day.group(1),
                 'start_time': '00:00',
                 'end_date': date_matches_multi_day_all_day.group(2),
-                'end_time': '11:59'
+                'end_time': '23:59'
             }
         elif date_matches_single_day_all_day:
             return {
                 'start_date': date_matches_single_day_all_day.group(1),
                 'start_time': '00:00',
                 'end_date': date_matches_single_day_all_day.group(1),
-                'end_time': '11:59'
+                'end_time': '23:59'
             }
         else:
             return {
