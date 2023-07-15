@@ -24,8 +24,7 @@ class Event(object):
     def __init__(self, event_dict):
         self.title = event_dict.get('title')
         self.start_datetime = self.parse_datetime(event_dict['startDate'])
-        if 'endDate' in event_dict:
-            self.end_datetime = self.parse_datetime(event_dict['endDate'])
+        self.end_datetime = self.parse_datetime(event_dict['endDate'])
         if self.start_datetime.hour == 0 and self.start_datetime.minute == 0:
             self.is_all_day = True
             # Set the time of all-day events to the system's current time, to
