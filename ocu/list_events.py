@@ -75,23 +75,30 @@ def filter_to_upcoming_events(events):
 
 
 # Sort the events such that future events are listed chronologically, whereas
-# past events are listed reverse-chronologically
+# past events are listed reverse-chronologically; all-day events are always
+# listed last
 def get_event_sort_key(current_datetime, event):
     if event.is_all_day:
+        # List all-day events at the very bottom of the list
         return sys.maxsize
     elif is_time_upcoming(
         event.start_datetime,
         time_threshold=prefs["event_time_threshold_mins"],
         current_datetime=current_datetime,
     ):
+        # e.g. 8:00am, 8:30am, 9:00am
         return event.start_datetime.timestamp()
     elif is_time_in_past(
         event.start_datetime,
         time_threshold=prefs["event_time_threshold_mins"],
         current_datetime=current_datetime,
     ):
+        # e.g. 7:30am, 7:00am, 6:30am
         return sys.maxsize - event.end_datetime.timestamp()
     else:
+        # this case will never occur because the other logic in this module
+        # guarantees that the provided event object will always be either an
+        # upcoming event or a past event
         return 0
 
 
