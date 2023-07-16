@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-import os
-import os.path
 import inspect
 import json
+import os
+import os.path
 import sys
 from functools import wraps
 from io import StringIO
@@ -13,6 +13,7 @@ from unittest.mock import patch
 def redirect_stdout(func):
     """A decorator which redirects stdout to new Unicode output stream; it must
     be called without parentheses"""
+
     @wraps(func)
     def wrapper(*args, **kwargs):
         original_stdout = sys.stdout
@@ -22,6 +23,7 @@ def redirect_stdout(func):
             return func(out, *args, **kwargs)
         finally:
             sys.stdout = original_stdout
+
     return wrapper
 
 
@@ -38,7 +40,7 @@ class use_env(object):
         self.value = value
 
     def __enter__(self):
-        self.orig_value = os.environ.get(self.key, '')
+        self.orig_value = os.environ.get(self.key, "")
         os.environ[self.key] = self.value
 
     def __exit__(self, type, value, traceback):
@@ -69,12 +71,16 @@ def use_event_dicts(event_dicts):
     A decorator which sets the current list of raw event dicts to use in
     ocu.list_events
     """
+
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
-            with patch('subprocess.check_output',
-                       return_value=json.dumps(event_dicts).encode('utf-8')):
+            with patch(
+                "subprocess.check_output",
+                return_value=json.dumps(event_dicts).encode("utf-8"),
+            ):
                 return func(*args, event_dicts, **kwargs)
+
         return wrapper
 
     return decorator
@@ -82,18 +88,20 @@ def use_event_dicts(event_dicts):
 
 def use_icalbuddy_output(file_name):
     """
-        Sets the current list of raw event dicts to use in ocu.list_events
+    Sets the current list of raw event dicts to use in ocu.list_events
     """
+
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
-            file_path = os.path.join(
-                'tests', 'icalbuddy_output', f'{file_name}.txt')
-            with open(file_path, 'r') as file:
+            file_path = os.path.join("tests", "icalbuddy_output", f"{file_name}.txt")
+            with open(file_path, "r") as file:
                 file_contents = file.read()
-            with patch('subprocess.check_output',
-                       return_value=file_contents.encode('utf-8')):
+            with patch(
+                "subprocess.check_output", return_value=file_contents.encode("utf-8")
+            ):
                 return func(*args, **kwargs)
+
         return wrapper
 
     return decorator

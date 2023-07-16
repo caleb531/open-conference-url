@@ -2,4 +2,4 @@
 
 from dotenv import load_dotenv
 
-load_dotenv('tests/.env.test')
+load_dotenv("tests/.env.test")

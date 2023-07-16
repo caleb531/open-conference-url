@@ -5,7 +5,6 @@ from unittest.mock import Mock
 
 from ocu.calendars.base_calendar import BaseCalendar
 
-
 case = unittest.TestCase()
 
 

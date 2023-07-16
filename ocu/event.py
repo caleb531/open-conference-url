@@ -12,19 +12,18 @@ from ocu.prefs import prefs
 # The object representation of a calendar event, with all of its fields
 # normalized and ready to be consumed by the list_events module
 class Event(object):
-
     # The date and time used internally to display and parse raw event data;
     # ***do not change this***
-    date_format = '%Y-%m-%d'
-    time_format = '%H:%M'
+    date_format = "%Y-%m-%d"
+    time_format = "%H:%M"
 
     # Initialize an Event object by parsing a dictionary of raw event
     # properties as input; this dictionary is constructed and outputted by the
     # get-calendar-events AppleScript
     def __init__(self, event_dict):
-        self.title = event_dict.get('title')
-        self.start_datetime = self.parse_datetime(event_dict['startDate'])
-        self.end_datetime = self.parse_datetime(event_dict['endDate'])
+        self.title = event_dict.get("title")
+        self.start_datetime = self.parse_datetime(event_dict["startDate"])
+        self.end_datetime = self.parse_datetime(event_dict["endDate"])
         if self.start_datetime.hour == 0 and self.start_datetime.minute == 0:
             self.is_all_day = True
             # Set the time of all-day events to the system's current time, to
@@ -36,19 +35,21 @@ class Event(object):
         # Bypass the browser when opening Zoom Join URLs, if enabled
         if self.__class__.is_convertible_zoom_url(self.conference_url):
             self.conference_url = self.__class__.convert_zoom_url_to_direct(
-                self.conference_url)
+                self.conference_url
+            )
         # Bypass the browser when opening MS Teams Meeting URLs, if enabled
         if self.__class__.is_convertible_msteams_url(self.conference_url):
             self.conference_url = self.__class__.convert_msteams_url_to_direct(
-                self.conference_url)
+                self.conference_url
+            )
 
     # Return True if the given URL is a Zoom URL that can be converted to a
     # direct link (via the zoommtg:// protocol); return False otherwise
     @staticmethod
     def is_convertible_zoom_url(url):
-        if not url or not prefs['use_direct_zoom']:
+        if not url or not prefs["use_direct_zoom"]:
             return False
-        matches = re.search(r'https://([\w\-]+\.)?(zoom.us)/j/', url)
+        matches = re.search(r"https://([\w\-]+\.)?(zoom.us)/j/", url)
         return bool(matches)
 
     # Return True if the given URL is a Microsoft Teams URL that can be
@@ -56,18 +57,18 @@ class Event(object):
     # otherwise
     @staticmethod
     def is_convertible_msteams_url(url):
-        if not url or not prefs['use_direct_msteams']:
+        if not url or not prefs["use_direct_msteams"]:
             return False
-        matches = re.search(r'https://([\w\-]+\.)?(teams.microsoft.com)/l/', url)
+        matches = re.search(r"https://([\w\-]+\.)?(teams.microsoft.com)/l/", url)
         return bool(matches)
 
     # Convert an https: Zoom URL to the zoommtg: protocol which will allow it
     # to bypass a web browser to open directly in the Zoom application
     @staticmethod
     def convert_zoom_url_to_direct(zoom_url):
-        zoom_url = re.sub(r'https://', 'zoommtg://', zoom_url)
-        zoom_url = re.sub(r'/j/', '/join?action=join&confno=', zoom_url)
-        zoom_url = re.sub(r'\?pwd=', '&pwd=', zoom_url)
+        zoom_url = re.sub(r"https://", "zoommtg://", zoom_url)
+        zoom_url = re.sub(r"/j/", "/join?action=join&confno=", zoom_url)
+        zoom_url = re.sub(r"\?pwd=", "&pwd=", zoom_url)
         return zoom_url
 
     # Convert an https: Microsoft Teams URL to the msteams: protocol which will
@@ -75,19 +76,19 @@ class Event(object):
     # application
     @staticmethod
     def convert_msteams_url_to_direct(msteams_url):
-        return msteams_url.replace('https://', 'msteams://')
+        return msteams_url.replace("https://", "msteams://")
 
     # Parse and return some raw date/time into a proper datetime object
     def parse_datetime(self, raw_datetime):
         # Handle events with specific start time
         return datetime.strptime(
-            raw_datetime,
-            '{}T{}'.format(self.date_format, self.time_format))
+            raw_datetime, "{}T{}".format(self.date_format, self.time_format)
+        )
 
     # Return true if the given domain (e.g. "us02web.zoom.us") matches the given
     # pattern (e.g. "*.zoom.us")
     def does_domain_match_pattern(self, domain, pattern):
-        domain_patt = re.sub(r'\\\*', r'([a-z0-9\-]+)', re.escape(pattern))
+        domain_patt = re.sub(r"\\\*", r"([a-z0-9\-]+)", re.escape(pattern))
         matches = re.match(domain_patt, domain)
         if matches:
             return True
@@ -96,32 +97,30 @@ class Event(object):
 
     # Clean up the conference URL by removing extraneous characters
     def normalize_url(self, url):
-        return re.sub(r'([\.\;]$)', '', url)
+        return re.sub(r"([\.\;]$)", "", url)
 
     # Compute a numeric score to represent the likelihood that this is the
     # conference domain we want
     def get_url_score(self, url):
-        if re.search(r'\.[a-z]{3}$', url):
+        if re.search(r"\.[a-z]{3}$", url):
             return -1
         url_parts = urlparse(url)
-        for i, domain_patt in enumerate(prefs['conference_domains']):
+        for i, domain_patt in enumerate(prefs["conference_domains"]):
             if self.does_domain_match_pattern(url_parts.hostname, domain_patt):
-                return 10 * (len(prefs['conference_domains']) - i)
+                return 10 * (len(prefs["conference_domains"]) - i)
         return -1
 
     # Return the conference URL for the given event, whereby some services have
     # higher precedence than others (e.g. always prefer Zoom URLs over Google
     # Meet URLs if both are present)
     def parse_conference_url(self, event_dict):
-        event_search_str = '\n'.join(event_dict.values())
+        event_search_str = "\n".join(event_dict.values())
         urls = re.findall(r'https://(?:.*?)(?=[\s><"\']|$)', event_search_str)
         if not urls:
             return None
         normalized_urls = [self.normalize_url(url) for url in urls]
-        url_pairs = [(url, self.get_url_score(url))
-                     for url in normalized_urls]
-        filtered_url_pairs = [(url, score)
-                              for url, score in url_pairs if score >= 0]
+        url_pairs = [(url, self.get_url_score(url)) for url in normalized_urls]
+        filtered_url_pairs = [(url, score) for url, score in url_pairs if score >= 0]
         if not filtered_url_pairs:
             return None
         return max(filtered_url_pairs, key=itemgetter(1))[0]
