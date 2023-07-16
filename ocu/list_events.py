@@ -3,10 +3,11 @@
 
 from __future__ import unicode_literals
 
+import functools
 import json
 import itertools
+import sys
 from datetime import datetime, timedelta
-from operator import attrgetter
 
 from ocu.calendar import get_calendar
 from ocu.event import Event
@@ -35,34 +36,28 @@ def get_events_today_with_conference_urls():
 
 # Return True if the given date/time is sometime within the past; otherwise,
 # return False
-def is_time_in_past(event_datetime, event_time_threshold_mins):
-    current_datetime = datetime.now()
-    event_time_threshold = timedelta(minutes=event_time_threshold_mins)
+def is_time_in_past(event_datetime, time_threshold, current_datetime=None):
+    if current_datetime is None:
+        current_datetime = datetime.now()
     min_datetime = event_datetime
-    max_datetime = (event_datetime + event_time_threshold)
-    if min_datetime < current_datetime <= max_datetime:
-        return True
-    else:
-        return False
+    return min_datetime < current_datetime
 
 
 # Return True if the given date/time is within the next 15 minutes; otherwise, return False
-def is_time_upcoming(event_datetime, event_time_threshold_mins):
-    current_datetime = datetime.now()
-    event_time_threshold = timedelta(minutes=event_time_threshold_mins)
-    min_datetime = (event_datetime - event_time_threshold)
-    max_datetime = (event_datetime + event_time_threshold)
-    if min_datetime < current_datetime <= max_datetime:
-        return True
-    else:
-        return False
+def is_time_upcoming(event_datetime, time_threshold, current_datetime=None):
+    if current_datetime is None:
+        current_datetime = datetime.now()
+    threshold_delta = timedelta(minutes=time_threshold)
+    min_datetime = (event_datetime - threshold_delta)
+    max_datetime = (event_datetime + threshold_delta)
+    return min_datetime < current_datetime <= max_datetime
 
 
 # Get those events from today which are in the past
 def filter_to_past_events(events):
     return [event for event in events if is_time_in_past(
                 event.end_datetime,
-                prefs['event_time_threshold_mins'])]
+                time_threshold=prefs['event_time_threshold_mins'])]
 
 
 # Get those events from today which are either in the past or upcoming (but not
@@ -71,12 +66,42 @@ def filter_to_upcoming_events(events):
     # Filter those events to only those which are nearest to the current time
     return [event for event in events if is_time_upcoming(
                 event.start_datetime,
-                prefs['event_time_threshold_mins'])]
+                time_threshold=prefs['event_time_threshold_mins'])]
 
 
-# Return a sorted list the given events by time
+# Sort the events such that future events are listed chronologically, whereas
+# past events are listed reverse-chronologically
+def get_event_sort_key(current_datetime, event):
+    if event.is_all_day:
+        return sys.maxsize
+    elif is_time_upcoming(event.start_datetime,
+                          time_threshold=prefs['event_time_threshold_mins'],
+                          current_datetime=current_datetime):
+        return event.start_datetime.timestamp()
+    elif is_time_in_past(event.start_datetime,
+                         time_threshold=prefs['event_time_threshold_mins'],
+                         current_datetime=current_datetime):
+        return sys.maxsize - event.end_datetime.timestamp()
+    else:
+        return 0
+
+
+# When we are using the get_event_sort_key() key function above, it is crucial
+# that use the same current datetime for all iterated events; otherwise, it
+# leaves open the possibility that some events could have a slightly different
+# datetime than others
+def get_event_sort_key_fn_for_current_datetime():
+    current_datetime = datetime.now()
+    return functools.partial(get_event_sort_key, current_datetime)
+
+
+# Return a sorted list the given events where events that start AFTER the
+# current time are listed chronologically (i.e. forward in time), whereas events
+# in the past are listed reverse-chronologically (i.e. backward in time); this
+# ensures that the nearest upcoming event is listed first, whereas the oldest
+# past event is listed last
 def sort_events_by_time(events):
-    return sorted(events, key=attrgetter('start_datetime'), reverse=True)
+    return sorted(events, key=get_event_sort_key_fn_for_current_datetime())
 
 
 # Get the event time (or 'All-Day' if the event is all-day)
@@ -112,8 +137,14 @@ def get_event_feedback_item(event):
 def main():
 
     all_events = get_events_today_with_conference_urls()
-    past_events = filter_to_past_events(all_events)
     upcoming_events = filter_to_upcoming_events(all_events)
+    past_events = filter_to_past_events(all_events)
+    # If both upcoming events and past events should be listed, only list the
+    # most recent past event
+    if upcoming_events and len(past_events) > 1:
+        past_events[:] = [min(past_events,
+                              key=get_event_sort_key_fn_for_current_datetime())]
+
     events_to_display = sort_events_by_time(
         set(itertools.chain(past_events, upcoming_events)))
 
