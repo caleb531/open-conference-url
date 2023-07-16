@@ -8,9 +8,9 @@ class EventDictRequiredKeys(TypedDict):
     title: str
     startDate: str
     endDate: str
-    isAllDay: str
 
 
 class EventDict(EventDictRequiredKeys, total=False):
+    isAllDay: str
     location: str
     notes: str
