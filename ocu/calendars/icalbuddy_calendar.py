@@ -5,10 +5,20 @@ import os
 import os.path
 import re
 import subprocess
+from typing import TypedDict
 
 from ocu.calendars.base_calendar import BaseCalendar
 from ocu.event import Event
+from ocu.event_dict import EventDict
 from ocu.prefs import prefs
+
+
+class DateInfo(TypedDict):
+    start_date: str
+    start_time: str
+    end_date: str
+    end_time: str
+    is_all_day: str
 
 
 # A Calendar class for retrieving event data via AppleScript
@@ -29,20 +39,20 @@ class IcalBuddyCalendar(BaseCalendar):
     # binary over our workflow-bundled binary that requires explicit permission
     # to execute)
     @classmethod
-    def get_binary_path(cls):
+    def get_binary_path(cls) -> str:
         for binary_path in cls.binary_paths:
             if os.path.exists(binary_path):
                 return binary_path
-        return None
+        return ""
 
     # A simple utility method to check if icalBuddy is currently installed on
     # the user's system
     @classmethod
-    def is_icalbuddy_installed(cls):
+    def is_icalbuddy_installed(cls) -> bool:
         return prefs["use_icalbuddy"] and bool(cls.get_binary_path())
 
     # Retrieve the raw calendar output from icalBuddy
-    def get_raw_calendar_output(self):
+    def get_raw_calendar_output(self) -> str:
         return subprocess.check_output(
             [
                 self.__class__.get_binary_path(),
@@ -67,7 +77,7 @@ class IcalBuddyCalendar(BaseCalendar):
 
     # Because parsing date/time information from an icalBuddy event string is
     # more involved, we have a dedicated method for it
-    def parse_date_info(self, raw_event_str):
+    def parse_date_info(self, raw_event_str: str) -> DateInfo:
         date_matches_single_day_all_day = re.search(
             r"\n\s{4}(\S+?)(\n|$)", raw_event_str
         )
@@ -86,6 +96,7 @@ class IcalBuddyCalendar(BaseCalendar):
                 "start_time": date_matches_multi_day.group(2),
                 "end_date": date_matches_multi_day.group(3),
                 "end_time": date_matches_multi_day.group(4),
+                "is_all_day": "false",
             }
         elif date_matches_multi_day_all_day:
             return {
@@ -93,6 +104,7 @@ class IcalBuddyCalendar(BaseCalendar):
                 "start_time": "00:00",
                 "end_date": date_matches_multi_day_all_day.group(2),
                 "end_time": "23:59",
+                "is_all_day": "true",
             }
         elif date_matches_single_day_all_day:
             return {
@@ -100,18 +112,30 @@ class IcalBuddyCalendar(BaseCalendar):
                 "start_time": "00:00",
                 "end_date": date_matches_single_day_all_day.group(1),
                 "end_time": "23:59",
+                "is_all_day": "true",
             }
-        else:
+        elif date_matches_single_day:
             return {
                 "start_date": date_matches_single_day.group(1),
                 "start_time": date_matches_single_day.group(2),
                 "end_date": date_matches_single_day.group(1),
                 "end_time": date_matches_single_day.group(3),
+                "is_all_day": "false",
+            }
+        else:
+            # This branch should never occur, but just defining it to appease
+            # Pyright
+            return {
+                "start_date": "",
+                "start_time": "",
+                "end_date": "",
+                "end_time": "",
+                "is_all_day": "false",
             }
 
     # Parse a string of raw event data into a dictionary which can be consumed
     # by the Event class
-    def convert_raw_event_str_to_dict(self, raw_event_str):
+    def convert_raw_event_str_to_dict(self, raw_event_str: str) -> EventDict:
         title_matches = re.search(r"^(.*?)\r?\n", raw_event_str)
         date_info = self.parse_date_info(raw_event_str)
         location_matches = re.search(
@@ -124,6 +148,7 @@ class IcalBuddyCalendar(BaseCalendar):
                 date_info["start_date"], date_info["start_time"]
             ),
             "endDate": "{}T{}".format(date_info["end_date"], date_info["end_time"]),
+            "isAllDay": date_info["is_all_day"],
             "location": location_matches.group(1) if location_matches else "",
             "notes": notes_matches.group(1) if notes_matches else "",
         }

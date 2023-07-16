@@ -11,7 +11,7 @@ case = unittest.TestCase()
 def test_base_calendar_not_instantiable():
     """Should not be able to instantiate a BaseCalendar object by itself"""
     with case.assertRaises(TypeError):
-        BaseCalendar()
+        BaseCalendar()  # type: ignore
 
 
 def test_get_event_dicts_not_implemented():

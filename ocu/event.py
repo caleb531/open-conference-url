@@ -4,6 +4,7 @@
 import re
 from datetime import datetime
 from operator import itemgetter
+from typing import Optional
 from urllib.parse import urlparse
 
 from ocu.prefs import prefs
@@ -16,6 +17,12 @@ class Event(object):
     # ***do not change this***
     date_format = "%Y-%m-%d"
     time_format = "%H:%M"
+
+    title: str
+    start_datetime: datetime
+    end_datetime: datetime
+    is_all_day: bool
+    conference_url: Optional[str]
 
     # Initialize an Event object by parsing a dictionary of raw event
     # properties as input; this dictionary is constructed and outputted by the

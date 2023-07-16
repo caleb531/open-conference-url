@@ -8,6 +8,7 @@ import itertools
 import json
 import sys
 from datetime import datetime, timedelta
+from typing import Iterable, Optional
 
 from ocu.calendar import get_calendar
 from ocu.event import Event
@@ -21,19 +22,23 @@ MINUTES_IN_HOUR = 60
 
 # Fetch all of today's events, regardless of proximity to the system's current
 # time
-def get_events_today():
+def get_events_today() -> list[Event]:
     event_dicts = get_calendar().get_event_dicts()
     return [Event(event_dict) for event_dict in event_dicts]
 
 
 # Retrieve only events from today for which a conference URL has been found
-def get_events_today_with_conference_urls():
+def get_events_today_with_conference_urls() -> list[Event]:
     return [event for event in get_events_today() if event.conference_url]
 
 
 # Return True if the given date/time is sometime within the past; otherwise,
 # return False
-def is_time_in_past(event_datetime, time_threshold, current_datetime=None):
+def is_time_in_past(
+    event_datetime: datetime,
+    time_threshold: int,
+    current_datetime: Optional[datetime] = None,
+) -> bool:
     if current_datetime is None:
         current_datetime = datetime.now()
     min_datetime = event_datetime
@@ -41,7 +46,11 @@ def is_time_in_past(event_datetime, time_threshold, current_datetime=None):
 
 
 # Return True if the given date/time is within the next 15 minutes; otherwise, return False
-def is_time_upcoming(event_datetime, time_threshold, current_datetime=None):
+def is_time_upcoming(
+    event_datetime: datetime,
+    time_threshold: int,
+    current_datetime: Optional[datetime] = None,
+) -> bool:
     if current_datetime is None:
         current_datetime = datetime.now()
     threshold_delta = timedelta(minutes=time_threshold)
@@ -51,7 +60,7 @@ def is_time_upcoming(event_datetime, time_threshold, current_datetime=None):
 
 
 # Get those events from today which are in the past
-def filter_to_past_events(events):
+def filter_to_past_events(events: Iterable[Event]) -> list[Event]:
     return [
         event
         for event in events
@@ -63,7 +72,7 @@ def filter_to_past_events(events):
 
 # Get those events from today which are either in the past or upcoming (but not
 # any further into the future)
-def filter_to_upcoming_events(events):
+def filter_to_upcoming_events(events: Iterable[Event]):
     # Filter those events to only those which are nearest to the current time
     return [
         event
@@ -77,7 +86,7 @@ def filter_to_upcoming_events(events):
 # Sort the events such that future events are listed chronologically, whereas
 # past events are listed reverse-chronologically; all-day events are always
 # listed last
-def get_event_sort_key(current_datetime, event):
+def get_event_sort_key(current_datetime: datetime, event: Event):
     if event.is_all_day:
         # List all-day events at the very bottom of the list
         return sys.maxsize
@@ -116,12 +125,12 @@ def get_event_sort_key_fn_for_current_datetime():
 # in the past are listed reverse-chronologically (i.e. backward in time); this
 # ensures that the nearest upcoming event is listed first, whereas the oldest
 # past event is listed last
-def sort_events_by_time(events):
+def sort_events_by_time(events: Iterable[Event]):
     return sorted(events, key=get_event_sort_key_fn_for_current_datetime())
 
 
 # Get the event time (or 'All-Day' if the event is all-day)
-def get_event_time(event):
+def get_event_time(event: Event):
     if event.is_all_day:
         return "All-Day"
     elif prefs["time_system"] == "24-hour":
@@ -131,7 +140,7 @@ def get_event_time(event):
 
 
 # Return an Alfred feedback item representing the given Event instance
-def get_event_feedback_item(event):
+def get_event_feedback_item(event: Event):
     return {
         "title": event.title,
         "subtitle": get_event_time(event),

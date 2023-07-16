@@ -3,6 +3,7 @@
 
 import os
 import re
+from typing import Any
 
 
 # A utility class for retrieving user preferences for this workflow; all
@@ -30,10 +31,11 @@ class Prefs(object):
 
     # Convert a boolean-like string value (like 'Yes' or 'True') to a proper
     # boolean
-    def convert_str_to_bool(self, value):
+    def convert_str_to_bool(self, value: str) -> bool:
         return value.lower().strip() in ("1", "y", "yes", "true", "t")
 
-    def __getitem__(self, pref_name):
+    # TODO: narrow the return type to eliminate the need for `Any`
+    def __getitem__(self, pref_name: str) -> Any:
         return self.pref_field_types[pref_name](os.environ[pref_name])
 
 

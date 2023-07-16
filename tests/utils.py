@@ -7,7 +7,10 @@ import os.path
 import sys
 from functools import wraps
 from io import StringIO
+from typing import Iterable
 from unittest.mock import patch
+
+from ocu.event_dict import EventDict
 
 
 def redirect_stdout(func):
@@ -66,7 +69,7 @@ class use_env(object):
             return function_wrapper
 
 
-def use_event_dicts(event_dicts):
+def use_event_dicts(event_dicts: Iterable[EventDict]):
     """
     A decorator which sets the current list of raw event dicts to use in
     ocu.list_events

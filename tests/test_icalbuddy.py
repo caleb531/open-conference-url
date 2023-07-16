@@ -46,8 +46,8 @@ def test_single_event():
     case.assertEqual(event_dicts[0]["title"], "WWDC 2022 Keynote")
     case.assertEqual(event_dicts[0]["startDate"], "2022-06-06T10:00")
     case.assertEqual(event_dicts[0]["endDate"], "2022-06-06T12:15")
-    case.assertEqual(event_dicts[0]["location"], "https://apple.zoom.us/j/123456")
-    case.assertEqual(event_dicts[0]["notes"], "")
+    case.assertEqual(event_dicts[0].get("location"), "https://apple.zoom.us/j/123456")
+    case.assertEqual(event_dicts[0].get("notes"), "")
     case.assertEqual(len(event_dicts), 1)
 
 
@@ -59,13 +59,13 @@ def test_multiple_events():
     case.assertEqual(event_dicts[0]["title"], "WWDC 2023 Keynote")
     case.assertEqual(event_dicts[0]["startDate"], "2023-06-05T10:00")
     case.assertEqual(event_dicts[0]["endDate"], "2023-06-05T12:15")
-    case.assertEqual(event_dicts[0]["location"], "https://apple.zoom.us/j/123456")
-    case.assertEqual(event_dicts[0]["notes"], "")
+    case.assertEqual(event_dicts[0].get("location"), "https://apple.zoom.us/j/123456")
+    case.assertEqual(event_dicts[0].get("notes"), "")
     case.assertEqual(event_dicts[1]["title"], "WWDC 2023 State of the Platform")
     case.assertEqual(event_dicts[1]["startDate"], "2023-06-05T13:00")
     case.assertEqual(event_dicts[1]["endDate"], "2023-06-05T14:30")
-    case.assertEqual(event_dicts[1]["location"], "https://apple.zoom.us/j/789012")
-    case.assertEqual(event_dicts[1]["notes"], "")
+    case.assertEqual(event_dicts[1].get("location"), "https://apple.zoom.us/j/789012")
+    case.assertEqual(event_dicts[1].get("notes"), "")
     case.assertEqual(len(event_dicts), 2)
 
 
@@ -77,8 +77,8 @@ def test_multiple_days():
     case.assertEqual(event_dicts[0]["title"], "Multi-Day Meeting")
     case.assertEqual(event_dicts[0]["startDate"], "2023-06-26T09:00")
     case.assertEqual(event_dicts[0]["endDate"], "2023-06-27T15:30")
-    case.assertEqual(event_dicts[0]["location"], "https://zoom.us/j/123456")
-    case.assertEqual(event_dicts[0]["notes"], "")
+    case.assertEqual(event_dicts[0].get("location"), "https://zoom.us/j/123456")
+    case.assertEqual(event_dicts[0].get("notes"), "")
     case.assertEqual(len(event_dicts), 1)
 
 
@@ -90,8 +90,8 @@ def test_single_day_all_day():
     case.assertEqual(event_dicts[0]["title"], "Single-Day All-Day Meeting")
     case.assertEqual(event_dicts[0]["startDate"], "2023-06-21T00:00")
     case.assertEqual(event_dicts[0]["endDate"], "2023-06-21T23:59")
-    case.assertEqual(event_dicts[0]["location"], "https://zoom.us/j/123456")
-    case.assertEqual(event_dicts[0]["notes"], "")
+    case.assertEqual(event_dicts[0].get("location"), "https://zoom.us/j/123456")
+    case.assertEqual(event_dicts[0].get("notes"), "")
     case.assertEqual(len(event_dicts), 1)
 
 
@@ -103,6 +103,6 @@ def test_multiple_days_all_day():
     case.assertEqual(event_dicts[0]["title"], "Multi-Day All-Day Meeting")
     case.assertEqual(event_dicts[0]["startDate"], "2023-06-28T00:00")
     case.assertEqual(event_dicts[0]["endDate"], "2023-06-30T23:59")
-    case.assertEqual(event_dicts[0]["location"], "https://zoom.us/j/123456")
-    case.assertEqual(event_dicts[0]["notes"], "")
+    case.assertEqual(event_dicts[0].get("location"), "https://zoom.us/j/123456")
+    case.assertEqual(event_dicts[0].get("notes"), "")
     case.assertEqual(len(event_dicts), 1)
