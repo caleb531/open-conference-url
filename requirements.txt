@@ -10,6 +10,7 @@ freezegun==1.2.2
 isort==5.12.0
 jsonschema==4.17.3
 mccabe==0.7.0
+mypy==1.4.1
 mypy-extensions==1.0.0
 nose2==0.13.0
 packaging==23.1
@@ -21,3 +22,4 @@ pyrsistent==0.19.3
 python-dateutil==2.8.2
 python-dotenv==1.0.0
 six==1.16.0
+typing_extensions==4.7.1

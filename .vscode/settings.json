@@ -1,5 +1,4 @@
 {
-  "python.analysis.typeCheckingMode": "basic",
   "python.analysis.extraPaths": [".virtualenv"],
   "python.formatting.provider": "black",
   "[python]": {
