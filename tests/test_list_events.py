@@ -63,6 +63,29 @@ def test_5mins_after(out, event_dicts):
     'endDate': '2022-10-16T09:00',
     'location': 'https://zoom.us/j/123456'
 }])
+@freeze_time('2022-10-16 8:00:00')
+@redirect_stdout
+def test_exact_start_time(out, event_dicts):
+    """Should list meeting that starts at this exact minute"""
+    list_events.main()
+    feedback = json.loads(out.getvalue())
+    case.assertEqual(feedback['items'][0]['title'], 'My Meeting')
+    case.assertEqual(feedback['items'][0]['subtitle'], '8:00am')
+    case.assertEqual(
+        feedback['items'][0]['text']['copy'],
+        event_dicts[0]['location'])
+    case.assertEqual(
+        feedback['items'][0]['text']['largetype'],
+        event_dicts[0]['location'])
+    case.assertEqual(len(feedback['items']), 1)
+
+
+@use_event_dicts([{
+    'title': 'My Meeting',
+    'startDate': '2022-10-16T08:00',
+    'endDate': '2022-10-16T09:00',
+    'location': 'https://zoom.us/j/123456'
+}])
 @freeze_time('2022-10-16 7:30:00')
 @redirect_stdout
 def test_before_window(out, event_dicts):
@@ -102,6 +125,46 @@ def test_all_day_standalone(out, event_dicts):
         feedback['items'][0]['text']['largetype'],
         event_dicts[0]['location'])
     case.assertEqual(len(feedback['items']), 1)
+
+
+@use_event_dicts([
+    {
+        'title': 'My Meeting 1',
+        'startDate': '2022-10-16T06:00',
+        'endDate': '2022-10-16T07:00',
+        'location': 'https://zoom.us/j/123456'
+    },
+    {
+        'title': 'All-Day Conference',
+        'startDate': '2022-10-16T00:00',
+        'endDate': '2022-10-16T23:59',
+        'isAllDay': 'true',
+        'location': 'https://zoom.us/j/123456'
+    }
+])
+@freeze_time('2022-10-16 8:00:00')
+@redirect_stdout
+def test_all_day_with_past(out, event_dicts):
+    """Should list all-day meetings below past events"""
+    list_events.main()
+    feedback = json.loads(out.getvalue())
+    case.assertEqual(feedback['items'][0]['title'], 'My Meeting 1')
+    case.assertEqual(feedback['items'][0]['subtitle'], '6:00am')
+    case.assertEqual(
+        feedback['items'][0]['text']['copy'],
+        event_dicts[0]['location'])
+    case.assertEqual(
+        feedback['items'][0]['text']['largetype'],
+        event_dicts[0]['location'])
+    case.assertEqual(feedback['items'][1]['title'], 'All-Day Conference')
+    case.assertEqual(feedback['items'][1]['subtitle'], 'All-Day')
+    case.assertEqual(
+        feedback['items'][1]['text']['copy'],
+        event_dicts[1]['location'])
+    case.assertEqual(
+        feedback['items'][1]['text']['largetype'],
+        event_dicts[1]['location'])
+    case.assertEqual(len(feedback['items']), 2)
 
 
 @use_event_dicts([{
