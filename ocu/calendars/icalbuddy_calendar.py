@@ -124,7 +124,7 @@ class IcalBuddyCalendar(BaseCalendar):
             }
         else:
             # This branch should never occur, but just defining it to appease
-            # Pyright
+            # mypy
             return {
                 "start_date": "",
                 "start_time": "",
