@@ -3,14 +3,27 @@
 
 import os
 import re
-from typing import Any
+from typing import Any, Callable, Literal, Union
+
+# The available preference names for this workflow; if you wish to access a
+# preference's value using subscripting (i.e. via square brackets), you must use
+# one of these names
+PrefName = Union[
+    Literal["conference_domains"],
+    Literal["calendar_names"],
+    Literal["event_time_threshold_mins"],
+    Literal["use_direct_zoom"],
+    Literal["use_direct_msteams"],
+    Literal["use_icalbuddy"],
+    Literal["time_system"],
+]
 
 
 # A utility class for retrieving user preferences for this workflow; all
 # preferences are stored as Alfred Workflow variables, and are exposed to the
 # scripting runtime as environment variables
 class Prefs(object):
-    pref_field_types: dict
+    pref_field_types: dict[PrefName, Callable]
 
     def __init__(self) -> None:
         self.pref_field_types = {
@@ -36,13 +49,9 @@ class Prefs(object):
     def convert_str_to_bool(self, value: str) -> bool:
         return value.lower().strip() in ("1", "y", "yes", "true", "t")
 
-    # TODO: narrow the return type to eliminate the need for `Any`
-    def __getitem__(self, pref_name: str) -> Any:
+    def __getitem__(self, pref_name: PrefName) -> Any:
         converter = self.pref_field_types[pref_name]
-        if converter:
-            return converter(os.environ[pref_name])
-        else:
-            return None
+        return converter(os.environ[pref_name])
 
 
 prefs = Prefs()
