@@ -10,5 +10,5 @@ from ocu.event_dict import EventDict
 # data to feed into Open Conference URL
 class BaseCalendar(metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def get_event_dicts(self) -> EventDict:
+    def get_event_dicts(self) -> list[EventDict]:
         raise NotImplementedError

@@ -7,6 +7,7 @@ import os.path
 import subprocess
 
 from ocu.calendars.base_calendar import BaseCalendar
+from ocu.event_dict import EventDict
 from ocu.prefs import prefs
 
 
@@ -18,7 +19,7 @@ class AppleScriptCalendar(BaseCalendar):
     )
 
     # Retrieve the raw event attribute dictionaries from the AppleScript
-    def get_event_dicts(self):
+    def get_event_dicts(self) -> list[EventDict]:
         return json.loads(
             subprocess.check_output(
                 ["osascript", self.script_path, *prefs["calendar_names"]]

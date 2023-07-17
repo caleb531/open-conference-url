@@ -155,7 +155,7 @@ class IcalBuddyCalendar(BaseCalendar):
 
     # Transform the raw event data into a list of dictionaries that are
     # consumable by the Event class
-    def get_event_dicts(self):
+    def get_event_dicts(self) -> list[EventDict]:
         # The [1:] is necessary because the first element will always be an
         # empty string, because the bullet point we are splitting on is not a
         # delimiter

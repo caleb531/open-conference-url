@@ -8,7 +8,7 @@ import itertools
 import json
 import sys
 from datetime import datetime, timedelta
-from typing import Iterable, Optional
+from typing import Callable, Iterable, Optional, Union
 
 from ocu.calendar import get_calendar
 from ocu.event import Event
@@ -45,7 +45,8 @@ def is_time_in_past(
     return min_datetime < current_datetime
 
 
-# Return True if the given date/time is within the next 15 minutes; otherwise, return False
+# Return True if the given date/time is within the next 15 minutes; otherwise,
+# return False
 def is_time_upcoming(
     event_datetime: datetime,
     time_threshold: int,
@@ -72,7 +73,7 @@ def filter_to_past_events(events: Iterable[Event]) -> list[Event]:
 
 # Get those events from today which are either in the past or upcoming (but not
 # any further into the future)
-def filter_to_upcoming_events(events: Iterable[Event]):
+def filter_to_upcoming_events(events: Iterable[Event]) -> list[Event]:
     # Filter those events to only those which are nearest to the current time
     return [
         event
@@ -86,7 +87,7 @@ def filter_to_upcoming_events(events: Iterable[Event]):
 # Sort the events such that future events are listed chronologically, whereas
 # past events are listed reverse-chronologically; all-day events are always
 # listed last
-def get_event_sort_key(current_datetime: datetime, event: Event):
+def get_event_sort_key(current_datetime: datetime, event: Event) -> Union[int, float]:
     if event.is_all_day:
         # List all-day events at the very bottom of the list
         return sys.maxsize
@@ -115,7 +116,7 @@ def get_event_sort_key(current_datetime: datetime, event: Event):
 # that use the same current datetime for all iterated events; otherwise, it
 # leaves open the possibility that some events could have a slightly different
 # datetime than others
-def get_event_sort_key_fn_for_current_datetime():
+def get_event_sort_key_fn_for_current_datetime() -> Callable:
     current_datetime = datetime.now()
     return functools.partial(get_event_sort_key, current_datetime)
 
@@ -125,12 +126,12 @@ def get_event_sort_key_fn_for_current_datetime():
 # in the past are listed reverse-chronologically (i.e. backward in time); this
 # ensures that the nearest upcoming event is listed first, whereas the oldest
 # past event is listed last
-def sort_events_by_time(events: Iterable[Event]):
+def sort_events_by_time(events: Iterable[Event]) -> list[Event]:
     return sorted(events, key=get_event_sort_key_fn_for_current_datetime())
 
 
 # Get the event time (or 'All-Day' if the event is all-day)
-def get_event_time(event: Event):
+def get_event_time(event: Event) -> str:
     if event.is_all_day:
         return "All-Day"
     elif prefs["time_system"] == "24-hour":
@@ -140,7 +141,7 @@ def get_event_time(event: Event):
 
 
 # Return an Alfred feedback item representing the given Event instance
-def get_event_feedback_item(event: Event):
+def get_event_feedback_item(event: Event) -> dict:
     return {
         "title": event.title,
         "subtitle": get_event_time(event),
@@ -159,7 +160,7 @@ def get_event_feedback_item(event: Event):
     }
 
 
-def main():
+def main() -> None:
     all_events = get_events_today_with_conference_urls()
     upcoming_events = filter_to_upcoming_events(all_events)
     past_events = filter_to_past_events(all_events)
@@ -175,7 +176,7 @@ def main():
     )
 
     # The feedback object which will be fed to Alfred to display the results
-    feedback = {"items": []}
+    feedback: dict = {"items": []}
     # For convenience, display all events for today if there are no upcoming
     # events; also display a No Results item at the top of the result set (so
     # that an event isn't hurriedly actioned by the user)

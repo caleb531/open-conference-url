@@ -10,7 +10,9 @@ from typing import Any
 # preferences are stored as Alfred Workflow variables, and are exposed to the
 # scripting runtime as environment variables
 class Prefs(object):
-    def __init__(self):
+    pref_field_types: dict
+
+    def __init__(self) -> None:
         self.pref_field_types = {
             "conference_domains": self.convert_str_to_list,
             "calendar_names": self.convert_str_to_list,
@@ -22,7 +24,7 @@ class Prefs(object):
         }
 
     # Convert a comma-separated string of values to a proper list type
-    def convert_str_to_list(self, value):
+    def convert_str_to_list(self, value: str) -> list:
         value_list = re.split(r"\s*(?:,|\n)\s*", value.strip())
         if value_list == [""]:
             return []
@@ -36,7 +38,11 @@ class Prefs(object):
 
     # TODO: narrow the return type to eliminate the need for `Any`
     def __getitem__(self, pref_name: str) -> Any:
-        return self.pref_field_types[pref_name](os.environ[pref_name])
+        converter = self.pref_field_types[pref_name]
+        if converter:
+            return converter(os.environ[pref_name])
+        else:
+            return None
 
 
 prefs = Prefs()
