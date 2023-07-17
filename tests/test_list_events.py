@@ -91,6 +91,31 @@ def test_exact_start_time(out, event_dicts):
         {
             "title": "My Meeting",
             "startDate": "2022-10-16T08:00",
+            "endDate": "2022-10-16T08:15",
+            "location": "https://zoom.us/j/123456",
+        }
+    ]
+)
+@freeze_time("2022-10-16 8:16:00")
+@redirect_stdout
+def test_combine_duplicate_events(out, event_dicts):
+    """Should not list meetings twice"""
+    list_events.main()
+    feedback = json.loads(out.getvalue())
+    case.assertEqual(feedback["items"][0]["title"], "My Meeting")
+    case.assertEqual(feedback["items"][0]["subtitle"], "8:00am")
+    case.assertEqual(feedback["items"][0]["text"]["copy"], event_dicts[0]["location"])
+    case.assertEqual(
+        feedback["items"][0]["text"]["largetype"], event_dicts[0]["location"]
+    )
+    case.assertEqual(len(feedback["items"]), 1)
+
+
+@use_event_dicts(
+    [
+        {
+            "title": "My Meeting",
+            "startDate": "2022-10-16T08:00",
             "endDate": "2022-10-16T09:00",
             "location": "https://zoom.us/j/123456",
         }
