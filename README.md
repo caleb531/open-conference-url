@@ -114,6 +114,9 @@ You must have icalBuddy installed via Homebrew for this to work. To install, ope
 brew install ical-buddy
 ```
 
+After you have installed icalBuddy, *make sure* you check the box in the
+workflow configuration to fully enable the integriation.
+
 ### Time System
 
 Whether 12-hour or 12-hour time are used for the displayed event start times.
