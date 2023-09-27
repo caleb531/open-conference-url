@@ -187,11 +187,10 @@ on run(listOfCalNames)
     -- authorization
     set authorizationStatus to current application's EKEventStore's authorizationStatusForEntityType:0 -- work around enum bug
     if authorizationStatus is not 3 then
-        display dialog "Access must be given in System Preferences" & linefeed & "-> Security & Privacy first." buttons {"OK"} default button 1
-        tell application "System Preferences"
-            activate
-            tell pane id "com.apple.preference.security" to reveal anchor "Privacy"
-        end tell
+        display dialog "Access must be given in System Settings" & linefeed & "-> Security & Privacy first." buttons {"OK"} default button 1
+        -- Documentation for opening System Settings panes with AppleScript:
+        -- <https://gist.github.com/rmcdongit/f66ff91e0dad78d4d6346a75ded4b751>
+        do shell script "open x-apple.systempreferences:com.apple.preference.security?Privacy_Calendars"
         -- Explicitly abort the script with an error
         error number -128
     end if
