@@ -41,7 +41,8 @@ footprint than full-blown Xcode.
 
 To read from your local calendar, the workflow requires Calendar permissions for
 both Alfred 5 and Terminal. Visit **Systems Settings > Privacy & Security >
-Calendars** to grant them these permissions.
+Calendars** to grant them these permissions. Make sure that you select **Full
+Access** (instead of just *Add Only*).
 
 ## Usage
 
