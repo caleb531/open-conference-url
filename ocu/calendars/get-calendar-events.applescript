@@ -182,7 +182,6 @@ on run(listOfCalNames)
 
     -- create event store and get the OK to access Calendars
     set theEKEventStore to current application's EKEventStore's alloc()'s init()
-    theEKEventStore's requestAccessToEntityType:0 completion:(missing value)
 
     -- check if app has access; this will still occur the first time you OK
     -- authorization
