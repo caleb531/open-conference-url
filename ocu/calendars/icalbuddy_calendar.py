@@ -5,7 +5,8 @@ import os
 import os.path
 import re
 import subprocess
-from typing import TypedDict
+from datetime import datetime
+from typing import TypedDict, Union
 
 from ocu.calendars.base_calendar import BaseCalendar
 from ocu.event import Event
@@ -33,6 +34,11 @@ class IcalBuddyCalendar(BaseCalendar):
         os.path.join(os.sep, "opt", "homebrew", "bin", "icalBuddy"),
         os.path.join(os.sep, "usr", "local", "bin", "icalBuddy"),
     ]
+
+    current_datetime: datetime
+
+    def __init__(self) -> None:
+        self.current_datetime = datetime.now()
 
     # Retrieve the first available path to the binary among a list of possible
     # paths (this allows us to prefer the already-signed Homebrew icalBuddy
@@ -85,18 +91,27 @@ class IcalBuddyCalendar(BaseCalendar):
 
     # Because parsing date/time information from an icalBuddy event string is
     # more involved, we have a dedicated method for it
-    def parse_date_info(self, raw_event_str: str) -> DateInfo:
+    def parse_date_info(self, raw_event_str: str) -> Union[DateInfo, None]:
+        indent_patt = r"\s{4}"
+        date_patt = r"\d{4}-\d{2}-\d{2}"
+        time_patt = r"\d{2}:\d{2}"
+        date_matches_zero_duration = re.search(
+            rf"\n{indent_patt}({time_patt})(\n|$)", raw_event_str
+        )
         date_matches_single_day_all_day = re.search(
-            r"\n\s{4}(\S+?)(\n|$)", raw_event_str
+            rf"\n{indent_patt}({date_patt})(\n|$)", raw_event_str
         )
         date_matches_multi_day_all_day = re.search(
-            r"\n\s{4}(\S+?) - (\S+?)(\n|$)", raw_event_str
+            rf"\n{indent_patt}({date_patt}) - ({date_patt})(\n|$)", raw_event_str
         )
         date_matches_single_day = re.search(
-            r"\n\s{4}(\S+?) at (\S+?) - (\S+?)(\n|$)", raw_event_str
+            rf"\n{indent_patt}({date_patt}) at ({time_patt}) - ({time_patt})(\n|$)",
+            raw_event_str,
         )
         date_matches_multi_day = re.search(
-            r"\n\s{4}(\S+?) at (\S+?) - (\S+?) at (\S+?)(\n|$)", raw_event_str
+            # flake8: noqa
+            rf"\n{indent_patt}({date_patt}) at ({time_patt}) - ({date_patt}) at ({time_patt})(\n|$)",
+            raw_event_str,
         )
         if date_matches_multi_day:
             return {
@@ -130,16 +145,20 @@ class IcalBuddyCalendar(BaseCalendar):
                 "end_time": date_matches_single_day.group(3),
                 "is_all_day": "false",
             }
+        elif date_matches_zero_duration:
+            start_date = self.current_datetime.strftime(Event.date_format)
+            start_time = date_matches_zero_duration.group(1)
+            return {
+                "start_date": start_date,
+                "start_time": start_time,
+                "end_date": start_date,
+                "end_time": start_time,
+                "is_all_day": "false",
+            }
         else:
             # This branch should never occur, but just defining it to appease
             # mypy
-            return {
-                "start_date": "",
-                "start_time": "",
-                "end_date": "",
-                "end_time": "",
-                "is_all_day": "false",
-            }
+            return None
 
     # Parse a string of raw event data into a dictionary which can be consumed
     # by the Event class
@@ -150,16 +169,19 @@ class IcalBuddyCalendar(BaseCalendar):
             r"\n\s{4}location: (.*?)(?:\r?\n|$)", raw_event_str
         )
         notes_matches = re.search(r"\n\s{4}notes: ((?:.|\r|\n)*)$", raw_event_str)
-        return {
-            "title": title_matches.group(1) if title_matches else "",
-            "startDate": "{}T{}".format(
-                date_info["start_date"], date_info["start_time"]
-            ),
-            "endDate": "{}T{}".format(date_info["end_date"], date_info["end_time"]),
-            "isAllDay": date_info["is_all_day"],
-            "location": location_matches.group(1) if location_matches else "",
-            "notes": notes_matches.group(1) if notes_matches else "",
-        }
+        if date_info:
+            return {
+                "title": title_matches.group(1) if title_matches else "",
+                "startDate": "{}T{}".format(
+                    date_info["start_date"], date_info["start_time"]
+                ),
+                "endDate": "{}T{}".format(date_info["end_date"], date_info["end_time"]),
+                "isAllDay": date_info["is_all_day"],
+                "location": location_matches.group(1) if location_matches else "",
+                "notes": notes_matches.group(1) if notes_matches else "",
+            }
+        else:
+            return {"title": "", "startDate": "", "endDate": ""}
 
     # Transform the raw event data into a list of dictionaries that are
     # consumable by the Event class
@@ -168,7 +190,14 @@ class IcalBuddyCalendar(BaseCalendar):
         # empty string, because the bullet point we are splitting on is not a
         # delimiter
         raw_event_strs = re.split(r"(?:^|\n)• ", self.get_raw_calendar_output())[1:]
-        return [
+        event_dicts = (
             self.convert_raw_event_str_to_dict(raw_event_str)
             for raw_event_str in raw_event_strs
+        )
+        # Filter out event dictionaries with bad data (e.g. empty title, or no
+        # start/end date)
+        return [
+            event_dict
+            for event_dict in event_dicts
+            if event_dict["title"] and event_dict["startDate"]
         ]

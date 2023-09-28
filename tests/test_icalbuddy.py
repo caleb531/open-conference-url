@@ -3,6 +3,8 @@
 import unittest
 from unittest.mock import patch
 
+from freezegun import freeze_time
+
 from ocu.calendar import get_calendar
 from ocu.calendars.icalbuddy_calendar import IcalBuddyCalendar
 from tests.utils import use_env, use_icalbuddy_output
@@ -125,3 +127,19 @@ def test_multiple_days_all_day():
     case.assertEqual(event_dicts[0].get("location"), "https://zoom.us/j/123456")
     case.assertEqual(event_dicts[0].get("notes"), "")
     case.assertEqual(len(event_dicts), 1)
+
+
+@use_icalbuddy_output("missing_times")
+@freeze_time("2023-09-21 9:00:00")
+def test_missing_times():
+    """should gracefully handle missing times in calendar events"""
+    calendar = IcalBuddyCalendar()
+    event_dicts = calendar.get_event_dicts()
+    case.assertEqual(
+        event_dicts[0]["title"], "Vocabulary 9/25 [Weldon - SCIENCE-GRADE 7 - S1]"
+    )
+    case.assertEqual(event_dicts[0]["startDate"], "2023-09-21T09:00")
+    case.assertEqual(event_dicts[0]["endDate"], "2023-09-21T09:00")
+    case.assertEqual(event_dicts[0].get("location"), "https://zoom.us/j/123456")
+    case.assertEqual(event_dicts[0].get("notes"), "")
+    case.assertEqual(len(event_dicts), 2)
