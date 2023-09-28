@@ -69,6 +69,25 @@ def test_multiple_events():
     case.assertEqual(len(event_dicts), 2)
 
 
+@use_env("calendar_names", "General,Work")
+@use_icalbuddy_output("multiple_events")
+def test_select_calendars():
+    """should specify certain calendars from which to fetch event data"""
+    calendar = IcalBuddyCalendar()
+    event_dicts = calendar.get_event_dicts()
+    case.assertEqual(event_dicts[0]["title"], "WWDC 2023 Keynote")
+    case.assertEqual(event_dicts[0]["startDate"], "2023-06-05T10:00")
+    case.assertEqual(event_dicts[0]["endDate"], "2023-06-05T12:15")
+    case.assertEqual(event_dicts[0].get("location"), "https://apple.zoom.us/j/123456")
+    case.assertEqual(event_dicts[0].get("notes"), "")
+    case.assertEqual(event_dicts[1]["title"], "WWDC 2023 State of the Platform")
+    case.assertEqual(event_dicts[1]["startDate"], "2023-06-05T13:00")
+    case.assertEqual(event_dicts[1]["endDate"], "2023-06-05T14:30")
+    case.assertEqual(event_dicts[1].get("location"), "https://apple.zoom.us/j/789012")
+    case.assertEqual(event_dicts[1].get("notes"), "")
+    case.assertEqual(len(event_dicts), 2)
+
+
 @use_icalbuddy_output("multiple_days")
 def test_multiple_days():
     """should parse single event spanning multiple days from icalBuddy output"""

@@ -51,11 +51,19 @@ class IcalBuddyCalendar(BaseCalendar):
     def is_icalbuddy_installed(cls) -> bool:
         return prefs["use_icalbuddy"] and bool(cls.get_binary_path())
 
+    @classmethod
+    def get_included_calendar_args(cls) -> list[str]:
+        if prefs["calendar_names"]:
+            return ["--includeCals", *prefs["calendar_names"]]
+        else:
+            return []
+
     # Retrieve the raw calendar output from icalBuddy
     def get_raw_calendar_output(self) -> str:
         return subprocess.check_output(
             [
                 self.__class__.get_binary_path(),
+                *self.__class__.get_included_calendar_args(),
                 # Override the default date/time formats
                 "--dateFormat",
                 Event.date_format,
