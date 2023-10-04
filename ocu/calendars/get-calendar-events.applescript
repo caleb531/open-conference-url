@@ -182,6 +182,16 @@ on run(listOfCalNames)
 
     -- create event store and get the OK to access Calendars
     set theEKEventStore to current application's EKEventStore's alloc()'s init()
+	-- trigger request for full access to calendar (this is crucial to ensure
+	-- that the workflow has calendar access); as of macOS Sonoma,
+	-- requestAccessToEntityType is deprecated (source:
+	-- <https://developer.apple.com/documentation/eventkit/ekeventstore/1507547-requestaccesstoentitytype>)
+	-- because the calendar permissions have become more granular (e.g. "Full
+	-- Access" vs. "Add Only"); the recommended alternative is to use
+	-- requestFullAccessToEventsWithCompletion (documentation here:
+	-- <https://developer.apple.com/documentation/eventkit/ekeventstore/4162272-requestfullaccesstoeventswithcom>)
+    theEKEventStore's requestFullAccessToEventsWithCompletion:(missing value)
+
     -- get calendars that can store events
     set theCalendars to theEKEventStore's calendarsForEntityType:0
     -- filter down to the calendars you want
