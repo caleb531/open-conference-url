@@ -182,19 +182,6 @@ on run(listOfCalNames)
 
     -- create event store and get the OK to access Calendars
     set theEKEventStore to current application's EKEventStore's alloc()'s init()
-
-    -- check if app has access; this will still occur the first time you OK
-    -- authorization
-    set authorizationStatus to current application's EKEventStore's authorizationStatusForEntityType:0 -- work around enum bug
-    if authorizationStatus is not 3 then
-        display dialog "Access must be given in System Settings" & linefeed & "-> Security & Privacy first." buttons {"OK"} default button 1
-        -- Documentation for opening System Settings panes with AppleScript:
-        -- <https://gist.github.com/rmcdongit/f66ff91e0dad78d4d6346a75ded4b751>
-        do shell script "open x-apple.systempreferences:com.apple.preference.security?Privacy_Calendars"
-        -- Explicitly abort the script with an error
-        error number -128
-    end if
-
     -- get calendars that can store events
     set theCalendars to theEKEventStore's calendarsForEntityType:0
     -- filter down to the calendars you want
