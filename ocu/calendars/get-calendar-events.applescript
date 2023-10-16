@@ -190,7 +190,13 @@ on run(listOfCalNames)
 	-- Access" vs. "Add Only"); the recommended alternative is to use
 	-- requestFullAccessToEventsWithCompletion (documentation here:
 	-- <https://developer.apple.com/documentation/eventkit/ekeventstore/4162272-requestfullaccesstoeventswithcom>)
-    theEKEventStore's requestFullAccessToEventsWithCompletion:(missing value)
+	try
+		# macOS Sonoma and newer
+		theEKEventStore's requestFullAccessToEventsWithCompletion:(missing value)
+	on error
+		# macOS Ventura and older
+		theEKEventStore's requestAccessToEntityType:0 completion:(missing value)
+	end try
 
     -- get calendars that can store events
     set theCalendars to theEKEventStore's calendarsForEntityType:0
