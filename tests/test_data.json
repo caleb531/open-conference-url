@@ -38,6 +38,15 @@
       ]
     },
     {
+      "name": "Slack",
+      "example_correct_urls": [
+        "https://app.slack.com/123456"
+      ],
+      "example_incorrect_urls": [
+        "https://app.slack.com/favicon.png"
+      ]
+    },
+    {
       "name": "GoTo",
       "example_correct_urls": [
         "https://meet.goto.com/123456"
