@@ -1,6 +1,6 @@
 # Open Conference URL
 
-*Copyright 2020-2023 Caleb Evans*  
+*Copyright 2020-2024 Caleb Evans*  
 *Released under the MIT license*
 
 [![tests](https://github.com/caleb531/open-conference-url/actions/workflows/tests.yml/badge.svg)](https://github.com/caleb531/open-conference-url/actions/workflows/tests.yml)
