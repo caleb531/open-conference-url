@@ -1,6 +1,6 @@
 alfred-workflow-packager==3.0.0
 attrs==23.1.0
-black==23.7.0
+black==24.3.0
 click==8.1.5
 coverage==7.2.5
 flake8==6.0.0
