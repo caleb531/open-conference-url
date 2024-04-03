@@ -120,7 +120,7 @@ workflow configuration to fully enable the integriation.
 
 ### Time System
 
-Whether 12-hour or 12-hour time are used for the displayed event start times.
+Whether 12-hour or 24-hour time is used for the displayed event start times.
 
 ## Credits
 
