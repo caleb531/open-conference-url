@@ -14,6 +14,8 @@ PrefName = Union[
     Literal["event_time_threshold_mins"],
     Literal["use_direct_zoom"],
     Literal["use_direct_msteams"],
+    Literal["use_direct_gmeet"],
+    Literal["gmeet_app_name"],
     Literal["use_icalbuddy"],
     Literal["time_system"],
 ]
@@ -32,6 +34,8 @@ class Prefs(object):
             "event_time_threshold_mins": int,
             "use_direct_zoom": self.convert_str_to_bool,
             "use_direct_msteams": self.convert_str_to_bool,
+            "use_direct_gmeet": self.convert_str_to_bool,
+            "gmeet_app_name": str,
             "use_icalbuddy": self.convert_str_to_bool,
             "time_system": str,
         }
