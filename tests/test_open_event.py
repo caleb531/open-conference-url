@@ -51,7 +51,10 @@ class TestOpenEvent(unittest.TestCase):
 
     @use_env("use_direct_gmeet", "true")
     def test_should_open_google_meet_app_with_google_url_and_pref_enabled(self):
-        """should_open_google_meet_app should return True for Google Meet URLs when preference is enabled"""
+        """
+        should_open_google_meet_app should return True for Google Meet URLs when
+        preference is enabled
+        """
         urls = [
             "https://meet.google.com/abc-def-ghi",
             "https://meet.google.com/xyz-123-456?authuser=0",
@@ -63,20 +66,27 @@ class TestOpenEvent(unittest.TestCase):
 
     @use_env("use_direct_gmeet", "false")
     def test_should_open_google_meet_app_with_google_url_and_pref_disabled(self):
-        """should_open_google_meet_app should return False for Google Meet URLs when preference is disabled"""
+        """
+        should_open_google_meet_app should return False for Google Meet URLs
+        when preference is disabled"""
         url = "https://meet.google.com/abc-def-ghi"
         result = open_event.should_open_google_meet_app(url)
         self.assertFalse(result)
 
     @use_env("use_direct_gmeet", "")  # Empty env var should default to False
     def test_should_open_google_meet_app_with_google_url_and_pref_unset(self):
-        """should_open_google_meet_app should return False for Google Meet URLs when preference is unset"""
+        """
+        should_open_google_meet_app should return False for Google Meet URLs
+        when preference is unset"""
         url = "https://meet.google.com/abc-def-ghi"
         result = open_event.should_open_google_meet_app(url)
         self.assertFalse(result)
 
     def test_should_open_google_meet_app_with_missing_pref_key(self):
-        """should_open_google_meet_app should handle missing preference key gracefully"""
+        """
+        should_open_google_meet_app should handle missing preference key
+        gracefully
+        """
         url = "https://meet.google.com/abc-def-ghi"
 
         with patch.dict("os.environ", {}, clear=True):  # Clear all env vars
@@ -102,7 +112,10 @@ class TestOpenEvent(unittest.TestCase):
     def test_open_url_with_native_app_subprocess_error(
         self, mock_open_no_app, mock_run
     ):
-        """open_url_with_native_app should fallback to default browser on subprocess error"""
+        """
+        open_url_with_native_app should fallback to default browser on
+        subprocess error
+        """
         from subprocess import CalledProcessError
 
         mock_run.side_effect = CalledProcessError(1, ["open"])
@@ -119,7 +132,10 @@ class TestOpenEvent(unittest.TestCase):
     @patch("subprocess.run")
     @patch("ocu.open_event.open_url_no_app")
     def test_open_url_with_native_app_file_not_found(self, mock_open_no_app, mock_run):
-        """open_url_with_native_app should fallback to default browser when app not found"""
+        """
+        open_url_with_native_app should fallback to default browser when app not
+        found
+        """
         mock_run.side_effect = FileNotFoundError("Application not found")
         stderr_capture = self.capture_stderr()
 
@@ -189,7 +205,10 @@ class TestOpenEvent(unittest.TestCase):
     @patch("ocu.open_event.open_url_no_app")
     @use_env("use_direct_gmeet", "false")
     def test_main_google_meet_url_pref_disabled(self, mock_open_no_app):
-        """main should open Google Meet URLs with default handler when preference disabled"""
+        """
+        main should open Google Meet URLs with default handler when preference
+        disabled
+        """
         stderr_capture = self.capture_stderr()
 
         open_event.main()
@@ -211,8 +230,9 @@ class TestOpenEvent(unittest.TestCase):
         open_event.main()
 
         stderr_output = stderr_capture.getvalue()
+        url = "https://meet.google.com/abc-def-ghi"
         self.assertIn(
-            "Opening Google Meet URL in Desktop app: https://meet.google.com/abc-def-ghi",
+            f"Opening Google Meet URL in Desktop app: {url}",
             stderr_output,
         )
         mock_open_with_app.assert_called_once_with(
@@ -230,8 +250,9 @@ class TestOpenEvent(unittest.TestCase):
         open_event.main()
 
         stderr_output = stderr_capture.getvalue()
+        url = "https://meet.google.com/abc-def-ghi"
         self.assertIn(
-            "Opening Google Meet URL in Desktop app: https://meet.google.com/abc-def-ghi",
+            f"Opening Google Meet URL in Desktop app: {url}",
             stderr_output,
         )
         mock_open_with_app.assert_called_once_with(
@@ -249,8 +270,9 @@ class TestOpenEvent(unittest.TestCase):
         open_event.main()
 
         stderr_output = stderr_capture.getvalue()
+        url = "https://meet.google.com/abc-def-ghi"
         self.assertIn(
-            "Opening Google Meet URL in Desktop app: https://meet.google.com/abc-def-ghi",
+            f"Opening Google Meet URL in Desktop app: {url}",
             stderr_output,
         )
         mock_open_with_app.assert_called_once_with(
@@ -261,7 +283,10 @@ class TestOpenEvent(unittest.TestCase):
     @patch("ocu.open_event.should_open_google_meet_app")
     @patch("ocu.open_event.open_url_no_app")
     def test_main_exception_handling(self, mock_open_no_app, mock_should_open):
-        """main should handle unexpected exceptions gracefully and fallback to default browser"""
+        """
+        main should handle unexpected exceptions gracefully and fallback to
+        default browser
+        """
         mock_should_open.side_effect = Exception("Unexpected error")
         stderr_capture = self.capture_stderr()
 

@@ -11,7 +11,8 @@ from ocu.prefs import prefs
 
 def should_open_google_meet_app(url: Optional[str]) -> bool:
     """
-    Return True if the given URL is a Google Meet URL, and the user prefers to open it in the native app;
+    Return True if the given URL is a Google Meet URL,
+    and the user prefers to open it in the native app;
     return False otherwise
     """
     if not url:
