@@ -55,7 +55,7 @@ class Prefs(object):
 
     def __getitem__(self, pref_name: PrefName) -> Any:
         converter = self.pref_field_types[pref_name]
-        return converter(os.environ[pref_name])
+        return converter(os.environ.get(pref_name, ""))
 
 
 prefs = Prefs()

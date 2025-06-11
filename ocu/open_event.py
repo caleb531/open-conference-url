@@ -17,8 +17,7 @@ def should_open_google_meet_app(url: Optional[str]) -> bool:
     if not url:
         return False
 
-    matches = re.search(r"https://(meet\.google\.com)", url)
-    is_google_url = bool(matches)
+    is_google_url = bool(re.search(r"https://(meet\.google\.com)", url))
     if not is_google_url:
         return False
 
@@ -63,16 +62,6 @@ def open_url_no_app(url: str) -> None:
         sys.exit(1)
 
 
-def get_pref_str_safely(pref_name: PrefName, default: str = "") -> str:
-    """
-    Safely get a string preference value, returning the default if the preference is not set
-    """
-    try:
-        return prefs[pref_name]
-    except KeyError:
-        return default
-
-
 def main() -> None:
     # Get the conference URL from command line arguments
     if len(sys.argv) < 2:
@@ -96,7 +85,7 @@ def main() -> None:
             )
 
             # Get the configured Google Meet app name (default: "Google Meet")
-            gmeet_app_name = get_pref_str_safely("gmeet_app_name", "Google Meet")
+            gmeet_app_name = prefs["gmeet_app_name"] or "Google Meet"
             open_url_with_native_app(conference_url, gmeet_app_name)
         else:
             print(
@@ -107,8 +96,8 @@ def main() -> None:
             # or when native app preference is disabled), open with default handler
             open_url_no_app(conference_url)
 
-    except Exception as e:
-        print(f"Error processing conference URL: {e}", file=sys.stderr)
+    except Exception as error:
+        print(f"Error processing conference URL: {error}", file=sys.stderr)
         # Fallback to default browser
         open_url_no_app(conference_url)
 
