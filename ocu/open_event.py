@@ -6,7 +6,7 @@ import subprocess
 import sys
 from typing import Optional
 
-from ocu.prefs import PrefName, prefs
+from ocu.prefs import prefs
 
 
 def should_open_google_meet_app(url: Optional[str]) -> bool:
@@ -22,14 +22,7 @@ def should_open_google_meet_app(url: Optional[str]) -> bool:
         return False
 
     # Check if the user prefers to open Google Meet URLs in the native app
-    try:
-        return prefs["use_direct_gmeet"]
-    except KeyError:
-        print(
-            "Preference 'use_direct_gmeet' not found, defaulting to False",
-            file=sys.stderr,
-        )
-        return False
+    return prefs["use_direct_gmeet"]
 
 
 def open_url_with_native_app(url: str, app_name: str) -> None:
