@@ -102,6 +102,18 @@ entirely.
 Opens Microsoft Teams links directly in the Microsoft Teams application,
 bypassing your web browser entirely.
 
+### Use Direct Google Meet Links
+
+Opens Google Meet links directly in the Google Meet Desktop application,
+bypassing your web browser entirely. This requires the Google Meet Desktop
+application to be installed through WebCatalog or a similar platform.
+
+### Google Meet Desktop Application Name
+
+The name of the Google Meet Desktop application. This is provided for any
+dynamic needs and allows you to specify the exact application name if it
+differs from the default "Google Meet".
+
 ### Use icalBuddy
 
 Uses icalBuddy to source calendar event data (instead of AppleScript). Enabling
