@@ -7,7 +7,6 @@ from ocu.calendars.base_calendar import BaseCalendar
 
 
 class TestBaseCalendar(unittest.TestCase):
-
     def test_base_calendar_not_instantiable(self):
         """Should not be able to instantiate a BaseCalendar object by itself"""
         with self.assertRaises(TypeError):

@@ -16,7 +16,6 @@ URL_TOKENS = (("'", "'"), ('"', '"'), ("<", ">"), ("\n", "\n"), (".", "."), (";"
 
 
 class TestMatching(unittest.TestCase):
-
     def get_test_data(self):
         """
         Retrieve a dictionary of information pertaining to the various test cases to

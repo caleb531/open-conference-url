@@ -10,7 +10,6 @@ from tests.utils import redirect_stdout, use_env, use_event_dicts
 
 
 class TestListEvents(unittest.TestCase):
-
     @use_event_dicts(
         [
             {

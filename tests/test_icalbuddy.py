@@ -11,7 +11,6 @@ from tests.utils import use_env, use_icalbuddy_output
 
 
 class TestIcalBuddy(unittest.TestCase):
-
     @patch("os.path.exists", return_value=True)
     @use_env("use_icalbuddy", "true")
     def test_icalbuddy_available_enabled(self, exists):

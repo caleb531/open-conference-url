@@ -11,7 +11,6 @@ from tests.utils import use_env
 
 
 class TestOpenEvent(unittest.TestCase):
-
     def setUp(self):
         """Set up test fixtures"""
         self.original_stderr = sys.stderr
