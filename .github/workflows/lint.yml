@@ -27,7 +27,9 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run mypy
-        run: mypy ocu/**/*.py tests/*.py
+        run: uv run mypy .
 
-      - name: Run flake8
-        run: flake8 ocu/**/*.py tests/*.py
+      - name: Run ruff
+        run: |
+          uv run ruff check .
+          uv run ruff format --check .
