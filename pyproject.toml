@@ -39,3 +39,11 @@ select = [
     # perflint
     "PERF",
 ]
+
+[tool.mypy]
+disallow_untyped_defs = true
+
+# It's not practical to add type annotations to tests
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
