@@ -40,6 +40,23 @@ select = [
     "PERF",
 ]
 
+[tool.coverage.run]
+branch = true
+
+[tool.coverage.report]
+# Regexes for lines to exclude from consideration
+exclude_lines = [
+    "pragma: no cover",
+    # Ignore non-runnable code
+    "if __name__ == .__main__.:",
+    "pass",
+]
+
+# Only check coverage for source files
+include = [
+    "ocu/**/*.py",
+]
+
 [tool.mypy]
 disallow_untyped_defs = true
 
