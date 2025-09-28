@@ -42,6 +42,8 @@ select = [
 
 [tool.coverage.run]
 branch = true
+# Only check coverage for source files
+include = ["ocu/**/*.py"]
 
 [tool.coverage.report]
 # Regexes for lines to exclude from consideration
@@ -50,11 +52,6 @@ exclude_lines = [
     # Ignore non-runnable code
     "if __name__ == .__main__.:",
     "pass",
-]
-
-# Only check coverage for source files
-include = [
-    "ocu/**/*.py",
 ]
 
 [tool.mypy]
