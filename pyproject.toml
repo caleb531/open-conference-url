@@ -16,10 +16,10 @@ dependencies = []
 [dependency-groups]
 dev = [
     "alfred-workflow-packager==3.1.1",
-    "coverage==7.2.5",
     "freezegun==1.5.2",
     "mypy==1.4.1",
-    "nose2==0.13.0",
+    "pytest>=8.4.2",
+    "pytest-cov>=7.0.0",
     "python-dotenv==1.0.0",
     "ruff>=0.12.0",
 ]

@@ -5,6 +5,7 @@ import json
 import os
 import os.path
 import sys
+import unittest
 from functools import wraps
 from io import StringIO
 from typing import Iterable
@@ -23,15 +24,18 @@ def redirect_stdout(func):
         out = StringIO()
         try:
             sys.stdout = out
-            # If the decorated function is a method, the `self` argument should
-            # still be first
-            if args and hasattr(args[0], "__class__"):
+            # Support legacy unittest-style methods while also handling plain functions
+            if args and isinstance(args[0], unittest.TestCase):
                 self_arg, *rest_args = args
                 return func(self_arg, out, *rest_args, **kwargs)
-            else:
-                return func(out, *args, **kwargs)
+            return func(out, *args, **kwargs)
         finally:
             sys.stdout = original_stdout
+
+    signature = inspect.signature(func)
+    parameters = list(signature.parameters.values())
+    if parameters:
+        wrapper.__signature__ = signature.replace(parameters=tuple(parameters[1:]))
 
     return wrapper
 
@@ -88,6 +92,11 @@ def use_event_dicts(event_dicts: Iterable[EventDict]):
                 return_value=json.dumps(event_dicts).encode("utf-8"),
             ):
                 return func(*args, event_dicts, **kwargs)
+
+        signature = inspect.signature(func)
+        parameters = list(signature.parameters.values())
+        if parameters:
+            wrapper.__signature__ = signature.replace(parameters=tuple(parameters[:-1]))
 
         return wrapper
 
