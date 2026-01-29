@@ -35,7 +35,7 @@ def redirect_stdout(func):
     signature = inspect.signature(func)
     parameters = list(signature.parameters.values())
     if parameters:
-        wrapper.__signature__ = signature.replace(parameters=tuple(parameters[1:]))
+        wrapper.__signature__ = signature.replace(parameters=tuple(parameters[1:]))  # type: ignore
 
     return wrapper
 
@@ -96,7 +96,7 @@ def use_event_dicts(event_dicts: Iterable[EventDict]):
         signature = inspect.signature(func)
         parameters = list(signature.parameters.values())
         if parameters:
-            wrapper.__signature__ = signature.replace(parameters=tuple(parameters[:-1]))
+            wrapper.__signature__ = signature.replace(parameters=tuple(parameters[:-1]))  # type: ignore
 
         return wrapper
 

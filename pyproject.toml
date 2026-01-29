@@ -17,11 +17,11 @@ dependencies = []
 dev = [
     "alfred-workflow-packager==3.1.1",
     "freezegun==1.5.2",
-    "mypy==1.4.1",
     "pytest>=8.4.2",
     "pytest-cov>=7.0.0",
     "python-dotenv==1.0.0",
     "ruff>=0.12.0",
+    "ty>=0.0.14",
 ]
 
 [tool.ruff]
@@ -38,7 +38,13 @@ select = [
     "I",
     # perflint
     "PERF",
+    # flake8-annotations
+    "ANN001",
+    "ANN201",
 ]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["ANN001", "ANN201"]
 
 [tool.coverage.run]
 branch = true
@@ -53,11 +59,3 @@ exclude_lines = [
     "if __name__ == .__main__.:",
     "pass",
 ]
-
-[tool.mypy]
-disallow_untyped_defs = true
-
-# It's not practical to add type annotations to tests
-[[tool.mypy.overrides]]
-module = "tests.*"
-disallow_untyped_defs = false
